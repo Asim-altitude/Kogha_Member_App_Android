@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <gradient
+                        android:startColor="@color/place_order_item"
+                        android:endColor="@color/place_order_item"
+                        android:angle="270" />
+                    <stroke
+                        android:width="0dp"
+                        android:color="@color/place_order_item" />
+                    <corners
+                        android:radius="4dp" />
+                    />
+                </shape>
+            </item>
+            <item
+                android:top="-2dp"
+                android:right="-1.8dp">
+                <bitmap android:src="@drawable/ic_dropdown_filled_1"
+                        android:gravity="top|right" />
+            </item>
+        </layer-list>
+    </item>
+</selector>

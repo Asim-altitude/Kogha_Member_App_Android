@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="theme_primary">#B21524</color>
+    <color name="theme_primary_dark">#B21524</color>
+    <color name="theme_primary_light">#BBDEFB</color>
+
+    <color name="theme_background">#FFFFFF</color>
+    <color name="theme_background_inverse">#212121</color>
+
+    <color name="btn_add_more">#62151C</color>
+    <color name="theme_accent_1">#212121</color>
+
+    <color name="theme_primary_trans">#99212121</color>
+
+    <color name="theme_primary_text">#212121</color>
+    <color name="theme_secondary_text">#727272</color>
+    <color name="theme_primary_text_inverted">#ffffff</color>
+    <color name="theme_secondary_text_inverted">#8affffff</color>
+    <color name="theme_icons">#FFFFFF</color>
+    <color name="theme_divider">#B6B6B6</color>
+
+    <color name="place_order_item">#2E2F33</color>
+    <color name="black_color">#000000</color>
+    <color name="white_color">#ffffff</color>
+    <color name="window_background">#FFFFFF</color>
+
+    <color name="dark_gray_color">#969696</color>
+    <color name="light_gray_color">#d4d4d4</color>
+    <color name="tab_bar_background">#E5E5E7</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="edit_text_background">#4DFFFFFF</color>
+    <color name="light_black_background">#95000000</color>
+    <!-- card colors -->
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow_1">#d4d4d4</color>
+    <color name="card_shadow_2">#dddddd</color>
+    <color name="card_detailing">#eee</color>
+    <color name="item_count_background">#515256</color>
+
+    <color name="order_black_background">#2E2F33</color>
+    <color name="bumble_ride_head_color">#515256</color>
+    <color name="bumble_ride_body_color">#2E2F33</color>
+    <color name="dim_btn_color">#531518</color>
+    <color name="rating_color">#ffff00</color>
+
+
+    <color name="yellow_color">#FFF1DA</color>
+    <color name="light_black_color">#90000000</color>
+    <color name="dashboard_background_color">#D6D6D6</color>
+    <color name="green_color">#00944F</color>
+    <color name="green_button_color">#72bb53</color>
+    <color name="sky_blue_color">#4dd7fa</color>
+    <color name="gray_dashboard">#EBEBEB</color>
+
+    <color name="dark_gray_color_">#403f3f</color>
+    <color name="light_gray">#ccededed</color>
+
+    <!-- card colors -->
+
+    <color name="color_red">#ff0000</color>
+    <color name="color_orange">#ff3823</color>
+    <color name="color_green">#4c7a34</color>
+    <color name="semi_transparent">#CC000000</color>
+    <color name="reddish">#d9534f</color>
+    <color name="greenish">#629c44</color>
+    <color name="bg_border">#BDBDBD</color>
+    <color name="blue">#0000FF</color>
+    <color name="orange">#FFA500</color>
+    <color name="green">#008000</color>
+    <color name="color_gray">#808080</color>
+    <drawable name="color_grey">#d4d4d4</drawable>
+    <drawable name="color_white">#ffffff</drawable>
+
+
+</resources>

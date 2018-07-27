@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white_color"
+   >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/current_layout"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Job"
+            android:textColor="@color/white_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:background="@color/green"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:id="@+id/tabs_lay"
+        android:layout_below="@+id/current_layout"
+        android:layout_toRightOf="@+id/sos_enable_lay"
+        android:layout_toEndOf="@+id/sos_enable_lay">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/tab_selected_bg"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/selected_tab1"
+            >
+
+            <TextView
+                android:id="@+id/tab_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/white_color"
+                android:layout_marginLeft="5dp"
+                android:text="@string/Upcoming_jobs"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/order_place_item_background"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/selected_tab2"
+            >
+
+            <TextView
+                android:id="@+id/tab_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/white_color"
+                android:layout_marginLeft="5dp"
+                android:text="@string/suggested_jobs"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/sos_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabs_lay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</RelativeLayout>

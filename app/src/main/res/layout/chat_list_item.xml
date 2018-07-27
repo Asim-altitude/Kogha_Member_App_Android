@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="8dp"
+    android:background="@color/black_color"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/member_item"
+        android:visibility="visible"
+        >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_avatar"
+        android:id="@+id/chat_image"
+        />
+        <com.daasuu.bl.BubbleLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            app:bl_bubbleColor="@color/dark_gray_color"
+            android:layout_toRightOf="@id/chat_image"
+            app:bl_arrowDirection="left"
+            app:bl_arrowHeight="8dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_strokeWidth="1dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:layout_alignParentEnd="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is a sample message
+             from me to text user please idonore the
+              rest of things "
+            android:textColor="@color/white_color"
+            android:id="@+id/chat_message"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/chat_message"
+            android:text="12:00 pm"
+            android:id="@+id/chat_message_time"
+            android:textColor="@drawable/color_grey"
+
+            />
+    </RelativeLayout>
+        </com.daasuu.bl.BubbleLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customer_item"
+        android:layout_below="@id/member_item"
+        android:layout_marginTop="5dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_avatar"
+            android:id="@+id/cust_chat_image"
+            android:layout_alignParentRight="true"
+            />
+        <com.daasuu.bl.BubbleLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            app:bl_bubbleColor="@color/theme_primary"
+            android:layout_toLeftOf="@id/cust_chat_image"
+            app:bl_arrowDirection="right"
+            app:bl_arrowHeight="8dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_strokeWidth="0dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/cust_chat_image">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is a sample message
+             from me to text user please idonore the
+              rest of things "
+                android:textColor="@color/white_color"
+                android:id="@+id/cust_chat_message"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/cust_chat_message"
+                android:text="12:00 pm"
+                android:id="@+id/cust_chat_message_time"
+                android:textColor="@drawable/color_grey"
+                />
+        </RelativeLayout>
+        </com.daasuu.bl.BubbleLayout>
+    </RelativeLayout>
+</RelativeLayout>

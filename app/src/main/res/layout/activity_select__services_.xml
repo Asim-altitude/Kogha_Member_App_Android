@@ -1,0 +1,121 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+
+        >
+
+        <ImageView
+            android:id="@+id/back_navigation"
+            android:layout_width="25dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/back_arrow" />
+
+
+        <ImageView
+            android:id="@+id/splashImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="-20dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_logo" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Sign up"
+        android:gravity="center"
+        android:textColor="@color/white_color"
+        android:textSize="30dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Select Services"
+        android:textSize="30dp"
+        android:textStyle="normal"
+        android:textColor="@color/white_color"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Select Services(max 3)"
+        android:textSize="18dp"
+        android:textStyle="normal"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white_color"
+        />
+
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/scrollView4"
+        android:layout_marginTop="60dp"
+        android:paddingLeft="16dp"
+        android:scrollbars="none"
+        android:paddingRight="16dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="fill_parent">
+
+
+
+
+
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/services_list"
+                android:scrollbars="none"
+                >
+
+            </ListView>
+
+
+            <Button
+                android:id="@+id/btnNext_services"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/white_color"
+                android:text="@string/next"
+                android:focusable="true"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+</LinearLayout>

@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name">Ahli KOGHA</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Alamat emel</string>
+    <string name="prompt_username">e-mel</string>
+    <string name="prompt_password">Kata laluan</string>
+    <string name="action_sign_in">Masuk sebagai Ahli</string>
+    <string name="auth_code">Kod pengesahan</string>
+    <string name="action_task_finish">Finish Task</string>
+    <string name="action_send_request">Send Request</string>
+    <string name="action_cancel_request">Cancel Request</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_sign_in_short">Log In</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."</string>
+
+    <string name="skip">Skip</string>
+
+
+    //sign up screen strings
+
+    <string name="enter_your_name">Masukkan nama anda</string>
+    <string name="enter_your_email">Masukkan emel anda</string>
+    <string name="enter_your_phone">Masukkan Telefon anda</string>
+    <string name="enter_your_password">Masukkan kata laluan anda</string>
+    <string name="re_enter_your_password">Masukkan semula Kata Laluan</string>
+
+    <string name="register">Daftar</string>
+    <string name="already_register">Sudah mendaftar</string>
+    //Forgot password screen languages
+
+    <string name="submit">Hantar</string>
+
+    //Register
+    <string name="create_account">Créer un compte</string>
+    <string name="already_account">Already Registered</string>
+    <string name="authentication_code_not_received"><u>Authentication Code not Received</u></string>
+    <string name="not_registered_account">Not Registered Yet?</string>
+    <string name="forget_password">Lupa kata laluan</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="FCM_PREF">com.getranked.teamguard.fcm_pref</string>
+    <string name="FCM_TOKEN">com.getranked.teamguard.fcm_token</string>
+
+
+    //Menu strings
+
+    <string name="dashboard">Dasbor</string>
+    <string name="suggested_job">Pekerjaan yang Disarankan</string>
+    <string name="completed_jobs">Pekerjaan Selesai</string>
+    <string name="my_profile">Profil saya</string>
+    <string name="allowed_services">Layanan yang Diizinkan</string>
+    <string name="notifications">pemberitahuan</string>
+    <string name="language">Bahasa</string>
+    <string name="log_out">Log keluar</string>
+    <string name="upload_documents">Upload documents</string>
+
+    //Change Password
+
+    <string name="old_pass">Masukkan kata laluan lama</string>
+    <string name="new_pass">Masukkan kata laluan baru</string>
+    <string name="confirm_pass">Sahkan kata laluan</string>
+    <string name="change_pass">Tukar kata laluan</string>
+
+    //Edit Profile
+
+    <string name="your_name">Masukkan nama anda</string>
+    <string name="your_email">Masukkan emel anda</string>
+    <string name="your_phone">Masukkan telefon anda</string>
+    <string name="update_info">Kemas kini Maklumat</string>
+
+    //tab strings
+    <string name="edit_profile">Sunting profil</string>
+    <string name="Upcoming_jobs">Pekerjaan yang akan datang</string>
+    <string name="suggested_jobs">Pekerjaan yang dicadangkan</string>
+
+    <string name="general">Ketua</string>
+    <string name="chat">Sembang</string>
+    <string name="job">Kerja</string>
+
+    <!-- Strings related to home page -->
+
+    //tabs strings
+
+    <string-array name="profile_tabs">
+        <item name="edit">@string/edit_profile</item>
+        <item name="change">@string/change_pass</item>
+    </string-array>
+
+    <string-array name="dashboard_tabs">
+        <item name="Upcoming">@string/Upcoming_jobs</item>
+        <item name="suggested">@string/suggested_jobs</item>
+    </string-array>
+
+    <string name="immediate_boking">Immediate booking</string>
+    <string name="schedule_booking">Schedule booking</string>
+    <string name="where_to">Where To </string>
+
+    <string name="services">Perkhidmatan</string>
+    <string name="uploaded_docs">Uploaded documents</string>
+
+
+    //Suggested jobs and upcoming jobs
+
+    <string name="meet_location">Lokasi Mesyuarat</string>
+    <string name="dest_location">Lokasi Destinasi</string>
+    <string name="meet_date_time">Bertemu tarikh &amp; Masa</string>
+    <string name="instructions">Arahan</string>
+    <string name="job_posted">dipaparkan kerja</string>
+    <string name="job_hrs">Jam kerja</string>
+    <string name="earnings">Pendapatan</string>
+    <string name="job_starts">kerja bermula pada</string>
+
+    <string name="accept">Terima</string>
+    <string name="reject">Tolak</string>
+
+    //alert strings
+
+    <string name="yes">ya</string>
+    <string name="no">tidak</string>
+
+    <string name="accept_confirmation">Adakah anda pasti mahu menerima?</string>
+    <string name="reject_confirmation">Adakah anda pasti mahu membatalkannya?</string>
+
+    <string name="seconds">detik</string>
+    <string name="mins">minit</string>
+    <string name="hours">Jam</string>
+    <string name="month">bulan</string>
+    <string name="ago">sebelum ini</string>
+    <string name="yesterday">semalam</string>
+    <string name="day">hari</string>
+
+    <string name="meet_date">Tarikh temu</string>
+
+    <string name="meet_time"> Masa</string>
+    <string name="completed_on">Selesai pada</string>
+
+    <string name="calculating">mengira ...</string>
+
+    <string name="gps_alert">Dayakan GPS untuk menggunakan aplikasi</string>
+
+    <string name="enable_gps">Dayakan GPS</string>
+    <string name="cancel">Batalkan</string>
+
+    <!-- Strings related to thank you page -->
+    <string name="thankyou_text">Thank You </string>
+    <string name="order_placed_text">Your order has been placed successfull</string>
+
+</resources>

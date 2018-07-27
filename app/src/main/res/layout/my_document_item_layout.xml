@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:background="@drawable/order_detail_item"
+        android:padding="10dp"
+        >
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:src="@drawable/car"
+            android:id="@+id/document_image"
+            android:scaleType="fitXY"
+            android:background="@color/black_color"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Car Image"
+                android:textSize="14dp"
+                android:textColor="@color/black_color"
+                android:id="@+id/document_name"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uploaded on 4 june 2018"
+                android:textSize="12dp"
+                android:textColor="@color/theme_primary"
+                android:id="@+id/document_uploaded_date"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

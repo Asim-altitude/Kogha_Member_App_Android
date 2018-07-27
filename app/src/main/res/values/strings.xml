@@ -1,0 +1,169 @@
+<resources>
+    <string name="app_name">KOGHA Member</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email Address</string>
+    <string name="prompt_username">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="auth_code">Authentication code</string>
+    <string name="action_sign_in">Login as Member</string>
+    <string name="action_task_finish">Finish Task</string>
+    <string name="action_send_request">Send Request</string>
+    <string name="action_cancel_request">Cancel Request</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_sign_in_short">Log In</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."</string>
+
+    <string name="already_account">Already Registered</string>
+    <string name="authentication_code_not_received"><u>Authentication Code not Received</u></string>
+    <string name="not_registered_account">Not Registered Yet?</string>
+    <string name="forget_password">Forgot Password</string>
+
+    <string name="create_account">Create Account</string>
+
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="FCM_PREF">com.getranked.teamguard.fcm_pref</string>
+    <string name="FCM_TOKEN">com.getranked.teamguard.fcm_token</string>
+
+
+    <!-- Strings related to home page -->
+
+    //sign up screen strings
+
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_your_phone">Enter Your Phone</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="re_enter_your_password">Re-Enter Password</string>
+    <string name="register">Register</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="confirm_registeration">Confirm Registration</string>
+    <string name="already_register">Already Register</string>
+    //Forgot password screen languages
+
+    <string name="submit">Submit</string>
+
+    <string name="immediate_boking">Immediate booking</string>
+    <string name="schedule_booking">Schedule booking</string>
+    <string name="where_to">Where To </string>
+
+
+    //Menu strings
+
+    <string name="dashboard">Dashboard</string>
+    <string name="suggested_job">Suggested Jobs</string>
+    <string name="completed_jobs">Completed Jobs</string>
+    <string name="my_profile">My Profile</string>
+    <string name="allowed_services">Allowed Services</string>
+    <string name="notifications">Notifications</string>
+    <string name="language">Language</string>
+    <string name="log_out">Log out</string>
+
+    <string name="upload_documents">My documents</string>
+    <string name="upload_docs">Upload documents</string>
+
+
+    //Change Password
+
+    <string name="old_pass">Enter old password</string>
+    <string name="new_pass">Enter new password</string>
+    <string name="confirm_pass">Confirm password</string>
+    <string name="change_pass">Change password</string>
+
+    //Edit Profile
+
+    <string name="your_name">Enter your name</string>
+    <string name="your_email">Enter your email</string>
+    <string name="your_phone">Enter your phone</string>
+    <string name="update_info">Update Information</string>
+
+
+    //tabs strings
+    <string name="edit_profile">Edit Profile</string>
+    <string name="Upcoming_jobs">Upcoming jobs</string>
+    <string name="suggested_jobs">Suggested Jobs</string>
+
+    <string name="edit_my_profile">Edit Profile</string>
+    <string name="change_my_password">Change Password</string>
+
+    <string name="general">General</string>
+    <string name="chat">Chat</string>
+    <string name="job">Job</string>
+
+    <string name="call">Call</string>
+
+    <string-array name="profile_tabs">
+        <item name="edit">@string/edit_profile</item>
+        <item name="change">@string/change_pass</item>
+    </string-array>
+
+    <string-array name="dashboard_tabs">
+        <item name="Upcoming">@string/Upcoming_jobs</item>
+        <item name="suggested">@string/suggested_jobs</item>
+    </string-array>
+
+
+    //titles
+
+    <string name="services">Services</string>
+    <string name="uploaded_docs">Uploaded documents</string>
+
+    //Suggested jobs and upcoming jobs
+
+    <string name="meet_location">Meetup Location</string>
+    <string name="dest_location">Destination</string>
+    <string name="meet_date_time">Meet date &amp; Time</string>
+    <string name="instructions">Instructions</string>
+    <string name="job_posted">Job posted</string>
+    <string name="job_hrs">Job hours</string>
+    <string name="earnings">Earnings</string>
+    <string name="job_starts">job starts in</string>
+
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+
+    <string name="meet_date">Meet date</string>
+
+    <string name="meet_time">Time</string>
+
+    <string name="job_started">job started</string>
+    <string name="completed_on">Completed on</string>
+
+
+    //alert strings
+
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+
+    <string name="accept_confirmation">Are you sure you want to accept?</string>
+    <string name="reject_confirmation">Are you sure you want to cancel?</string>
+
+    <string name="seconds">seconds</string>
+    <string name="mins">mins</string>
+    <string name="hours">hours</string>
+    <string name="month">month</string>
+    <string name="ago">ago</string>
+    <string name="yesterday">yesterday</string>
+    <string name="day">days</string>
+
+    <string name="calculating">calculating...</string>
+
+    <string name="gps_alert">Enable GPS to use application</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="cancel">Cancel</string>
+
+
+    <!-- Strings related to thank you page -->
+    <string name="thankyou_text">Thank You </string>
+    <string name="order_placed_text">Your order has been placed successfull</string>
+
+</resources>

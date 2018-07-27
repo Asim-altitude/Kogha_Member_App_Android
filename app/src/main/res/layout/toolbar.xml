@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:theme="@style/ToolbarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/black_color">
+
+    <TextView
+        android:id="@+id/pageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text=""
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textColor="@color/white_color"/>
+
+    <FrameLayout
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:layout_width="40dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgShoppingCart"
+            android:src="@drawable/ic_shopping_cart"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+
+        <TextView
+            android:id="@+id/badger"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:layout_gravity="start|top"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/oval_shape"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/white_color"/>
+
+    </FrameLayout>
+
+</android.support.v7.widget.Toolbar>

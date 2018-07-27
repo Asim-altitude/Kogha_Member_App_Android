@@ -1,0 +1,150 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_color">
+    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
+
+        <!--LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:text="Coming Soon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white_color"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"/>
+
+        </LinearLayout-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_order_recycler_view"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white_color"
+            android:padding="5dp"
+            android:layout_marginTop="60dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/tabBar"
+        android:background="@color/tab_bar_background"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:id="@+id/btn_home"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_home"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+            <TextView
+                android:text="Home"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnOrders"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@color/theme_primary_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_my_orders"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+            <TextView
+                android:text="My Orders"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnReviews"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_my_reviews"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+            <TextView
+                android:text="My Reviews"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnProfile"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_my_profile"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+            <TextView
+                android:text="My Profile"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

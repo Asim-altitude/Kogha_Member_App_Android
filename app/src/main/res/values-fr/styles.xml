@@ -1,0 +1,175 @@
+<resources>
+
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here -->
+
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/black_color</item>
+        <item name="colorAccent">@color/theme_primary_dark</item>
+        <item name="android:windowBackground">@color/theme_background</item>
+        <item name="android:textColorPrimary">@color/black_color</item>
+        <item name="actionMenuTextColor">@color/theme_icons</item>
+        <item name="android:textColorSecondary">@color/theme_primary_dark</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorButtonNormal">@color/theme_primary_dark</item>
+        <item name="android:listDivider">@color/white_color</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+
+
+        <!--item name="listPreferredItemHeightSmall">38dp</item-->
+
+    </style>
+
+
+    <style name="SwitchCompatTheme" >
+        <item name="colorControlActivated">@color/green_color</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">#000</item>
+        <item name="colorAccent">@color/theme_primary</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">#000</item>
+        <item name="colorAccent">@color/theme_primary</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_primary_dark</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="colorAccent">@color/theme_primary_dark</item>
+        <item name="android:textColorPrimary">@color/theme_primary_dark</item>
+        <item name="android:textColorSecondary">@color/theme_primary_dark</item>
+    </style>
+
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon -->
+        <item name="searchIcon">@drawable/search_ic</item>
+        <!-- Gets rid of the "underline" in the text -->
+        <item name="queryBackground">@color/white_color</item>
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <item name="queryHint">Search contact</item>
+    </style>
+
+    <style name="Theme_Dialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:textColor">@color/black_color</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/theme_icons</item>
+        <item name="android:textColorSecondary">@color/theme_icons</item>
+    </style>
+
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white_color</item>
+    </style>
+
+    <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Transparent the theme here -->
+
+        <!--
+            android:windowIsTranslucent
+                Flag indicating whether this is a translucent window.
+        -->
+        <!--
+            public static final int Window_windowIsTranslucent
+                Flag indicating whether this is a translucent window. If this attribute is unset
+                (but not if set to false), the window might still be considered translucent,
+                if windowSwipeToDismiss is set to true.
+
+                Must be a boolean value, either "true" or "false".
+
+                This may also be a reference to a resource (in the form "@[package:]type:name") or
+                theme attribute (in the form "?[package:][type:]name") containing a value of this type.
+
+                This corresponds to the global attribute resource symbol windowIsTranslucent.
+
+                Constant Value: 5 (0x00000005)
+        -->
+        <item name="android:windowIsTranslucent">true</item>
+
+        <!--
+            android:windowBackground
+                Drawable to use as the overall window background.
+        -->
+        <!--
+            public static final int Window_windowBackground
+                Drawable to use as the overall window background. As of HONEYCOMB, this may be a
+                selector that uses state_accelerated to pick a non-solid color when running
+                on devices that can draw such a bitmap with complex compositing on top at 60fps.
+
+                There are a few special considerations to use when setting this drawable:
+
+                This information will be used to infer the pixel format for your window surface.
+                If the drawable has any non-opaque pixels, your window will be translucent (32 bpp).
+                If you want to draw the entire background yourself, you should set this drawable to
+                some solid color that closely matches that background (so the system preview of
+                your window will match), and then in code manually set your window's background
+                to null so it will not be drawn.
+
+                Must be a reference to another resource, in the form "@[+][package:]type:name" or
+                to a theme attribute in the form "?[package:][type:]name".
+
+                This corresponds to the global attribute resource symbol windowBackground.
+
+                Constant Value: 1 (0x00000001)
+
+        -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!--
+            android:windowContentOverlay
+                This Drawable is overlaid over the foreground of the Window content area, usually
+                to place a shadow below the title.
+        -->
+        <item name="android:windowContentOverlay">@null</item>
+
+        <!--
+            android:windowNoTitle
+                Flag indicating whether there should be no title on this window.
+        -->
+        <item name="android:windowNoTitle">true</item>
+
+        <!--
+            android:windowIsFloating
+                Flag indicating whether this is a floating window.
+        -->
+        <item name="android:windowIsFloating">true</item>
+
+        <!--
+            android:backgroundDimEnabled
+                Control whether dimming behind the window is enabled.
+        -->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="MyCustomTheme" parent="@android:style/Theme.Panel">
+        <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>
+    </style>
+
+    <style name="MyAnimation.Window" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/dialog_in_animation</item>
+        <item name="android:windowExitAnimation">@anim/dialog_out_animation</item>
+    </style>
+
+    <style name="SwitchCompatStyle" >
+        <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="trackTint">@color/green_color</item>
+    </style>
+</resources>

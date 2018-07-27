@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="220dp"
+    android:background="@color/black_color"
+    android:orientation="vertical"
+    android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userProfilePic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_avatar"/>
+
+        <TextView
+            android:id="@+id/txtName"
+            android:text="John Doe"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:textColor="@color/theme_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/ic_meetup_location"
+                    android:layout_marginTop="1dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"/>
+
+                <TextView
+                    android:text="Kualalampur, Malaysia"
+                    android:textSize="16sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="17dp"
+            android:background="@color/white_color"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+
+
+</LinearLayout>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="asim.tgs_member_app">
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDHMVQCO0KvLss_GvZYL8impb-3SLkj75Q" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".service.FcmInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".service.FcmMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <!-- action android:name="com.google.android.c2dm.intent.RECEIVE"/ -->
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".SignUpActivity"
+            android:configChanges="locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".VerificationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".HomePage"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".DrawerActivity"
+            android:configChanges="locale" />
+        <activity
+            android:name=".MyProfile"
+            android:configChanges="locale" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:configChanges="locale" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:configChanges="locale"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".NotificationListActivity"
+            android:configChanges="locale"
+            android:theme="@style/DarkTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <receiver
+            android:name=".service.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.google.android.gcm.demo.app" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.BackgroundLocationService"
+            android:exported="false" />
+        <!--
+            service
+            android:name=".service.ChatMessageNotifier"
+            android:exported="false" /
+        -->
+
+        <activity
+            android:name=".AllowedServices"
+            android:configChanges="locale" />
+        <activity
+            android:name=".UploadedDocumentsScreen"
+            android:configChanges="locale" />
+        <activity
+            android:name=".LanguageSelection"
+            android:configChanges="locale" />
+        <activity android:name=".Select_Services_Activity" />
+        <activity android:name=".Upload_Profile_Picture_Registration" />
+        <activity android:name=".Upload_Strength_Picture_Registeration" />
+        <activity android:name=".Upload_Driving_License_Registeration" />
+        <activity android:name=".Car_Details_Registeration" />
+        <activity android:name=".Upload_SideBody_Picture_Registeration" />
+        <activity android:name=".Upload_IC_Picture_Registeration" />
+        <activity android:name=".Upload_Insurance_Picture_Registeration" />
+        <activity android:name=".Upload_Interior_Picture_Registeration" />
+        <activity android:name=".Upload_Passport_Picture_Registeration" />
+        <activity android:name=".Upload_Grant_Picture_Registeration" />
+        <activity android:name=".Registeration_completed_Screen" />
+
+        <receiver android:name=".receiver.UninstallIntentReceiver">
+            <intent-filter android:priority="0">
+                <action android:name="android.intent.action.QUERY_PACKAGE_RESTART" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".AdminApprovalMessageActivity" />
+        <activity android:name=".PreferredLanguage" />
+        <activity android:name=".Current_job_screen"
+            android:theme="@style/DarkTheme"
+            ></activity>
+    </application>
+
+</manifest>

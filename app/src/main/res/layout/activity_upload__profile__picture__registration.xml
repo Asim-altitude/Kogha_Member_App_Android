@@ -1,0 +1,162 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white_color">
+
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:id="@+id/scrollView4"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+           >
+
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/app_name"
+                android:layout_width="25dp"
+                android:layout_height="22dp"
+                android:id="@+id/back_navigation"
+                android:tint="@color/black_color"
+                android:src="@drawable/back_arrow"/>
+
+            <ImageView
+                android:layout_marginTop="-20dp"
+                android:contentDescription="@string/app_name"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:id="@+id/splashImage"
+                android:tint="@color/black_color"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Upload Profile Picture"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="@color/white_color"
+                />
+
+
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                >
+
+
+          <ImageView
+              android:layout_width="300dp"
+              android:layout_height="220dp"
+              android:src="@drawable/profile_pic"
+              android:id="@+id/user_profile_image"
+              android:scaleType="fitXY"
+              android:layout_marginTop="10dp"
+              />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="0.07">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/service_image_container"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/camera_btn"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/camera"
+                        android:tint="@color/white_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="  Click from Camera  "
+                        android:textColor="@color/white_color"
+                        android:textSize="11dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/service_image_container"
+                    android:gravity="center_horizontal"
+                    android:padding="5dp"
+                    android:id="@+id/gallery_btn"
+                    android:layout_marginLeft="10dp"
+                    >
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/gallery_icon"
+                        android:tint="@color/white_color"
+                        android:scaleType="centerCrop"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose from Gallery"
+                        android:textColor="@color/white_color"
+                        android:textSize="11dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnNext_upload_profile"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_button"
+                android:text="@string/next"
+                android:textColor="@color/white_color"
+                android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginTop="20dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

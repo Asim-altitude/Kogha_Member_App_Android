@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white_color"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp"
+        android:id="@+id/main_item_layout"
+        android:background="@drawable/order_item_bg"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    >
+                    <View
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/circle_thick"
+                        />
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/notification"
+                        android:layout_centerInParent="true"
+                        android:tint="@color/white_color"
+                        />
+                </RelativeLayout>
+                <asim.tgs_member_app.utils.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:font="OpenSans_Bold.ttf"
+                    android:text="Job Alert"
+                    android:id="@+id/notification_title"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black_color"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="time"
+                android:id="@+id/notification_time"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/theme_primary"
+                />
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="this is my notification message "
+            android:id="@+id/notification_body"
+            android:textSize="13dp"
+            android:textColor="@color/black_color"
+            android:layout_marginTop="10dp"
+            android:minLines="2"
+            android:gravity="start"
+            android:padding="10dp"
+            />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "836709336266",
+    "firebase_url": "https://teamguardsecurity-56a93.firebaseio.com",
+    "project_id": "teamguardsecurity-56a93",
+    "storage_bucket": "teamguardsecurity-56a93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836709336266:android:2317cf8700e5a184",
+        "android_client_info": {
+          "package_name": "com.getranked.teamguard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836709336266-3o58r226tp3pfs346tsj81or6dnmc216.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuVJRhzwvzH5L09IEkPEs2IXPWAO-x5-Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836709336266:android:6c64d73dbfc1673f",
+        "android_client_info": {
+          "package_name": "com.getranked.teamguard_member"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836709336266-3o58r226tp3pfs346tsj81or6dnmc216.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuVJRhzwvzH5L09IEkPEs2IXPWAO-x5-Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
