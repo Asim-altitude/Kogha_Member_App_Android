@@ -1,17 +1,19 @@
 <resources>
     <string name="app_name">KOGHA Member</string>
 
+    <string name="DIRECTION_API_KEY">AIzaSyCVq9PoFIgocv01ACZ5bcRugJ1KwIjMfXA</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email Address</string>
     <string name="prompt_username">Email</string>
     <string name="prompt_password">Password</string>
     <string name="auth_code">Authentication code</string>
-    <string name="action_sign_in">Login as Member</string>
+    <string name="action_sign_in">Login</string>
     <string name="action_task_finish">Finish Task</string>
     <string name="action_send_request">Send Request</string>
     <string name="action_cancel_request">Cancel Request</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_sign_in_short">Log In</string>
+    <string name="action_sign_in_short">Login</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -22,9 +24,10 @@
     <string name="already_account">Already Registered</string>
     <string name="authentication_code_not_received"><u>Authentication Code not Received</u></string>
     <string name="not_registered_account">Not Registered Yet?</string>
-    <string name="forget_password">Forgot Password</string>
+    <string name="forget_password">Forgot Password?</string>
 
     <string name="create_account">Create Account</string>
+
 
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -38,13 +41,18 @@
 
     //sign up screen strings
 
-    <string name="enter_your_name">Enter Your Name</string>
-    <string name="enter_your_email">Enter Your Email</string>
-    <string name="enter_your_phone">Enter Your Phone</string>
+    <string name="member_login_title">Member Login</string>
+    <string name="member_signup_title">Member Registration</string>
+    <string name="enter_your_name">Full Name</string>
+    <string name="enter_your_email">Email</string>
+    <string name="enter_your_phone">Phone</string>
+    <string name="enter_your_ic">IC Number</string>
+    <string name="enter_your_passport">Passport Number</string>
     <string name="enter_your_password">Enter Your Password</string>
     <string name="re_enter_your_password">Re-Enter Password</string>
     <string name="register">Register</string>
     <string name="next">Next</string>
+    <string name="save_pass">Save Password</string>
     <string name="skip">Skip</string>
     <string name="confirm_registeration">Confirm Registration</string>
     <string name="already_register">Already Register</string>
@@ -125,6 +133,7 @@
     <string name="instructions">Instructions</string>
     <string name="job_posted">Job posted</string>
     <string name="job_hrs">Job hours</string>
+    <string name="uniform">Uniform</string>
     <string name="earnings">Earnings</string>
     <string name="job_starts">job starts in</string>
 
@@ -145,7 +154,7 @@
     <string name="no">no</string>
 
     <string name="accept_confirmation">Are you sure you want to accept?</string>
-    <string name="reject_confirmation">Are you sure you want to cancel?</string>
+    <string name="reject_confirmation">Are You Sure, You Want to Reject The Job?</string>
 
     <string name="seconds">seconds</string>
     <string name="mins">mins</string>

@@ -2,15 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="220dp"
-    android:background="@color/black_color"
+    android:background="@color/white_color"
     android:orientation="vertical"
     android:gravity="center">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userProfilePic"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_avatar"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userProfilePic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_avatar"
+                    android:layout_centerHorizontal="true"
+                    />
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/txtName"
@@ -19,7 +34,7 @@
             android:textAlignment="center"
             android:textSize="23sp"
             android:textStyle="bold"
-            android:textColor="@color/theme_primary"
+            android:textColor="@color/black_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -48,10 +63,11 @@
 
         <View
             android:layout_marginTop="17dp"
-            android:background="@color/white_color"
+            android:background="@color/theme_primary"
             android:layout_width="match_parent"
-            android:layout_height="2dp"/>
-
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="15sp"
+            android:layout_height="1dp"/>
 
 
 </LinearLayout>

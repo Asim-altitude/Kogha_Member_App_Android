@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="asim.tgs_member_app.BumbleRideCurrentRideScreen">
+
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context=".HomeActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Cancel Ride"
+            android:textColor="@color/theme_primary"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15sp"
+            android:id="@+id/cancel_ride_btn"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="End Ride"
+            android:textColor="@color/theme_primary"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15sp"
+            android:id="@+id/end_ride_btn"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Reached"
+            android:id="@+id/reached_btn"
+            android:textColor="@color/white_color"
+            android:visibility="visible"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Start Job"
+            android:id="@+id/start_job_btn"
+            android:visibility="visible"
+            android:textColor="@color/white_color"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

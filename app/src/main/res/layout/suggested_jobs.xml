@@ -6,35 +6,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="10dp"
         android:background="@drawable/order_detail_item"
-        >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <ImageView
+                android:id="@+id/chat_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/chat_red"
                 android:padding="8dp"
-                android:id="@+id/chat_btn"
-                />
+                android:src="@drawable/chat_red" />
 
             <LinearLayout
+                android:id="@+id/jobs_starts_in_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/top_right_rounded"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/jobs_starts_in_btn"
-                android:visibility="gone"
-                android:background="@drawable/top_right_rounded"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -44,258 +41,259 @@
                     android:textStyle="bold"
 
                     />
+
                 <TextView
+                    android:id="@+id/time_job"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="01:11:04"
                     android:layout_marginLeft="5dp"
+                    android:text="01:11:04"
                     android:textColor="@color/white_color"
-                    android:textStyle="bold"
-                    android:id="@+id/time_job"
                     android:textSize="13dp"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/meetup_location"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/meetup_location" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/meet_location"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/meet_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:maxLines="3"
+                    android:padding="2dp"
                     android:text="Kuala Lampur Federal Malaysia"
                     android:textColor="@color/black_color"
-                    android:textStyle="normal"
-                    android:padding="2dp"
                     android:textSize="12dp"
-                    android:maxLines="3"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/meet_location"
-                    />
+                    android:textStyle="normal" />
 
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/meetup_location"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/meetup_location" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/dest_location"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/destination_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:maxLines="3"
+                    android:padding="2dp"
                     android:text="Kuala Lampur Federal Malaysia"
                     android:textColor="@color/black_color"
-                    android:textStyle="normal"
-                    android:padding="2dp"
                     android:textSize="12dp"
-                    android:maxLines="3"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/destination_location"
-                    />
+                    android:textStyle="normal" />
 
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
+            android:id="@+id/meet_time_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:id="@+id/meet_time_layout"
-            >
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/clock"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/clock" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/meet_date_time"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/meet_datetime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11/11/2018 8:00am"
-                    android:textColor="@color/black_color"
+                    android:layout_marginLeft="10dp"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:textStyle="normal"
                     android:padding="2dp"
+                    android:text="11/11/2018 8:00am"
+                    android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/meet_datetime"
-                    />
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
+            android:id="@+id/posted_time_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:id="@+id/posted_time_layout"
-            >
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/clock"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/clock" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/job_posted"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/posted_datetime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11/11/2018 8:00am"
-                    android:textColor="@color/black_color"
+                    android:layout_marginLeft="10dp"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:textStyle="normal"
                     android:padding="2dp"
+                    android:text="11/11/2018 8:00am"
+                    android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/posted_datetime"
-                    />
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:id="@+id/instruction_layout"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/instructions"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/instructions" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/instructions"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/instructions"
@@ -312,86 +310,169 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:id="@+id/job_hrs_layout"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/job_hours"
                 android:layout_margin="10dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/job_hours" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="5dp"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="@string/job_hrs"
                     android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:padding="2dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/job_hours"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="8Hrs, 8am to 4pm"
-                    android:textColor="@color/black_color"
+                    android:layout_marginLeft="10dp"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:textStyle="normal"
                     android:padding="2dp"
-                    android:id="@+id/job_hours"
+                    android:text="8Hrs, 8am to 4pm"
+                    android:textColor="@color/black_color"
                     android:textSize="12dp"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:textStyle="normal" />
 
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_color"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:background="@color/light_gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:id="@+id/job_type_layout"
+            android:padding="10dp"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job type"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/black_color"
+
+                />
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/job_type_list"
+                android:padding="5dp"
+                ></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/light_gray_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/uniform_layout"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/payment"
                 android:layout_margin="10dp"
-                android:padding="2dp"
                 android:background="@drawable/rectangle_redish"
-                />
+                android:src="@drawable/uniform" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/uniform"
+                    android:textColor="@color/black_color"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/uniform"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/intermediate"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/light_gray_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rectangle_redish"
+                android:padding="2dp"
+                android:src="@drawable/payment" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/textView2"
@@ -404,55 +485,53 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/order_total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="RM200"
-                    android:textColor="@color/black_color"
+                    android:layout_marginLeft="10dp"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:textStyle="bold"
                     android:padding="2dp"
+                    android:text="RM200"
+                    android:textColor="@color/black_color"
                     android:textSize="14dp"
-                    android:id="@+id/order_total"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/option_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
-            android:weightSum="2"
             android:padding="5dp"
-            android:id="@+id/option_layout"
             android:visibility="visible"
-            >
+            android:weightSum="2">
+
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/reject"
-                android:layout_margin="10dp"
-                android:textColor="@color/white_color"
-                android:background="@drawable/cancel_btn_bg"
-                android:textAllCaps="false"
                 android:id="@+id/reject_job"
-                />
-            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/accept"
                 android:layout_margin="10dp"
-                android:textColor="@color/white_color"
-                android:background="@drawable/tab_selected_bg"
+                android:layout_weight="1"
+                android:background="@drawable/cancel_btn_bg"
+                android:text="@string/reject"
                 android:textAllCaps="false"
+                android:textColor="@color/white_color" />
+
+            <Button
                 android:id="@+id/accept_job"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/tab_selected_bg"
+                android:text="@string/accept"
+                android:textAllCaps="false"
+                android:textColor="@color/white_color" />
         </LinearLayout>
 
-</LinearLayout>
     </LinearLayout>
+</LinearLayout>

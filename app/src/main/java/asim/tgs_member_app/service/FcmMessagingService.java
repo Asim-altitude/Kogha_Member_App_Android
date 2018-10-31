@@ -1,5 +1,6 @@
 package asim.tgs_member_app.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,7 +20,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,6 +33,7 @@ import asim.tgs_member_app.chat.ChatActivity;
 import asim.tgs_member_app.chat.Chat_Message;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.Notification_Data;
+import asim.tgs_member_app.utils.NotificationUtils;
 
 import static android.content.ContentValues.TAG;
 
@@ -59,6 +63,12 @@ public class FcmMessagingService extends FirebaseMessagingService {
             String post_id = remoteMessage.getData().get("post_id");
 
             Log.e("message",remoteMessage.toString());
+
+
+            if (!Constants.can_login)
+            {
+                return;
+            }
 
             if (post_id==null)
                 post_id = "0";
@@ -113,6 +123,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
         Gson gson = new Gson();
         String notification_type;
         String json;
+        String  date_before = new SimpleDateFormat("dd MMM yyyy h:mm").format(Calendar.getInstance().getTime());
         // String json = gson.toJson(notifications);
         if (prefs_name.equalsIgnoreCase(Constants.USER_JOB_NOTIFICATION)) {
             json = settings.getString("job_notifications", "");
@@ -135,6 +146,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
             notification.setTitle(title);
             notification.setExtra("");
             notification.setId("1");
+            notification.setTime(date_before);
             notification.setShown(false);
 
             notifications.add(notification);
@@ -157,6 +169,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
                 notification.setBody(body);
                 notification.setTitle(title);
                 notification.setExtra("");
+                notification.setTime(date_before);
                 notification.setId(extra_id + "");
                 notification.setShown(false);
 
@@ -191,27 +204,54 @@ public class FcmMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.checkmark_true);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.kogha_launcher);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder.setSmallIcon(R.drawable.checkmark_true);
-            notificationBuilder.setColor(getResources().getColor(R.color.reddish));
-        } else {
-            notificationBuilder.setSmallIcon(R.drawable.checkmark_true);
+            if (notificationUtils==null)
+                notificationUtils = new NotificationUtils(getApplicationContext());
+
+            Notification.Builder notificationBuilder = notificationUtils.getAndroidChannelNotification(title_,messageBody);
+            notificationBuilder.setSmallIcon(R.drawable.kogha_launcher);
+            ;
+          /*  notificationBuilder.setContentTitle(title);
+            if (count > 1) {
+                notificationBuilder.setContentTitle(count + " chat messeges");
+                notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(messeges));
+                notificationBuilder.setContentText(messeges);
+                messeges = "";
+            } else {
+                notificationBuilder.setContentText(message);
+            }*/
+
+            notificationBuilder.setAutoCancel(true);
+            notificationBuilder.setSound(defaultSoundUri);
+            notificationBuilder.setLargeIcon(bm);
+            notificationBuilder.setContentIntent(pendingIntent);
+
+            notificationUtils.getManager().notify(101, notificationBuilder.build());
+
         }
-        notificationBuilder
-                .setLargeIcon(bm)
-                .setContentTitle(title_)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Constants.NOTICIATION_ID /* ID of notification */, notificationBuilder.build());
+        else {
 
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                notificationBuilder.setSmallIcon(R.drawable.kogha_launcher);
+                // notificationBuilder.setColor(getResources().getColor(R.color.reddish));
+            } else {
+                notificationBuilder.setSmallIcon(R.drawable.kogha_launcher);
+            }
+            notificationBuilder
+                    .setLargeIcon(bm)
+                    .setContentTitle(title_)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(Constants.NOTICIATION_ID /* ID of notification */, notificationBuilder.build());
 
+        }
     }
 
 
@@ -265,6 +305,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
     ArrayList<String> messege_list = new ArrayList<>();
     public static int count = 0;
     String messeges="";
+    NotificationUtils notificationUtils;
     private void NotifyUser(String message, String chat_id,String title)
     {
         if (count==0)
@@ -291,37 +332,73 @@ public class FcmMessagingService extends FirebaseMessagingService {
             }
         }
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setSmallIcon(R.drawable.ic_logo);;
-        notificationBuilder.setContentTitle(title);
-        if (count>1)
-        {
-            notificationBuilder.setContentTitle(count+" chat messeges");
-            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messeges));
-            notificationBuilder.setContentText(messeges);
-            messeges = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            if (notificationUtils==null)
+                notificationUtils = new NotificationUtils(getApplicationContext());
+
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.kogha_launcher);
+
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Notification.Builder notificationBuilder = notificationUtils.getAndroidChannelNotification(title,message);
+            notificationBuilder.setSmallIcon(R.drawable.kogha_launcher);
+            ;
+          /*  notificationBuilder.setContentTitle(title);
+            if (count > 1) {
+                notificationBuilder.setContentTitle(count + " chat messeges");
+                notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(messeges));
+                notificationBuilder.setContentText(messeges);
+                messeges = "";
+            } else {
+                notificationBuilder.setContentText(message);
+            }*/
+
+            notificationBuilder.setAutoCancel(true);
+            notificationBuilder.setSound(defaultSoundUri);
+            notificationBuilder.setLargeIcon(bm);
+            notificationBuilder.setContentIntent(pendingIntent);
+
+            notificationUtils.getManager().notify(101, notificationBuilder.build());
+
         }
-        else
-        {
-            notificationBuilder.setContentText(message);
+        else {
+
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.kogha_launcher);
+
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+            notificationBuilder.setSmallIcon(R.drawable.kogha_launcher);
+            ;
+            notificationBuilder.setContentTitle(title);
+            if (count > 1) {
+                notificationBuilder.setContentTitle(count + " chat messeges");
+                notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messeges));
+                notificationBuilder.setContentText(messeges);
+                messeges = "";
+            } else {
+                notificationBuilder.setContentText(message);
+            }
+            notificationBuilder.setAutoCancel(true);
+            notificationBuilder.setSound(defaultSoundUri);
+            notificationBuilder.setLargeIcon(bm);
+            notificationBuilder.setContentIntent(pendingIntent);
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            saveChatNotification(message, title, chat_id);
+            notificationManager.notify(10 /* ID of notification */, notificationBuilder.build());
+
         }
-        notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setSound(defaultSoundUri);
-        notificationBuilder.setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-        saveChatNotification(message,title);
-        notificationManager.notify(10 /* ID of notification */, notificationBuilder.build());
     }
     ArrayList<Notification_Data> notifications;
     SharedPreferences settings;
-    private void saveChatNotification(String message,String title)
+    private void saveChatNotification(String message,String title,String chat_id)
     {
         settings = getSharedPreferences(Constants.USER_CHAT_NOTIFICATION , MODE_PRIVATE);
+
+
 
         Gson gson = new Gson();
         String notification_type;
@@ -331,6 +408,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
         json = settings.getString("chat_notifications", "");
         notification_type = "chat_notifications";
 
+        String  date_before = new SimpleDateFormat("dd MMM yyyy h:mm").format(Calendar.getInstance().getTime());
 
         notifications = new ArrayList<>();
 
@@ -343,6 +421,9 @@ public class FcmMessagingService extends FirebaseMessagingService {
             notification.setTitle(title);
             notification.setExtra("");
             notification.setId("1");
+            notification.setChat_id(chat_id);
+            notification.setChat(true);
+            notification.setTime(date_before);
             notification.setShown(false);
 
             notifications.add(notification);
@@ -366,7 +447,9 @@ public class FcmMessagingService extends FirebaseMessagingService {
                 notification.setExtra("");
                 notification.setId(extra_id + "");
                 notification.setShown(false);
-
+                notification.setChat_id(chat_id);
+                notification.setChat(true);
+                notification.setTime(date_before);
                 notifications.add(notification);
 
             }

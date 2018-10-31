@@ -6,18 +6,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
@@ -30,7 +36,10 @@ import java.util.List;
 
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.models.Constants;
+import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.models.SuggestedJobObject;
+import asim.tgs_member_app.utils.Job_Accepted_Callback;
+import asim.tgs_member_app.utils.Job_Selection_Notifier;
 import asim.tgs_member_app.utils.NotifyUpdates;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
@@ -40,8 +49,8 @@ import cz.msebera.android.httpclient.Header;
  */
 public class SuggestedJobAdapter extends BaseAdapter
 {
-
     private List<SuggestedJobObject> list;
+
     private Context context;
     private LayoutInflater layoutInflater;
     private NotifyUpdates notifyUpdates;
@@ -55,6 +64,18 @@ public class SuggestedJobAdapter extends BaseAdapter
         this.context = context;
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        settings = context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+        mem_id = settings.getString(Constants.PREFS_USER_ID,"117");
+
+    }
+    String mem_id;
+
+    private Job_Accepted_Callback job_accepted_callback;
+    public void setCallBack(Job_Accepted_Callback job_accepted_callback)
+    {
+        this.job_accepted_callback = job_accepted_callback;
     }
 
     @Override
@@ -72,13 +93,14 @@ public class SuggestedJobAdapter extends BaseAdapter
         return 0;
     }
 
+    private int id = 0;
+    Job_Services_Adapter job_services_adapter;
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if (convertView==null)
-        {
-            convertView = layoutInflater.inflate(R.layout.suggested_jobs,null);
-        }
 
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.suggested_jobs, null);
+        }
 
         TextView meet_location = (TextView) convertView.findViewById(R.id.meet_location);
         TextView destination_location = (TextView) convertView.findViewById(R.id.destination_location);
@@ -88,24 +110,78 @@ public class SuggestedJobAdapter extends BaseAdapter
         TextView instructions = (TextView) convertView.findViewById(R.id.instructions);
         TextView job_hrs = (TextView) convertView.findViewById(R.id.job_hours);
         TextView timer_text = (TextView) convertView.findViewById(R.id.time_job);
+        ImageView uniform = (ImageView) convertView.findViewById(R.id.uniform);
+        LinearLayout uniform_layout = (LinearLayout) convertView.findViewById(R.id.uniform_layout);
 
         Button accept_job = (Button) convertView.findViewById(R.id.accept_job);
         Button cancel_job = (Button) convertView.findViewById(R.id.reject_job);
         LinearLayout meet_time_layout = (LinearLayout) convertView.findViewById(R.id.meet_time_layout);
         final LinearLayout option_layout = (LinearLayout) convertView.findViewById(R.id.option_layout);
+        LinearLayout job_type_layout = (LinearLayout) convertView.findViewById(R.id.job_type_layout);
+        LinearLayout instruction_layout = (LinearLayout) convertView.findViewById(R.id.instruction_layout);
+
+        LinearLayout job_hrs_layout = (LinearLayout) convertView.findViewById(R.id.job_hrs_layout);
+        RecyclerView job_type_list = convertView.findViewById(R.id.job_type_list);
+
+
+        if (list.get(position).getService_list().size() > 0) {
+            job_type_layout.setVisibility(View.VISIBLE);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            job_type_list.setLayoutManager(layoutManager);
+            job_services_adapter = new Job_Services_Adapter(list.get(position).getService_list(), context);
+            if (list.get(position).getService_list().size()==1)
+            {
+                list.get(position).setSelected_service_id(list.get(position).getService_list().get(0).getService_id());
+                list.get(position).setService_type_selected_id(list.get(position).getService_list().get(0).getService_type_id());
+                list.get(position).setService_name(list.get(position).getService_list().get(0).getService_name());
+                job_services_adapter.setSelected_index(0);
+            }
+            else {
+                job_services_adapter.setJob_selection_notifier(new Job_Selection_Notifier() {
+                    @Override
+                    public void onJobSelection(int pos) {
+
+                        list.get(position).setSelected_service_id(list.get(position).getService_list().get(pos).getService_id());
+                        list.get(position).setService_type_selected_id(list.get(position).getService_list().get(pos).getService_type_id());
+                        list.get(position).setService_name(list.get(position).getService_list().get(pos).getService_name());
+                        job_services_adapter.setSelected_index(pos);
+                        job_services_adapter.notifyDataSetChanged();
+
+                    }
+                });
+            }
+
+            job_type_list.setAdapter(job_services_adapter);
+
+        } else {
+            job_type_layout.setVisibility(View.GONE);
+        }
+
 
 
         accept_job.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String order_id = settings.getString(Constants.CURRENT_JOB,"0");
+                if (!order_id.equalsIgnoreCase("0"))
+                {
+                    UtilsManager.showAlertMessage(context, "", "You already have a job in progress.");
+                    return;
+                }
+
+
+                if (!list.get(position).getService_name().equalsIgnoreCase("0") && !list.get(position).getService_name().equalsIgnoreCase(""))
                     AcceptJob(position);
+                else
+                    UtilsManager.showAlertMessage(context, "", "Select service please");
 
             }
         });
         cancel_job.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    CancelJob(position);
+                CancelJob(position);
 
             }
         });
@@ -113,16 +189,55 @@ public class SuggestedJobAdapter extends BaseAdapter
 
         SuggestedJobObject object = list.get(position);
 
+
+        if (list.get(position).getUniform().equalsIgnoreCase("0")) {
+            uniform_layout.setVisibility(View.GONE);
+        } else {
+
+            uniform_layout.setVisibility(View.VISIBLE);
+
+            if (list.get(position).getUniform().equalsIgnoreCase("1")) {
+                uniform.setImageResource(R.drawable.premium);
+                id = 1;
+            } else if (list.get(position).getUniform().equalsIgnoreCase("2")) {
+                uniform.setImageResource(R.drawable.casual);
+                id = 2;
+            } else if (list.get(position).getUniform().equalsIgnoreCase("3")) {
+                uniform.setImageResource(R.drawable.intermediate);
+                id = 3;
+            } else if (list.get(position).getUniform().equalsIgnoreCase("4")) {
+                uniform.setImageResource(R.drawable.basic);
+                id = 4;
+            }
+
+            uniform.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (list.get(position).getUniform().equalsIgnoreCase("1")) {
+                        showZoomImage(R.drawable.premium);
+                    } else if (list.get(position).getUniform().equalsIgnoreCase("2")) {
+                        showZoomImage(R.drawable.casual);
+                    } else if (list.get(position).getUniform().equalsIgnoreCase("3")) {
+                        showZoomImage(R.drawable.intermediate);
+                    } else if (list.get(position).getUniform().equalsIgnoreCase("4")) {
+                        showZoomImage(R.drawable.basic);
+                    }
+                }
+            });
+
+        }
+
         if (object.getBooking_type().equalsIgnoreCase("Immediate") || object.getBooking_type().equalsIgnoreCase("")) {
             meet_time_layout.setVisibility(View.GONE);
             list.get(position).setDatetime_meet("required immediatly");
-        }
-        else {
+        } else {
             meet_time_layout.setVisibility(View.VISIBLE);
         }
 
         if (object.getInstructions().equals("N/A"))
-            object.setInstructions("no instructions ");
+            instruction_layout.setVisibility(View.GONE);
+        else
+            instruction_layout.setVisibility(View.VISIBLE);
 
         meet_date.setText(ApplyFormat(object.getDatetime_meet()));
         meet_location.setText(object.getMeet_loc());
@@ -142,19 +257,16 @@ public class SuggestedJobAdapter extends BaseAdapter
 
             if (comma_seperated_price.equalsIgnoreCase(".00"))
                 comma_seperated_price = "0.00";
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        total.setText(Constants.currency+comma_seperated_price);
-        job_hrs.setText(object.getNo_of_hours()+" hrs");
+        total.setText(Constants.currency + comma_seperated_price);
+        job_hrs.setText(object.getNo_of_hours() + " hrs");
         timer_text.setText(object.getJob_starts_in());
         posted_date.setText(object.getJob_posted_time());
 
-       calculatejobpostedTime(position,object.getDatetime_ordered(),object.getServer_time());
+        calculatejobpostedTime(position, object.getDatetime_ordered(), object.getServer_time());
 
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss");
@@ -164,9 +276,7 @@ public class SuggestedJobAdapter extends BaseAdapter
             // meet_date.setText(new SimpleDateFormat("yyyy/MM/dd-h:mm:ss").parse(list.get(position).getDatetime_meet()).toString());
             meet_date.setText(formmated_date);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -181,6 +291,12 @@ public class SuggestedJobAdapter extends BaseAdapter
             if (list.get(position).getJob_starts_in().equalsIgnoreCase("not started yet"))
                 showCountDown(timer_text,list.get(position),position);
         }*/
+
+        if (list.get(position).getNo_of_hours().equalsIgnoreCase("0")) {
+            job_hrs_layout.setVisibility(View.GONE);
+            instruction_layout.setVisibility(View.GONE);
+        }
+
 
         return convertView;
     }
@@ -323,8 +439,13 @@ public class SuggestedJobAdapter extends BaseAdapter
         builder.setMessage(R.string.reject_confirmation);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                list.get(position).setShow_options(false);
+               // list.get(position).setShow_options(false);
+
                 confirmation.dismiss();
+                SuggestedJobObject object = list.get(position);
+                CancelJob(mem_id,object.getCustomer_id(),object.getOrder_id(),"2");
+                list.remove(position);
+
                 notifyDataSetChanged();
             }
         }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
@@ -336,8 +457,7 @@ public class SuggestedJobAdapter extends BaseAdapter
         });
 
 
-
-        confirmation= builder.create();
+        confirmation = builder.create();
         confirmation.show();
     }
 
@@ -376,9 +496,15 @@ public class SuggestedJobAdapter extends BaseAdapter
          String member_id = settings.getString(Constants.PREFS_USER_ID,"0");
          key ="tgs_appkey_amin";// settings.getString(Constants.PREFS_ACCESS_TOKEN,"tgs_appkey_amin");
 
+        String service_name = list.get(position).getService_name();
+        String service_type_id = list.get(position).getService_type_selected_id();
+        String service_id = list.get(position).getSelected_service_id();
 
-        Log.e("suggested jobs",  Constants.Host_Address + "members/accept_order/"+member_id+"/"+list.get(position).getOrder_id()+"/"+list.get(position).getOrder_item_id()+"/"+list.get(position).getMember_share()+"/"+key+"/"+list.get(position).getCustomer_id());
-        httpClient.get(context, Constants.Host_Address + "members/accept_order/"+member_id+"/"+list.get(position).getOrder_id()+"/"+list.get(position).getOrder_item_id()+"/"+list.get(position).getMember_share()+"/"+key+"/"+list.get(position).getCustomer_id(), new AsyncHttpResponseHandler() {
+        String accept_url = Constants.Host_Address + "members/accept_order/"+member_id+"/"+list.get(position).getOrder_id()+"/"+list.get(position).getOrder_item_id()+"/"+list.get(position).getMember_share()+"/"+key+"/"+list.get(position).getCustomer_id()+"/"+service_name+"/"+service_type_id +"/"+service_id;
+        Log.e("accepted_url",accept_url);
+
+        //Log.e("suggested_jobs", Constants.Host_Address + "members/accept_order/"+member_id+"/"+list.get(position).getOrder_id()+"/"+list.get(position).getOrder_item_id()+"/"+list.get(position).getMember_share()+"/"+key+"/"+list.get(position).getCustomer_id()+"/"+service_name+"/"+service_type_id);
+        httpClient.get(context, Constants.Host_Address + "members/accept_order/"+member_id+"/"+list.get(position).getOrder_id()+"/"+list.get(position).getOrder_item_id()+"/"+list.get(position).getMember_share()+"/"+key+"/"+list.get(position).getCustomer_id()+"/"+service_name+"/"+service_type_id+"/"+service_id, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -398,15 +524,22 @@ public class SuggestedJobAdapter extends BaseAdapter
                     String responseData = new String(responseBody,"UTF-8");
                     Log.e("response success",responseData);
                     JSONObject object = new JSONObject(responseData);
-                    JSONObject data = object.getJSONObject("data");
-                    String datetime_accepted = data.getString("datetime_accepted");
-                    String datetime_reached = data.getString("datetime_reached");
-                    String order_item_id = data.getString("order_item_id");
-                    list.remove(position);
-                    notifyDataSetChanged();
-                    notifyUpdates.callToFragment();
+                    int errorCode = object.getInt("errorCode");
 
-                    Toast.makeText(context,"Job accepted",Toast.LENGTH_LONG).show();
+                    if (errorCode==1)
+                    {
+                        String message = object.getString("message");
+                        UtilsManager.showAlertMessage(context,"",message);
+                    }
+                    else {
+                        list.remove(position);
+                        // job_accepted_callba.onJobAccepted(list.get(position).getOrder_id());
+
+                        notifyDataSetChanged();
+                        notifyUpdates.callToFragment();
+
+                        Toast.makeText(context, "Job accepted", Toast.LENGTH_LONG).show();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -499,7 +632,7 @@ public class SuggestedJobAdapter extends BaseAdapter
                         rem_seconds = tem_sec%60;
                     }
 
-                    String calcuated_time = context.getResources().getString(R.string.calculating);
+                    String calcuated_time = list.get(position).getJob_posted_time();//context.getResources().getString(R.string.calculating);
 
                     if (rem_hrs<10 && rem_minutes<10 && rem_seconds>=10)
                         calcuated_time= "0"+rem_hrs+":"+"0"+rem_minutes+":"+rem_seconds;
@@ -552,4 +685,94 @@ public class SuggestedJobAdapter extends BaseAdapter
             e.printStackTrace();
         }
     }
+
+    FirebaseDatabase firebaseDatabase;
+
+    private void createFirebaseNode(String order_id)
+    {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        String mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
+        String mem_id = settings.getString(Constants.PREFS_USER_ID, "");
+        String current_job = settings.getString(Constants.CURRENT_JOB,"1");
+        String lat = settings.getString(Constants.PREFS_USER_LAT,"");
+        String lon = settings.getString(Constants.PREFS_USER_LNG,"");
+
+        settings.edit().putString(Constants.CURRENT_JOB,order_id).apply();
+        final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", lat + "", lon + "");
+        member.setCurrent_job(order_id);
+
+        String key = mem_id + "_member";
+        if (!mem_id.equalsIgnoreCase(""))
+            firebaseDatabase.getReference().child("members").child(key).setValue(member);
+    }
+
+    private void CancelJob(String member_id,String customer_id,String order_id,String status)
+    {
+        httpClient.setConnectTimeout(20000);
+        Log.e("REEJECT_ORDER",Constants.Host_Address + "members/order_response/" + member_id + "/" + customer_id + "/" + order_id + "/"+status+"/tgs_appkey_amin");
+
+        httpClient.get(context, Constants.Host_Address + "members/order_response/" + member_id + "/" + customer_id + "/" + order_id + "/"+status+"/tgs_appkey_amin", new AsyncHttpResponseHandler() {
+
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Cancelling job");
+                progressDialog.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+
+                    if (progressDialog!=null)
+                        progressDialog.dismiss();
+
+                    String response = new String(responseBody);
+                    Log.e("RESPONSE",response);
+
+                    settings.edit().putInt(Constants.CURRENT_TAB,1).apply();
+                    notifyUpdates.callToFragment();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    if (progressDialog!=null)
+                        progressDialog.dismiss();
+
+                    String response = new String(responseBody);
+                    Log.e("RESPONSE",response);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    Dialog dialog;
+
+    private void showZoomImage(int resource)
+    {
+        dialog = new Dialog(context);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        dialog.setContentView(R.layout.zoom_dialog_layout);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.MyAnimation_Window;
+        ImageView bmImage = (ImageView) dialog.findViewById(R.id.img_receipt);
+        bmImage.setImageResource(resource);
+        dialog.setCancelable(true);
+        dialog.show();
+
+    }
+
 }

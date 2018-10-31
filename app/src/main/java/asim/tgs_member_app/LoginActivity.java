@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
@@ -43,6 +45,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Pattern;
 
+import asim.tgs_member_app.adapters.SelectServicesAdapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.ErrorCodes;
 import asim.tgs_member_app.models.FragmentSettings;
@@ -51,9 +54,12 @@ import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.restclient.BaseModel;
 import asim.tgs_member_app.restclient.ErrorModel;
 import asim.tgs_member_app.restclient.RestServiceClient;
+import asim.tgs_member_app.utils.GPSTracker;
 import asim.tgs_member_app.utils.LanguageConfig;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * A login screen that offers login via email/password.
@@ -69,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
    RestServiceClient restServiceClient;
 
    // UI references.
-   private AutoCompleteTextView mUsernameView;
+   private EditText mUsernameView;
    private EditText mPasswordView;
 
    private MOLoginResponse loginResponse;
@@ -84,13 +90,15 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
    private FirebaseDatabase databaseReference;
 
+   private GPSTracker gpsTracker;
+
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_login);
 
-
+      gpsTracker = new GPSTracker(LoginActivity.this);
 
       settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
       boolean login = settings.getBoolean(Constants.PREFS_LOGIN_STATE,false);
@@ -106,13 +114,13 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
       // Set up the login form.
       remember = (CheckBox) findViewById(R.id.checkBoxRemember);
-      mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+      mUsernameView =  findViewById(R.id.username);
 
       mPasswordView = (EditText) findViewById(R.id.password);
       mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
          @Override
          public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+            if (id == R.id.email_sign_in_button || id == EditorInfo.IME_NULL) {
                attemptLogin();
                return true;
             }
@@ -170,8 +178,8 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
                           SharedPreferences pref = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
                           SharedPreferences.Editor editor = pref.edit();
-                          editor.putString("lastLocationLatitude", String.valueOf(location.getLatitude()));
-                          editor.putString("lastLocationLongitude", String.valueOf(location.getLongitude()));
+                          editor.putString(Constants.PREFS_USER_LAT, String.valueOf(location.getLatitude()));
+                          editor.putString(Constants.PREFS_USER_LNG, String.valueOf(location.getLongitude()));
                           editor.apply();
                        }
                     }
@@ -483,7 +491,22 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          editor.putString(Constants.PREFS_USER_ADDRESS,address);
          editor.putString(Constants.PREFS_USER_IMAGE,image);
          editor.putString(Constants.PREFS_USER_ID,id);
-         editor.putString(Constants.PREFS_CUSTOMER_ID,id);
+
+         editor.putString(Constants.APPROVED,can_login);
+
+         CreateFireBaseNode(id,name);
+
+         if (can_login.equalsIgnoreCase("yes"))
+            Constants.can_login = true;
+         else
+            Constants.can_login = false;
+
+         if (gpsTracker.canGetLocation())
+         {
+            lat = gpsTracker.getLatitude() + "";
+            lng = gpsTracker.getLongitude() + "";
+         }
+
 
          editor.putString(Constants.PREFS_USER_DATE,date_registred);
          editor.putString(Constants.PREFS_USER_LAT,lat);
@@ -495,7 +518,22 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
           editor.putBoolean(Constants.PREFS_LOGIN_STATE,true);
           editor.apply();
 
-         if (document_uploaded.equalsIgnoreCase("yes") && can_login.equalsIgnoreCase("yes")) {
+         if (can_login.equalsIgnoreCase("Yes"))
+         {
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class).putExtra(Constants.APPROVED,"yes")
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
+         }
+         else
+         {
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class).putExtra(Constants.APPROVED,"no")
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
+         }
+
+       //  startActivity(new Intent(LoginActivity.this, Select_Services_Activity.class));
+
+       /*  if (document_uploaded.equalsIgnoreCase("yes") && can_login.equalsIgnoreCase("yes")) {
             startActivity(new Intent(LoginActivity.this, DrawerActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
          }
@@ -506,7 +544,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          else if (!document_uploaded.equalsIgnoreCase("yes") && !can_login.equalsIgnoreCase("yes"))
          {
             startActivity(new Intent(LoginActivity.this,AdminApprovalMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-         }
+         }*/
 
       }
       catch (Exception e)
@@ -514,6 +552,60 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          e.printStackTrace();
          UtilsManager.showAlertMessage(LoginActivity.this,"","Invalid User or Password");
       }
+   }
+
+   private void CreateFireBaseNode(String id,String mem_name)
+   {
+      getLastLocation(id,mem_name);
+
+   }
+
+   public void getLastLocation(final String mem_id,final String mem_name) {
+      // Get last known recent location using new Google Play Services SDK (v11+)
+      FusedLocationProviderClient locationClient = getFusedLocationProviderClient(LoginActivity.this);
+
+      if (ActivityCompat.checkSelfPermission(LoginActivity.this,
+              Manifest.permission.ACCESS_FINE_LOCATION) !=
+              PackageManager.PERMISSION_GRANTED &&
+              ActivityCompat.checkSelfPermission(LoginActivity.this,
+                      Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                      PackageManager.PERMISSION_GRANTED) {
+         // TODO: Consider calling
+         //    ActivityCompat#requestPermissions
+         // here to request the missing permissions, and then overriding
+         //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+         //                                          int[] grantResults)
+         // to handle the case where the user grants the permission. See the documentation
+         // for ActivityCompat#requestPermissions for more details.
+         return;
+      }
+      locationClient.getLastLocation()
+              .addOnSuccessListener(new OnSuccessListener<Location>() {
+                 @Override
+                 public void onSuccess(Location loc) {
+                    // GPS location can be null if GPS is switched off
+                    try {
+                       if (loc != null) {
+                          final MemberLocationObject member = new MemberLocationObject(mem_id,mem_name, "driver",loc.getLatitude()+ "", loc.getLongitude() + "");
+                          member.setCurrent_job("0");
+                          String key = mem_id + "_member";
+                          if (!mem_id.equalsIgnoreCase(""))
+                             FirebaseDatabase.getInstance().getReference().child("members").child(key).setValue(member);
+                       }
+                    }
+                    catch (Exception e)
+                    {
+                       e.printStackTrace();
+                    }
+                 }
+              })
+              .addOnFailureListener(new OnFailureListener() {
+                 @Override
+                 public void onFailure(@NonNull Exception e) {
+                    Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                    e.printStackTrace();
+                 }
+              });
    }
 
    /**

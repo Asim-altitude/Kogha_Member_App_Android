@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15sp"
+        android:background="@drawable/white_rect"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        >
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:tint="@color/black_color"
+            android:src="@drawable/logo"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/prompt_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Are you sure you want to end the ride?"
+                android:textColor="@color/black_color"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Your bodyguard might be on his way. He would be sad if you cancel it :("
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/text_box_bg"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/edit"
+                android:tint="@color/white_color" />
+
+            <EditText
+                android:id="@+id/reason_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="write your reason here."
+                android:paddingTop="5dp"
+                android:textColor="@color/white_color"
+                android:textColorHint="@color/dark_gray_color"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/do_not_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/cancel_order_button"
+                android:text="Don't End Ride"
+                android:textAllCaps="true"
+                android:textColor="@color/white_color"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/end_ride"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/cancel_order_border_btn"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="YES, End Ride"
+                android:textAllCaps="true"
+                android:textColor="@color/reddish"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/cross"
+        android:layout_alignParentRight="true"
+        android:id="@+id/close_btn"
+        />
+
+</RelativeLayout>

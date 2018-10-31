@@ -39,6 +39,7 @@ public class Current_job_screen extends AppCompatActivity {
     private Button complete_job_btn;
     private String member_id;
     private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,8 @@ public class Current_job_screen extends AppCompatActivity {
         chat_btn = (LinearLayout) findViewById(R.id.chat_btn_layout);
         call_btn = (LinearLayout) findViewById(R.id.call_btn_layout);
 
+        call_btn.setVisibility(View.GONE);
+
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +114,7 @@ public class Current_job_screen extends AppCompatActivity {
 
         mem_share_text.setText(mem_share);
 
-        Glide.with(Current_job_screen.this).load("http://getrankedprojects.net/tgs/uploads/customer_profile_images/thumbs/"+customer_image).into(customer_image_url);
+        Glide.with(Current_job_screen.this).load(Constants.Customer_Image_BASE_PATH+customer_image).into(customer_image_url);
 
     }
 

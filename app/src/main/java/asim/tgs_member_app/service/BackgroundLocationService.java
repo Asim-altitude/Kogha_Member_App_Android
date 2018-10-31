@@ -40,18 +40,20 @@ public class BackgroundLocationService extends Service
 
     private String mem_name,mem_id;
     private FirebaseDatabase firebaseDatabase;
+    private String current_job = "0";
     @Override
-public void onCreate() {
+    public void onCreate() {
     super.onCreate();
 
     firebaseDatabase = FirebaseDatabase.getInstance();
-    settings = this.getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+    settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
     mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
     mem_id = settings.getString(Constants.PREFS_USER_ID, "");
+    current_job = settings.getString(Constants.CURRENT_JOB,"0");
     Log.e("service status","service started");
     locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-    handler = new Handler();
+  /*  handler = new Handler();
     runnable = new Runnable() {
         public void run()
         {
@@ -59,7 +61,7 @@ public void onCreate() {
         }
     };
 
-    handler.postDelayed(runnable, 15000);
+    handler.postDelayed(runnable, 15000);*/
     checkGps();
 
 }
@@ -67,8 +69,14 @@ public void onCreate() {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        try {
             handler.removeCallbacks(runnable);
             locManager.removeUpdates(locationListenerGPS);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 
@@ -78,15 +86,24 @@ public void onCreate() {
         @Override
         public void onLocationChanged(Location location) {
             try {
-                boolean isActive_loggedin = settings.getBoolean(Constants.PREFS_USER_ACTIVE,false);
+            /*    boolean isActive_loggedin = settings.getBoolean(Constants.PREFS_USER_ACTIVE,false);*/
 
-                if (isActive_loggedin) {
+                if (true) {
 
+                    current_job = settings.getString(Constants.CURRENT_JOB,"0");
+                    mem_id = settings.getString(Constants.PREFS_USER_ID,"");
                     Log.e("location found", location.getLatitude() + "-" + location.getLongitude());
                     final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", location.getLatitude() + "", location.getLongitude() + "");
+                    member.setCurrent_job(current_job);
 
                     String key = mem_id + "_member";
-                    firebaseDatabase.getReference().child("members").child(key).setValue(member);
+                    if (!mem_id.equalsIgnoreCase("")) {
+                        firebaseDatabase.getReference().child("members").child(key).setValue(member);
+                    }
+                    else
+                    {
+                        locManager.removeUpdates(this);
+                    }
 
                     Log.e("location updated for ", mem_name);
                     editor = settings.edit();
@@ -125,7 +142,8 @@ public void onCreate() {
     private void updateUserLocation() {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding

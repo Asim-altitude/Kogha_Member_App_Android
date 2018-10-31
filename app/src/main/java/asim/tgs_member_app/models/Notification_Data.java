@@ -9,7 +9,26 @@ public class Notification_Data
     private String body;
     private String extra;
     private String id;
+    private String time;
+    private String chat_id;
+    private boolean isChat;
     private boolean shown;
+
+    public boolean isChat() {
+        return isChat;
+    }
+
+    public void setChat(boolean chat) {
+        isChat = chat;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public boolean isShown() {
         return shown;
@@ -25,6 +44,14 @@ public class Notification_Data
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(String chat_id) {
+        this.chat_id = chat_id;
     }
 
     public Notification_Data() {

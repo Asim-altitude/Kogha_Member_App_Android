@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_color"
+    android:background="@color/white_color"
     android:orientation="vertical"
     tools:context=".chat.ChatActivity">
 
@@ -23,26 +23,28 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_margin="15dp"
-        android:background="@drawable/chat_box_bg"
+        android:background="@drawable/light_gray_rect"
         >
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="60dp"
-            android:hint="type your message here..."
+            android:hint="type a message..."
             android:textColor="@color/black_color"
             android:id="@+id/message_box"
             android:background="@android:color/transparent"
             android:layout_alignParentTop="true"
+            android:textSize="14dp"
+
             android:layout_alignParentLeft="true" />
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:src="@drawable/send"
             android:id="@+id/send_btn"
             />

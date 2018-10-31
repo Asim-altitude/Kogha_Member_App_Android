@@ -18,7 +18,24 @@ public class CompletedJobObject extends BaseModel {
     private String job_starts_in = "not started yet";
     private boolean isChatEnabled = false;
     private String server_time;
-    private String customer_name,customer_image;
+    private String customer_name,customer_image,completed_time,uniform_id;
+
+    public String getUniform_id() {
+        return uniform_id;
+
+    }
+
+    public void setUniform_id(String uniform_id) {
+        this.uniform_id = uniform_id;
+    }
+
+    public String getCompleted_Time() {
+        return completed_time;
+    }
+
+    public void setCompleted_Time(String completed_time) {
+        this.completed_time = completed_time;
+    }
 
     public String getCustomer_name() {
         return customer_name;

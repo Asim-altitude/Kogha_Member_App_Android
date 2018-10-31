@@ -6,7 +6,6 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:paddingTop="8dp"
-    android:background="@color/black_color"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -14,7 +13,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/member_item"
         android:visibility="visible"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="40dp"
@@ -26,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            app:bl_bubbleColor="@color/dark_gray_color"
+            app:bl_bubbleColor="@color/chat_item_bg"
             android:layout_toRightOf="@id/chat_image"
             app:bl_arrowDirection="left"
             app:bl_arrowHeight="8dp"
@@ -46,7 +47,7 @@
             android:text="This is a sample message
              from me to text user please idonore the
               rest of things "
-            android:textColor="@color/white_color"
+            android:textColor="@color/black_color"
             android:id="@+id/chat_message"
             />
         <TextView
@@ -56,7 +57,7 @@
             android:layout_below="@id/chat_message"
             android:text="12:00 pm"
             android:id="@+id/chat_message_time"
-            android:textColor="@drawable/color_grey"
+            android:textColor="@color/theme_primary"
 
             />
     </RelativeLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:id="@+id/tabs_lay"
+        android:layout_below="@+id/current_layout"
+        android:layout_toRightOf="@+id/sos_enable_lay"
+        android:layout_toEndOf="@+id/sos_enable_lay">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/tab_selected_bg"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/selected_tab1"
+            >
+
+            <TextView
+                android:id="@+id/tab_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/white_color"
+                android:layout_marginLeft="5dp"
+                android:text="Uploaded"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/order_place_item_background"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/selected_tab2"
+            >
+
+            <TextView
+                android:id="@+id/tab_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/white_color"
+                android:layout_marginLeft="5dp"
+                android:text="Pending"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/docs_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabs_lay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+</LinearLayout>

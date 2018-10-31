@@ -29,7 +29,7 @@
             android:layout_height="180dp"
             android:id="@+id/splashImage"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_logo"/>
+            android:src="@drawable/logo"/>
 
 
         <RelativeLayout
@@ -45,8 +45,8 @@
                 android:hint="Authentication Code"
                 android:padding="10dp"
                 android:background="@color/transparent"
-                android:textColor="@color/white_color"
-                android:textColorHint="@color/white_color"
+                android:textColor="@color/black_color"
+                android:textColorHint="@color/dark_gray_color"
                 android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"/>
@@ -58,6 +58,7 @@
                 android:id="@+id/password_icon"
                 android:src="@drawable/ic_password"
                 android:layout_width="25dp"
+                android:tint="@color/theme_primary"
                 android:layout_height="25dp" />
 
         </RelativeLayout>

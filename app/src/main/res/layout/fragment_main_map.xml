@@ -1,0 +1,62 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_color">
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context=".HomeActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black_color"
+        android:textIsSelectable="true"
+        android:text="location points"
+        android:id="@+id/location_text"
+        />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:background="@color/light_black_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="You don't have any active order right now"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp"
+            android:textSize="17sp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_place_order"
+            style="?android:textAppearanceSmall"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_button_1"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white_color"
+            android:text="Place order"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

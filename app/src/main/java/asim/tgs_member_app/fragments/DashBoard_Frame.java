@@ -1,14 +1,20 @@
 package asim.tgs_member_app.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.view.ViewPager;
@@ -19,7 +25,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -28,12 +36,19 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import asim.tgs_member_app.BumbleRideActivity;
 import asim.tgs_member_app.Current_job_screen;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.models.Constants;
+import asim.tgs_member_app.models.MemberLocationObject;
+import asim.tgs_member_app.service.BackgroundLocationService;
 import asim.tgs_member_app.utils.NotifyUpdates;
+import asim.tgs_member_app.utils.RideDirectionPointsDB;
+import asim.tgs_member_app.utils.ServiceStatus;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Asim Shahzad on 2/19/2018.
@@ -46,15 +61,20 @@ public class DashBoard_Frame extends Fragment
 
     private String selected_language;
     private String key;
-    private String member_id,lat,lon;
+    private String member_id,member_name,lat,lon;
 
-    private String pickup,detination,mem_share,customer_name,customer_image,cust_mobile,cust_id,order_id,total_distance,meet_date;
+
+    private String pickup,detination,mem_share,customer_name,customer_image,cust_mobile,
+            cust_id,order_id,total_distance,meet_date,service_id;
+    private FirebaseDatabase firebaseDatabase;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rooTView = inflater.inflate(R.layout.dashboard_layout, container, false);
     ///setToolBar();
-        settings = getContext().getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        settings = getContext().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         member_id = settings.getString(Constants.PREFS_USER_ID,"0");
         lat = settings.getString(Constants.PREFS_USER_LAT,"0");
         lon = settings.getString(Constants.PREFS_USER_LNG,"0");
@@ -68,23 +88,35 @@ public class DashBoard_Frame extends Fragment
         current_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), Current_job_screen.class);
 
-                intent.putExtra("pickup",pickup);
-                intent.putExtra("detination",detination);
-                intent.putExtra("mem_share",mem_share);
-                intent.putExtra("customer_name",customer_name);
-                intent.putExtra("customer_image",customer_image);
-                intent.putExtra("cust_mobile",cust_mobile);
-                intent.putExtra("cust_id",cust_id);
-                intent.putExtra("order_id",order_id);
-                intent.putExtra("total_distance",total_distance);
+                if (haveJob && isBumble)
+                {
+                    startActivity(new Intent(getContext(),BumbleRideActivity.class)
+                            .putExtra("mem_share",mem_share)
+                            .putExtra("customer_name",customer_name)
+                            .putExtra("customer_image",customer_image)
+                            .putExtra("cust_mobile", cust_mobile));
+                    return;
+                }
 
-                startActivity(intent);
+                if (haveJob) {
+                    Intent intent = new Intent(getContext(), Current_job_screen.class);
+
+                    intent.putExtra("pickup", pickup);
+                    intent.putExtra("detination", detination);
+                    intent.putExtra("mem_share", mem_share);
+                    intent.putExtra("customer_name", customer_name);
+                    intent.putExtra("customer_image", customer_image);
+                    intent.putExtra("cust_mobile", cust_mobile);
+                    intent.putExtra("cust_id", cust_id);
+                    intent.putExtra("order_id", order_id);
+                    intent.putExtra("total_distance", total_distance);
+                    startActivity(intent);
+                }
             }
         });
 
-        settings =getActivity().getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+        settings =getActivity().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         selected_language = settings.getString(Constants.PREF_LOCAL,"english");
 
         if (!selected_language.equalsIgnoreCase("english"))
@@ -136,8 +168,12 @@ public class DashBoard_Frame extends Fragment
 
         int index=0;
 
+        index = settings.getInt(Constants.CURRENT_TAB,0);
+
         if (bundle!=null)
          index = bundle.getInt("index");
+
+
 
         final Upcoming_Jobs upcoming_ = new Upcoming_Jobs();
 
@@ -188,11 +224,26 @@ public class DashBoard_Frame extends Fragment
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        try {
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         try {
+
+           // getContext().startService(new Intent(getContext(),BackgroundLocationService.class));
             checkCurrentJob();
-            setUpTimer();
+
+           // setUpTimer();
         }
         catch (Exception e)
         {
@@ -239,25 +290,29 @@ public class DashBoard_Frame extends Fragment
 
     }
 
-    SharedPreferences settings;
     AsyncHttpClient asyncClient = new AsyncHttpClient();
+    boolean haveJob = false;
+    String test_pick = "Patiala Associates, Mir Chakar Khan Road, I-8 Markaz Islamabad";//"Faizabad Interchange, Murree Road, Islamabad, Pakistan";
+    String test_dest = "6th Road, Rawalpindi";
 
     private void checkCurrentJob()
     {
 
         asyncClient.setConnectTimeout(20000);
 
-        asyncClient.get(getContext(), Constants.Host_Address + "members/show_my_current_job/" + member_id + "/" + key + "", new AsyncHttpResponseHandler() {
+        Log.e("CURRENT_JOB_API_MEMBER", Constants.Host_Address + "members/show_my_current_job/" + member_id + "/" + key);
+        asyncClient.get(getContext(), Constants.Host_Address + "members/show_my_current_job/" + member_id + "/" + key, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     String response = new String(responseBody);
-                    Log.e("response",response);
+                    Log.e("response", response);
                     JSONObject responseObj = new JSONObject(response);
                     JSONArray array = responseObj.getJSONArray("data");
                     JSONObject data = array.getJSONObject(0);
 
                     pickup = data.getString("meet_location");
+                    service_id = data.getString("service_id");
                     detination = data.getString("destination");
                     mem_share = data.getString("member_share");
                     customer_name = data.getString("customer_name");
@@ -266,32 +321,96 @@ public class DashBoard_Frame extends Fragment
                     cust_id = data.getString("customer_id");
                     order_id = data.getString("order_id");
                     total_distance = data.getString("total_distance");
-                   // meet_date = data.getString("meetup_time");
+                    // meet_date = data.getString("meetup_time");
 
-                    Log.e("refreshed","data refreshed");
+                    Log.e("refreshed", "data refreshed");
 
-                    if (!order_id.equalsIgnoreCase("null"))
+                    String mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
+                    String mem_id = settings.getString(Constants.PREFS_USER_ID, "");
+                    String current_job = settings.getString(Constants.CURRENT_JOB,"1");
+                    String lat = settings.getString(Constants.PREFS_USER_LAT,"");
+                    String lon = settings.getString(Constants.PREFS_USER_LNG,"");
+
+
+                    SharedPreferences sharedPreferences =getContext().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString(Constants.MEET_LOCATION,pickup);
+                    editor.putString(Constants.DESTINATION,detination);
+                    editor.putString(Constants.TOTAL,mem_share);
+                    editor.putString(Constants.ORDER_ID,order_id);
+                    editor.putString(Constants.KOGHA_CUSTOMER_ID,cust_id);
+
+                    editor.apply();
+
+
+                    if (!order_id.equalsIgnoreCase("null")) {
                         current_layout.setVisibility(View.VISIBLE);
-                    else
-                        current_layout.setVisibility(View.GONE);
+                        current_layout.getChildAt(0).setBackgroundColor(Color.parseColor("#00944F"));
+                        ((TextView)current_layout.getChildAt(0)).setText("Current Job");
+                        haveJob = true;
+                        settings.edit().putString(Constants.CURRENT_JOB,order_id).apply();
+                        final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", lat + "", lon + "");
+                        member.setCurrent_job(order_id);
+
+                     /*   String key = mem_id + "_member";
+                        if (!mem_id.equalsIgnoreCase(""))
+                            firebaseDatabase.getReference().child("members").child(key).setValue(member);*/
+
+                    }
+                    else {
+                        current_layout.setVisibility(View.VISIBLE);
+                        ((TextView)current_layout.getChildAt(0)).setBackgroundColor(Color.BLACK);
+                        ((TextView)current_layout.getChildAt(0)).setText("Currently You Don't Have Any Job");
+                        haveJob = false;
+                        settings.edit().putString(Constants.CURRENT_JOB,"0").apply();
+
+                        final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", lat + "", lon + "");
+                        member.setCurrent_job("0");
+
+                      /*  String key = mem_id + "_member";
+                        if (!mem_id.equalsIgnoreCase(""))
+                           firebaseDatabase.getReference().child("members").child(key).setValue(member);*/
+                    }
 
                     isRunning = false;
                     if (countDownTimer!=null) {
                         countDownTimer.cancel();
                         countDownTimer = null;
                     }
-                    setUpTimer();
+
+                    firebaseDatabase.getReference().child("members").child("_member").removeValue();
+
+                    if (service_id.equalsIgnoreCase("3")) {
+
+                        /*editor.putString(Constants.MEET_LOCATION,test_pick);
+                        editor.putString(Constants.DESTINATION,test_dest);
+                        editor.apply();*/
+                        isBumble = true;
+
+                    }
+                    else
+                    {
+                        new RideDirectionPointsDB(getActivity()).clearSavedPoints();
+                    }
+
+                  //  setUpTimer();
                 }
                 catch (Exception e)
                 {
+                    new RideDirectionPointsDB(getActivity()).clearSavedPoints();
                     Log.e("refreshed",e.getMessage());
                     current_layout.setVisibility(View.GONE);
+                    settings.edit().putString(Constants.CURRENT_JOB,"0").apply();
+                    haveJob = false;
+
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                try {
+                try
+                {
                     String response = new String(responseBody);
                     Log.e("response",response);
                 }
@@ -304,4 +423,138 @@ public class DashBoard_Frame extends Fragment
 
     }
 
+    boolean isBumble = false;
+
+
+    String current_job = "0";
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
+    private final LocationListener locationListenerGPS = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            try {
+                boolean isActive_loggedin = settings.getBoolean(Constants.PREFS_USER_ACTIVE,false);
+
+                if (true) {
+
+                    current_job = settings.getString(Constants.CURRENT_JOB,"0");
+                    member_id = settings.getString(Constants.PREFS_USER_ID,"");
+                    Log.e("location found", location.getLatitude() + "-" + location.getLongitude());
+                    final MemberLocationObject member = new MemberLocationObject(member_id,member_name, "driver", location.getLatitude() + "", location.getLongitude() + "");
+                    member.setCurrent_job(current_job);
+
+                    String key = member_id + "_member";
+                    if (!member_id.equalsIgnoreCase(""))
+                        firebaseDatabase.getReference().child("members").child(key).setValue(member);
+                    else
+                        locManager.removeUpdates(this);
+
+                    Log.e("location updated for ",  member_name);
+                    editor = settings.edit();
+                    editor.putString(Constants.PREFS_USER_LAT, location.getLatitude() + "");
+                    editor.putString(Constants.PREFS_USER_LNG, location.getLongitude() + "");
+
+                    editor.apply();
+                }
+
+            } catch (Exception e) {
+                Log.e("location error", e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+
+    LocationManager locManager;
+
+    private void updateUserLocation() {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListenerGPS);
+        //  locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListenerGPS);
+    }
+
+    void checkGps() {
+
+        try {
+            if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showGPSDisabledAlertToUser();
+            }
+            else
+            {
+                updateUserLocation();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showGPSDisabledAlertToUser() {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage("Enable GPS to use application")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    android.app.AlertDialog alert;
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if (locManager!=null && locationListenerGPS!=null)
+                locManager.removeUpdates(locationListenerGPS);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

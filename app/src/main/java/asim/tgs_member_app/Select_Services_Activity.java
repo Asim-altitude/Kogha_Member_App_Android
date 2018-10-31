@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.ExpandedMenuView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,9 +34,12 @@ import java.util.List;
 import java.util.Objects;
 
 import asim.tgs_member_app.adapters.SelectServicesAdapter;
+import asim.tgs_member_app.adapters.SignUp_Services_Adapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberService;
+import asim.tgs_member_app.models.Order_Service_Info;
 import asim.tgs_member_app.models.Service_Slot;
+import asim.tgs_member_app.utils.ServiceSelectionCallBack;
 import asim.tgs_member_app.utils.UpdateHeight;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
@@ -41,16 +47,26 @@ import cz.msebera.android.httpclient.Header;
 
 public class Select_Services_Activity extends AppCompatActivity  {
 
-    private SelectServicesAdapter adapter;
+    private SignUp_Services_Adapter adapter;
     private ListView service_list;
     private ArrayList<MemberService> list;
-    private List<ArrayList<Service_Slot>> services_list;
+    private List<ArrayList<Order_Service_Info>> services_list;
     private Button next;
     private ImageView back_navigation;
     private ArrayList<String> service_ids,service_type_ids;
 
     private String member_id = "117";
+    private String email = "";
     private SharedPreferences settings;
+    private RecyclerView bodyguard_recycle,bodyguard_cum_driver_recycle,driver_chauffer_recycle,bumble_recycle;
+    private SignUp_Services_Adapter b_services_adapter,b_c_services_adapter,driver_services_adapter,bumble_services_adapter;
+    RecyclerView.LayoutManager layoutManager;
+
+
+    private Order_Service_Info bodyguard_selected=null,bodyguard_cum_selected=null,driver_selected=null,bumble_selected=null;
+
+    private LinearLayout b_parent,b_c_parent,dr_parent,bum_parent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +77,58 @@ public class Select_Services_Activity extends AppCompatActivity  {
         services_list = new ArrayList<>();
 
         settings = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
-        member_id = getIntent().getStringExtra("member_id");
+        member_id = getIntent().getStringExtra(Constants.PREFS_USER_ID);
+        email = getIntent().getStringExtra(Constants.PREFS_USER_EMAIL);
+
+        bodyguard_recycle = findViewById(R.id.bodyguard_recycler);
+        bodyguard_cum_driver_recycle = findViewById(R.id.bodyguard_cum_recycler);
+        driver_chauffer_recycle = findViewById(R.id.bodyguard_driver_recycler);
+        bumble_recycle = findViewById(R.id.bumble_recycler);
+
+        b_parent = findViewById(R.id.bodyguard_parent);
+        b_c_parent = findViewById(R.id.bodyguard_cum_parent);
+        dr_parent = findViewById(R.id.driver_parent);
+        bum_parent = findViewById(R.id.bumble_parent);
+
+        b_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bodyguard_recycle.getVisibility()==View.VISIBLE)
+                    bodyguard_recycle.setVisibility(View.GONE);
+                else
+                    bodyguard_recycle.setVisibility(View.VISIBLE);
+            }
+        });
+        b_c_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bodyguard_cum_driver_recycle.getVisibility()==View.VISIBLE)
+                    bodyguard_cum_driver_recycle.setVisibility(View.GONE);
+                else
+                    bodyguard_cum_driver_recycle.setVisibility(View.VISIBLE);
+            }
+        });
+        dr_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (driver_chauffer_recycle.getVisibility()==View.VISIBLE)
+                    driver_chauffer_recycle.setVisibility(View.GONE);
+                else
+                    driver_chauffer_recycle.setVisibility(View.VISIBLE);
+            }
+        });
+        bum_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bumble_recycle.getVisibility()==View.VISIBLE)
+                    bumble_recycle.setVisibility(View.GONE);
+                else
+                    bumble_recycle.setVisibility(View.VISIBLE);
+            }
+        });
+
         getServicesFromServer();
+
         service_list = (ListView) findViewById(R.id.services_list);
         next = (Button) findViewById(R.id.btnNext_services);
 
@@ -102,19 +168,42 @@ public class Select_Services_Activity extends AppCompatActivity  {
                 service_ids = new ArrayList<String>();
                 service_type_ids = new ArrayList<String>();
 
-                for (int i=0;i<list.size();i++)
+            /*    for (int i=0;i<list.size();i++)
                 {
-                    if (list.get(i).isSelected())
-                    {
                         for (int j=0;j<services_list.get(i).size();j++)
                         {
-                            if (services_list.get(i).get(j).isActive()) {
+                            if (services_list.get(i).get(j).getSelected()>-1) {
                                 selected_services++;
-                                service_ids.add(services_list.get(i).get(j).getSlot_id());
+                                service_ids.add(services_list.get(i).get(j).getService_id());
                                 service_type_ids.add(list.get(i).getId());
                             }
                         }
-                    }
+
+                }*/
+
+            if (bodyguard_selected!=null)
+            {
+                service_type_ids.add(list.get(0).getId());
+                service_ids.add(bodyguard_selected.getService_id());
+            }
+
+                if (bodyguard_cum_selected!=null)
+                {
+                    service_type_ids.add(list.get(1).getId());
+                    service_ids.add(bodyguard_cum_selected.getService_id());
+                }
+
+                if (driver_selected!=null)
+                {
+                    service_type_ids.add(list.get(2).getId());
+                    service_ids.add(driver_selected.getService_id());
+                }
+
+
+                if (bumble_selected!=null)
+                {
+                    service_type_ids.add(list.get(3).getId());
+                    service_ids.add(bumble_selected.getService_id());
                 }
 
                 Object[] s_ids = service_ids.toArray();
@@ -171,7 +260,7 @@ public class Select_Services_Activity extends AppCompatActivity  {
             return false;
     }
 
-    private void loadServices()
+  /*  private void loadServices()
     {
         list = new ArrayList<>();
         services_list = new ArrayList<>();
@@ -271,7 +360,7 @@ public class Select_Services_Activity extends AppCompatActivity  {
 
         services_list.add(service_bumble);
     }
-
+*/
     public void setListViewHeightBasedOnChildren(ListView listView)
     {
         ListAdapter listAdapter = listView.getAdapter();
@@ -371,11 +460,21 @@ public class Select_Services_Activity extends AppCompatActivity  {
                         Service_Slot slot = new Service_Slot();
                         slot.setSlot_id(sub_service_id);
 
-                        if (service_name.contains("Driver cum Bodyguard")) {
-                            service_name.replace("Driver cum Bodyguard", "");
+                    /*    if (service_name.contains("Cum")) {
+                            service_name.replace("Bodyguard Cum Driver ", "");
+
+                        }
+                        else
+                        {
+                            service_name.replace("Bodyguard ", "");
                             service_name = "BCD "+service_name;
                         }
 
+                        if (service_name.contains("Bumble"))
+                        {
+                            service_name = service_name.replace("Bumble Ride Bike","").replace("Bumble Ride Car","");
+                        }
+*/
                         slot.setSlot_name(service_name);
                         slot.setActive(false);
 
@@ -391,22 +490,79 @@ public class Select_Services_Activity extends AppCompatActivity  {
 
                     }
 
-                    services_list.add(service_bodyguard);
-                    services_list.add(service_bcd);
-                    services_list.add(service_driver);
-                    services_list.add(service_bumble);
 
+                    services_list.add(ConvertObjectList(service_bodyguard));
+                    services_list.add(ConvertObjectList(service_bcd));
+                    services_list.add(ConvertObjectList(service_driver));
+                    services_list.add(ConvertObjectList(service_bumble));
 
-                    adapter = new SelectServicesAdapter(getApplicationContext(),list,services_list);
-                    adapter.setListener(new UpdateHeight() {
+                    b_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bodyguard),Select_Services_Activity.this);
+                    b_c_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bcd),Select_Services_Activity.this);
+                    driver_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_driver),Select_Services_Activity.this);
+                    bumble_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bumble),Select_Services_Activity.this);
+
+                    b_services_adapter.setS_code(0);
+                    b_c_services_adapter.setS_code(1);
+                    driver_services_adapter.setS_code(2);
+                    bumble_services_adapter.setS_code(3);
+
+                    b_services_adapter.setServiceSelectionCallBack(new ServiceSelectionCallBack() {
                         @Override
-                        public void updateheight() {
-                            setListViewHeightBasedOnChildren(service_list);
+                        public void onServiceSelected(Order_Service_Info order_service_info, int code,int pos) {
+                            if (code==0)
+                            {
+                                bodyguard_selected = order_service_info;
+                                b_services_adapter.setSelected_index(pos);
+                                b_services_adapter.notifyDataSetChanged();
+                            }
                         }
                     });
 
-                    service_list.setAdapter(adapter);
-                    setListViewHeightBasedOnChildren(service_list);
+                    b_c_services_adapter.setServiceSelectionCallBack(new ServiceSelectionCallBack() {
+                        @Override
+                        public void onServiceSelected(Order_Service_Info order_service_info, int code,int pos) {
+                            if (code==1)
+                            {
+                                bodyguard_cum_selected = order_service_info;
+                                b_c_services_adapter.setSelected_index(pos);
+                                b_c_services_adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                    driver_services_adapter.setServiceSelectionCallBack(new ServiceSelectionCallBack() {
+                        @Override
+                        public void onServiceSelected(Order_Service_Info order_service_info, int code,int pos) {
+                            if (code==2)
+                            {
+                                driver_selected = order_service_info;
+                                driver_services_adapter.setSelected_index(pos);
+                                driver_services_adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                    bumble_services_adapter.setServiceSelectionCallBack(new ServiceSelectionCallBack() {
+                        @Override
+                        public void onServiceSelected(Order_Service_Info order_service_info, int code,int pos) {
+                            if (code==3)
+                            {
+                                bumble_selected = order_service_info;
+                                bumble_services_adapter.setSelected_index(pos);
+                                bumble_services_adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                    bodyguard_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
+                    bodyguard_cum_driver_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
+                    driver_chauffer_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
+                    bumble_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
+
+                    bodyguard_recycle.setAdapter(b_services_adapter);
+                    bodyguard_cum_driver_recycle.setAdapter(b_c_services_adapter);
+                    driver_chauffer_recycle.setAdapter(driver_services_adapter);
+                    bumble_recycle.setAdapter(bumble_services_adapter);
 
                 }
                 catch (Exception e)
@@ -429,7 +585,6 @@ public class Select_Services_Activity extends AppCompatActivity  {
             }
         });
     }
-
 
 
 
@@ -460,9 +615,13 @@ public class Select_Services_Activity extends AppCompatActivity  {
                     JSONObject data = new JSONObject(response);
                     if (data.getString("status").equalsIgnoreCase("success"))
                     {
-                        startActivity(new Intent(Select_Services_Activity.this,PreferredLanguage.class));
+                        startActivity(new Intent(Select_Services_Activity.this,VerificationActivity.class)
+                                .putExtra(Constants.PREFS_USER_EMAIL,email)
+                                .putExtra(Constants.PREFS_USER_ID,member_id));
+
+                  /*      startActivity(new Intent(Select_Services_Activity.this,PreferredLanguage.class));
                         Toast.makeText(Select_Services_Activity.this,"Services registered successfully",Toast.LENGTH_LONG).show();
-                    }
+                */    }
                     else
                     {
                         Toast.makeText(Select_Services_Activity.this,"No member found.",Toast.LENGTH_LONG).show();
@@ -491,6 +650,23 @@ public class Select_Services_Activity extends AppCompatActivity  {
             }
         });
 
+    }
+
+
+    private ArrayList<Order_Service_Info> ConvertObjectList(ArrayList<Service_Slot> list_)
+    {
+        ArrayList<Order_Service_Info> services = new ArrayList<>();
+        for (int i=0;i<list_.size();i++)
+        {
+            Order_Service_Info order_service_info = new Order_Service_Info();
+            order_service_info.setService_id(list_.get(i).getSlot_id());
+            order_service_info.setService_name(list_.get(i).getSlot_name());
+            order_service_info.setSelected(-1);
+
+            services.add(order_service_info);
+        }
+
+        return services;
     }
 
 

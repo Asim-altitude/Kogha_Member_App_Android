@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,9 +26,15 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -35,13 +42,18 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import asim.tgs_member_app.chat.ChatActivity;
 import asim.tgs_member_app.fragments.Completed_Jobs;
 import asim.tgs_member_app.fragments.DashBoard_Frame;
+import asim.tgs_member_app.fragments.DummyFrame;
 import asim.tgs_member_app.fragments.Suggested_Jobs;
 import asim.tgs_member_app.fragments.Upcoming_Jobs;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberLocationObject;
+import asim.tgs_member_app.receiver.LocationChangeReciver;
 import asim.tgs_member_app.service.BackgroundLocationService;
 import asim.tgs_member_app.service.ChatMessageNotifier;
+import asim.tgs_member_app.service.LocationListnerServices;
+import asim.tgs_member_app.service.ServiceForMemberLocation;
 import asim.tgs_member_app.utils.NotifyUpdates;
+import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,6 +88,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
     private FirebaseDatabase firebaseDatabase;
     private String mem_name,mem_id;
 
+    private String approved = "yes";
 
     private int dashboard_tab_index = 0;
     @Override
@@ -83,6 +96,9 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        loadUserPermissions();
+
         setSupportActionBar(toolbar);
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -90,11 +106,11 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        SharedPreferences settings = this.getSharedPreferences(Constants.PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
         mem_id = settings.getString(Constants.PREFS_USER_ID, "");
         settings.edit().putBoolean(Constants.PREFS_USER_ACTIVE,true).apply();
-        String image = settings.getString(Constants.PREFS_USER_IMAGE, "");
+        final String image = settings.getString(Constants.PREFS_USER_IMAGE, "");
 
 
         if (getIntent().hasExtra("index"))
@@ -106,24 +122,58 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         TextView name = (TextView) navHeader.findViewById(R.id.txtName);
-        CircleImageView imageView = (CircleImageView) navHeader.findViewById(R.id.userProfilePic);
+        final CircleImageView imageView = (CircleImageView) navHeader.findViewById(R.id.userProfilePic);
         name.setText(mem_name);
-        Glide.with(DrawerActivity.this).load(image).into(imageView);
+        final ProgressBar progressBar = (ProgressBar) navHeader.findViewById(R.id.progress);
+        Glide.with(DrawerActivity.this).load(image).override(400,400).into(new SimpleTarget<GlideDrawable>() {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                imageView.setImageDrawable(resource);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
 
         // load toolbar titles from string resources
 
         // initializing navigation menu
+
+        if (approved.equalsIgnoreCase("no"))
+        {
+            navigationView.getMenu().removeItem(R.id.nav_dashboard);
+            navigationView.getMenu().removeItem(R.id.suggested_jobs);
+            navigationView.getMenu().removeItem(R.id.completed_jobs);
+            navigationView.getMenu().removeItem(R.id.my_notifications);
+            navigationView.getMenu().removeItem(R.id.my_notifications);
+        }
+
         setUpNavigationView();
 
         Bundle bundle = new Bundle();
         bundle.putInt("index",dashboard_tab_index);
         DashBoard_Frame dashBoard_frame = new DashBoard_Frame();
         dashBoard_frame.setArguments(bundle);
-        manager.beginTransaction().replace(R.id.content_main_frame,dashBoard_frame).commit();
+        if (approved.equalsIgnoreCase("yes")) {
+            manager.beginTransaction().replace(R.id.content_main_frame, dashBoard_frame).commit();
+        }
+        else {
+            manager.beginTransaction().replace(R.id.content_main_frame, new DummyFrame()).commit();
+
+        }
+
         setTitle(R.string.dashboard);
 
         //startService(new Intent(DrawerActivity.this, BackgroundLocationService.class));
 
+    }
+
+    private void loadUserPermissions() {
+        SharedPreferences sh_prefs = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+        String login_status = sh_prefs.getString(Constants.APPROVED,"yes");
+        approved = login_status;
+        if (login_status.equalsIgnoreCase("no"))
+            Constants.can_login = false;
+        else
+            Constants.can_login = true;
     }
 
     FragmentManager manager = getSupportFragmentManager();
@@ -180,7 +230,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
                         break;
                */     case R.id.log_out:
                         Constants.logOutUser(DrawerActivity.this);
-                        RemoveFireBaseNode();
+                        logOutUser();
                         break;
 
                     default:
@@ -291,7 +341,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         }
 
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListenerGPS);
-        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListenerGPS);
+       // locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListenerGPS);
     }
 
     void checkGps() {
@@ -301,8 +351,8 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         }
         else
         {
-            startService(new Intent(DrawerActivity.this,BackgroundLocationService.class));
-            startService(new Intent(DrawerActivity.this,ChatMessageNotifier.class));
+
+            //startService(new Intent(DrawerActivity.this,ChatMessageNotifier.class));
         }
 
     }
@@ -339,6 +389,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         {
             checkGps();
             refreshData();
+            startLocationService();
 
         }
         catch (Exception e)
@@ -421,6 +472,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
 
     }
 
+
     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
     private void saveDeviceIDServer(String device_info)
     {
@@ -457,5 +509,56 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         });
     }
 
+
+    private void logOutUser()
+    {
+        asyncHttpClient.setConnectTimeout(20000);
+        Log.e("url",Constants.Host_Address + "members/logout/" + mem_id+"/tgs_appkey_amin");
+        asyncHttpClient.get(DrawerActivity.this, Constants.Host_Address + "members/logout/" + mem_id+"/tgs_appkey_amin", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String response = new String(responseBody);
+                    Log.e("response",response);
+                    RemoveFireBaseNode();
+                    if (UtilsManager.isMyServiceRunning(DrawerActivity.this,LocationListnerServices.class))
+                        stopService(new Intent(DrawerActivity.this,LocationListnerServices.class));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String response = new String(responseBody);
+                    Log.e("response",response);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+
+    private void startLocationService()
+    {
+        LocationListnerServices loactionService = new LocationListnerServices();
+        loactionService.setContext(DrawerActivity.this);
+        if (!UtilsManager.isMyServiceRunning(DrawerActivity.this,LocationListnerServices.class)) {
+        /*    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                startService(new Intent(DrawerActivity.this,LocationListnerServices.class));
+            } else {
+                startForegroundService(new Intent(DrawerActivity.this,LocationListnerServices.class));
+            }*/
+
+            startService(new Intent(DrawerActivity.this,LocationListnerServices.class));
+        }
+    }
 
 }

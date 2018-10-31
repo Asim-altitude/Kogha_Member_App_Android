@@ -52,7 +52,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 holder.mem_layout.setVisibility(View.VISIBLE);
                 holder.cust_layout.setVisibility(View.GONE);
                 holder.chat_message.setText(message.getMessage().getMessage_text());
-                holder.chat_time.setText(convertToReadableDateTime(message.getMessage().getServerTimeValue()));
+               // holder.chat_time.setText(convertToReadableDateTime(message.getMessage().getServerTimeValue()));
+                holder.chat_time.setText(message.getMessage().getDate_time());
                 if (context != null && message.getMember() != null)
                     Glide.with(context).load(message.getMember().getMem_image()).into(holder.chat_icon);
             }
@@ -67,7 +68,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 holder.cust_layout.setVisibility(View.VISIBLE);
                 holder.mem_layout.setVisibility(View.GONE);
                 holder.cust_chat_message.setText(message.getMessage().getMessage_text());
-                holder.cust_chat_time.setText(convertToReadableDateTime(message.getMessage().getServerTimeValue()));
+               // holder.cust_chat_time.setText(convertToReadableDateTime(message.getMessage().getServerTimeValue()));
+                holder.cust_chat_time.setText(message.getMessage().getDate_time());
+
                 if (context != null && message.getCustomer() != null)
                     Glide.with(context).load(message.getCustomer().getC_image()).into(holder.cust_chat_icon);
             }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/asim/tgs_member_app/utils/GPSTracker.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/attachment.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/camera.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/camera_icon.png" charset="ISO-8859-1" />
@@ -10,9 +11,9 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/full_image.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/gallery.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/gallery_icon.png" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/gallery_icon.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/profile_pic.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/uncheck_box.png" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/uniform.png" charset="ISO-8859-1" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

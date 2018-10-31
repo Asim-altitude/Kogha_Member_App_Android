@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +31,11 @@ import java.util.List;
 
 import asim.tgs_member_app.adapters.DocumentAdapter;
 import asim.tgs_member_app.adapters.ServicesAdapter;
+import asim.tgs_member_app.fragments.DocumnetFrame;
+import asim.tgs_member_app.fragments.MissingDocuments;
+import asim.tgs_member_app.fragments.Suggested_Jobs;
+import asim.tgs_member_app.fragments.Upcoming_Jobs;
+import asim.tgs_member_app.fragments.UsefulViewPagerAdapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberDocument;
 import asim.tgs_member_app.utils.UtilsManager;
@@ -38,42 +45,95 @@ import cz.msebera.android.httpclient.Header;
 public class UploadedDocumentsScreen extends AppCompatActivity {
 
 
-    private Button upload_details;
-    Button upload_documnets_btn;
-    SharedPreferences settings;
-    String mem_id;
-    private List<MemberDocument> documents;
-    private ListView listView;
-
+   SharedPreferences settings;
+    LinearLayout uploaded,missing_lay;
+    ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.uploaded_docs);
-
+        setContentView(R.layout.documents_tabs);
+        settings = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
         setupToolbar();
-        settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-        mem_id = settings.getString(Constants.PREFS_CUSTOMER_ID,"");
-        upload_documnets_btn = (Button) findViewById(R.id.upload_documnets_btn);
-        listView = (ListView) findViewById(R.id.doc_listview);
-        upload_documnets_btn.setOnClickListener(new View.OnClickListener() {
+        viewPager = (ViewPager) findViewById(R.id.docs_viewpager);
+        uploaded = (LinearLayout) findViewById(R.id.selected_tab1);
+        missing_lay = (LinearLayout) findViewById(R.id.selected_tab2);
+
+        uploaded.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* if (Constants.hasProfessionalImage
-                        && Constants.hasDrivingLicense
-                        && Constants.hasCarImage)
-                {
-                    UtilsManager.showAlertMessage(UploadedDocumentsScreen.this,"","Your documents are complete");
+                uploaded.setBackgroundResource(R.drawable.tab_selected_bg);
+                missing_lay.setBackgroundResource(R.drawable.order_place_item_background);
+                viewPager.setCurrentItem(0);
+            }
+        });
+
+        missing_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                missing_lay.setBackgroundResource(R.drawable.tab_selected_bg);
+                uploaded.setBackgroundResource(R.drawable.order_place_item_background);
+                viewPager.setCurrentItem(1);
+            }
+        });
+
+        setupViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        final UsefulViewPagerAdapter adapter = new UsefulViewPagerAdapter(getSupportFragmentManager());
+
+
+        int index=0;
+
+
+        final DocumnetFrame docs_frame = new DocumnetFrame();
+
+        adapter.addFragment(docs_frame,"Uploaded");
+
+        MissingDocuments missing = new MissingDocuments();
+        adapter.addFragment(missing,"Missing");
+
+
+        viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    uploaded.performClick();
+                    if (UtilsManager.shouldRefresh) {
+                        adapter.updateFragments();
+                        UtilsManager.shouldRefresh = false;
+                    }
                 }
-                else
-                {
-                    startActivity(new Intent(UploadedDocumentsScreen.this, Upload_Strength_Picture_Registeration.class));
-                }*/
-                startActivity(new Intent(UploadedDocumentsScreen.this, Upload_Strength_Picture_Registeration.class));
+                else {
+                    missing_lay.performClick();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
 
+        // tabLayout.setupWithViewPager(viewPager);
+        //  setupTabIcons();
+
+        //  TabLayout.Tab tab= tabLayout.getTabAt(index);
+        //  tab.select();
+        //  setupTabIcons();
+
+        viewPager.setCurrentItem(index);
+
     }
+
     private void setupToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,109 +154,6 @@ public class UploadedDocumentsScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        fetchDocuments();
-    }
-
-    ProgressDialog progressDialog;
-    private void showDialog(){
-        progressDialog = new ProgressDialog(UploadedDocumentsScreen.this);
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-    }
-
-    AsyncHttpClient httpClient = new AsyncHttpClient();
-    private void fetchDocuments()
-    {
-        httpClient.setConnectTimeout(30000);
-        Log.e("url ",Constants.Host_Address + "members/member_documents/"+mem_id+"/tgs_appkey_amin");
-        httpClient.get(UploadedDocumentsScreen.this, Constants.Host_Address + "members/member_documents/"+mem_id+"/tgs_appkey_amin",new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                super.onStart();
-                showDialog();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    progressDialog.dismiss();
-                    String response = new String(responseBody);
-                    Log.e("response",response);
-                    documents = new ArrayList<MemberDocument>();
-                    JSONObject object = new JSONObject(response);
-                    JSONArray doc_array = object.getJSONArray("data");
-                    if (doc_array==null)
-                        return;
-                    String doc_id,doc_name,doc_image,uploaded_date;
-
-                    for (int i=0;i<doc_array.length();i++)
-                    {
-                        JSONObject object1 = doc_array.getJSONObject(i);
-                        doc_id = object1.getString("id");
-                        doc_name = object1.getString("document");
-                        doc_image = object1.getString("document_name");
-                        uploaded_date = object1.getString("uploaded_date");
-
-                        if (doc_name.equalsIgnoreCase("car pictures"))
-                            Constants.hasCarImage = true;
-
-                        if (doc_name.equalsIgnoreCase("Driving license"))
-                            Constants.hasDrivingLicense = true;
-
-                        if (doc_name.equalsIgnoreCase("professional pictures"))
-                            Constants.hasProfessionalImage = true;
-
-                        MemberDocument memberDocument = new MemberDocument();
-                        memberDocument.setDoc_id(doc_id);
-                        memberDocument.setDoc_name(doc_name);
-                        memberDocument.setDoc_image(doc_image);
-                        memberDocument.setUploaded_date(uploaded_date);
-
-
-                        documents.add(memberDocument);
-                    }
-
-                    DocumentAdapter adapter = new DocumentAdapter(UploadedDocumentsScreen.this, documents);
-                    listView.setAdapter(adapter);
-
-                    if (documents.size()==0)
-                        ((TextView)findViewById(R.id.document_error_empty)).setVisibility(View.VISIBLE);
-                    else
-                        ((TextView)findViewById(R.id.document_error_empty)).setVisibility(View.GONE);
-
-
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    if (documents.size()==0)
-                        ((TextView)findViewById(R.id.document_error_empty)).setVisibility(View.VISIBLE);
-                    else
-                        ((TextView)findViewById(R.id.document_error_empty)).setVisibility(View.GONE);
-
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                try {
-                    progressDialog.dismiss();
-                    String response = new String(responseBody);
-                    Log.e("response",response);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
 
 }

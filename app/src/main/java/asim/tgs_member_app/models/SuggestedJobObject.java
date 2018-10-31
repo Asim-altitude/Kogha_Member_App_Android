@@ -1,5 +1,8 @@
 package asim.tgs_member_app.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import asim.tgs_member_app.restclient.BaseModel;
 
 /**
@@ -21,10 +24,74 @@ public class SuggestedJobObject extends BaseModel {
     private String job_posted_time;
     private String customer_name;
     private String customer_image;
+    private String job_status;
+    private String status_id;
+    private String uniform;
+    private String selected_service_id = "0",service_type_selected_id="0",service_name="";
+
+
+    public String getService_name() {
+        return service_name;
+    }
+
+    public void setService_name(String service_name) {
+        this.service_name = service_name;
+    }
+
+    public String getService_type_selected_id() {
+        return service_type_selected_id;
+    }
+
+    public void setService_type_selected_id(String service_type_selected_id) {
+        this.service_type_selected_id = service_type_selected_id;
+    }
+
+    public String getSelected_service_id() {
+        return selected_service_id;
+    }
+
+    public void setSelected_service_id(String selected_service_id) {
+        this.selected_service_id = selected_service_id;
+    }
+
+    private List<Order_Service_Info> service_list;
+
+    public List<Order_Service_Info> getService_list() {
+        return service_list;
+    }
+
+    public void setService_list(List<Order_Service_Info> service_list) {
+        this.service_list = service_list;
+    }
+
+    public String getUniform() {
+        return uniform;
+    }
+
+    public void setUniform(String uniform) {
+        this.uniform = uniform;
+    }
+
+    public String getJob_status() {
+        return job_status;
+    }
+
+    public void setJob_status(String job_status) {
+        this.job_status = job_status;
+    }
+
+    public String getStatus_id() {
+        return status_id;
+    }
+
+    public void setStatus_id(String status_id) {
+        this.status_id = status_id;
+    }
 
     public SuggestedJobObject()
     {
         job_posted_time = "calculating...";
+        service_list = new ArrayList<>();
     }
 
 

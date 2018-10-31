@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Car Image, Body Image are missing"
+        android:gravity="center_horizontal"
+        android:textStyle="normal"
+        android:textSize="16dp"
+        android:textColor="@color/black_color"
+        android:padding="10dp"
+        android:id="@+id/missing_docs_names"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/missing_docs_list"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/upload_documnets_btn"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/upload_docs"
+        android:textColor="@color/white_color"
+        android:layout_margin="10dp"
+        android:textAllCaps="false"
+        android:layout_alignParentBottom="true"
+        android:textSize="18sp" />
+
+</LinearLayout>

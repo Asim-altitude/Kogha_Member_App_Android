@@ -12,40 +12,41 @@
         android:layout_margin="10dp"
         android:layout_centerHorizontal="true">
         <LinearLayout
-            android:layout_width="85dp"
-            android:layout_height="300dp"
+            android:layout_width="100dp"
+            android:layout_height="320dp"
             android:orientation="vertical"
             android:id="@+id/first_main_layout"
             android:background="@drawable/my_order_left_drawable"
             >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp"
                 android:gravity="center_horizontal"
-                >
+                android:orientation="vertical"
+                android:padding="5dp">
+
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/order_person_image"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_avatar"
-                    android:id="@+id/order_person_image"
-                    />
+                    android:src="@drawable/ic_avatar" />
+
                 <TextView
+                    android:id="@+id/order_person_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="John Doe"
-                    android:textColor="@color/white_color"
-                    android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     android:gravity="center_horizontal"
-                    android:id="@+id/order_person_name"
+                    android:text="John Doe"
+                    android:textColor="@color/white_color"
                     android:textSize="12dp"
-                    />
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
+                android:layout_height="110dp"
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:id="@+id/first_middle_layout"
@@ -84,13 +85,14 @@
                     android:textColor="@color/white_color"
                     android:textStyle="bold"
                     android:id="@+id/time_job"
+                    android:gravity="center_horizontal"
                     android:textSize="11dp"
                     />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="260dp"
+            android:layout_height="320dp"
             android:orientation="vertical"
             android:id="@+id/second_main_layout"
             android:background="@drawable/my_order_right_drawable"
@@ -147,15 +149,66 @@
                 />
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/drop_location"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rectangle_redish"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dest_location"
+                        android:textColor="@color/black_color"
+                        android:textSize="13dp"
+                        android:padding="2dp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kuala Lampur Federal Malaysia"
+                        android:textColor="@color/black_color"
+                        android:maxLines="3"
+                        android:minLines="3"
+                        android:textStyle="normal"
+                        android:padding="2dp"
+                        android:textSize="13dp"
+                        android:id="@+id/destination"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray_color"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:orientation="horizontal"
                 android:id="@+id/meet_datetime_layout"
-                android:visibility="visible"
+                android:visibility="gone"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+
                     >
                     <ImageView
                         android:layout_width="27dp"
@@ -251,7 +304,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
+                android:id="@+id/instruction_layout"
+                android:visibility="gone"
                 >
                 <ImageView
                     android:layout_width="27dp"
@@ -260,34 +314,35 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/rectangle_redish"
                     />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:orientation="vertical"
-                    android:padding="5dp"
-                    >
+                    android:padding="5dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="2dp"
                         android:text="@string/instructions"
                         android:textColor="@color/black_color"
                         android:textSize="13dp"
-                        android:padding="2dp"
                         android:textStyle="bold"
 
                         />
+
                     <TextView
+                        android:id="@+id/instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Be on time, Formal event"
-                        android:textColor="@color/black_color"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:textStyle="normal"
                         android:padding="2dp"
+                        android:text="Be on time, Formal event"
+                        android:textColor="@color/black_color"
                         android:textSize="13dp"
-                        android:id="@+id/instructions"
-                        />
+                        android:textStyle="normal" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -354,6 +409,55 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:id="@+id/uniform_layout"
+                android:visibility="visible"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rectangle_redish"
+                    android:src="@drawable/uniform" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="@string/uniform"
+                        android:textColor="@color/black_color"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/uniform"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/intermediate"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray_color"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
 
                 >
@@ -367,7 +471,7 @@
                     />
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="60dp"
                     android:orientation="vertical"
                     android:padding="5dp"
                     >

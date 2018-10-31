@@ -70,6 +70,13 @@ public class Upload_SideBody_Picture_Registeration extends AppCompatActivity {
 
         btn_next = (Button) findViewById(R.id.btnNext_upload_profile);
         btnSkip_upload_profile = (Button) findViewById(R.id.btnSkip_upload_profile);
+
+        String doc_name = sharedPreferences.getString(Constants.SIDEBODY_DOC,"no");
+        if (doc_name.equalsIgnoreCase("done"))
+        {
+            btnSkip_upload_profile.performClick();
+        }
+
         btnSkip_upload_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +114,8 @@ public class Upload_SideBody_Picture_Registeration extends AppCompatActivity {
               galleryIntent();
             }
         });
+
+
     }
 
 

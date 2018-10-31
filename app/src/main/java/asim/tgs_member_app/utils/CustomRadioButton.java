@@ -36,17 +36,13 @@ public class CustomRadioButton extends android.support.v7.widget.AppCompatRadioB
         if (attrs != null) {
 
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CustomEditText);
-
-            String fontName = a.getString(R.styleable.CustomEditText_font);
-
-
+            String fontName = a.getString(R.styleable.CustomEditText_font_text);
 
             try {
 
                 if (fontName != null) {
 
                     Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/" + fontName);
-
                     setTypeface(myTypeface);
 
                 }

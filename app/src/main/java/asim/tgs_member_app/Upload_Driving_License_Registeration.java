@@ -71,6 +71,14 @@ public class Upload_Driving_License_Registeration extends AppCompatActivity {
         btn_next = (Button) findViewById(R.id.btnNext_upload_profile);
         btnSkip = (Button) findViewById(R.id.btnSkip);
 
+
+        String doc_name = sharedPreferences.getString(Constants.DRIVING_LICENCE_DOC,"no");
+        if (doc_name.equalsIgnoreCase("done"))
+        {
+            btnSkip.performClick();
+        }
+
+
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +110,7 @@ public class Upload_Driving_License_Registeration extends AppCompatActivity {
                     galleryIntent();
             }
         });
+
 
     }
 

@@ -35,6 +35,7 @@ import java.util.List;
 
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.chat.ChatActivity;
+import asim.tgs_member_app.chat.Customer;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.SuggestedJobObject;
 import asim.tgs_member_app.utils.UtilsManager;
@@ -82,6 +83,7 @@ public class UpcomingJobAdapter extends BaseAdapter
 
 
         TextView meet_location = (TextView) convertView.findViewById(R.id.meet_location);
+        TextView destination = (TextView) convertView.findViewById(R.id.destination);
         TextView meet_date = (TextView) convertView.findViewById(R.id.meet_datetime);
         TextView total = (TextView) convertView.findViewById(R.id.order_total);
         TextView instructions = (TextView) convertView.findViewById(R.id.instructions);
@@ -92,6 +94,7 @@ public class UpcomingJobAdapter extends BaseAdapter
         final ImageView chat = (ImageView) convertView.findViewById(R.id.chat_btn);
         final CircleImageView customer_img = (CircleImageView) convertView.findViewById(R.id.customer_img);
         TextView customer_name = (TextView) convertView.findViewById(R.id.customer_name);
+        TextView job_status = (TextView) convertView.findViewById(R.id.job_status);
 
         Button accept_job = (Button) convertView.findViewById(R.id.accept_job);
         Button cancel_job = (Button) convertView.findViewById(R.id.reject_job);
@@ -99,6 +102,9 @@ public class UpcomingJobAdapter extends BaseAdapter
         final LinearLayout job_starts_in_layout = (LinearLayout) convertView.findViewById(R.id.jobs_starts_in_btn);
         final LinearLayout meet_date_layout = (LinearLayout) convertView.findViewById(R.id.meet_date_layout);
         final RelativeLayout chat_layout = (RelativeLayout) convertView.findViewById(R.id.chat_layout);
+        LinearLayout instruction_layout = (LinearLayout) convertView.findViewById(R.id.instruction_layout);
+        LinearLayout job_hrs_layout = (LinearLayout) convertView.findViewById(R.id.job_hrs_layout);
+
         chat_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +129,24 @@ public class UpcomingJobAdapter extends BaseAdapter
             }
         });
 
+        if (list.get(position).getJob_status().equalsIgnoreCase("Paid"))
+        {
+            job_status.setText("Job Confirmed");
+            chat_layout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            if (list.get(position).getStatus_id().equalsIgnoreCase("1"))
+                job_status.setText("Job Applied");
+            else if (list.get(position).getStatus_id().equalsIgnoreCase("2"))
+                job_status.setText("Job Accepted");
+            else
+                job_status.setText("Job Rejected");
+
+            chat_layout.setVisibility(View.INVISIBLE);
+        }
+
+        destination.setText(list.get(position).getDestination());
 
         customer_name.setText(object.getCustomer_name());
         Glide.with(context).load("http://getrankedprojects.net/tgs/uploads/customer_profile_images/thumbs/"+object.getCustomer_image()+"")
@@ -133,13 +157,18 @@ public class UpcomingJobAdapter extends BaseAdapter
             @Override
             public void onClick(View v) {
                 Intent chat_activity = new Intent(context, ChatActivity.class);
+                Customer customer = new Customer();
+                customer.setC_id(list.get(position).getCustomer_id());
+                customer.setC_image(list.get(position).getCustomer_image());
+                customer.setC_name(list.get(position).getCustomer_name());
+                customer.setC_lat("2.33");
+                customer.setC_lng("56.44");
+                chat_activity.putExtra("customer",customer);
                 chat_activity.putExtra("customer_id",list.get(position).getCustomer_id());
                 chat_activity.putExtra("order_id",list.get(position).getOrder_id());
                 context.startActivity(chat_activity);
             }
         });
-
-
 
 
         if (object.getInstructions()!=null) {
@@ -229,10 +258,16 @@ public class UpcomingJobAdapter extends BaseAdapter
                 list.get(position).getJob_starts_in().equalsIgnoreCase("not started yet"))
             showCountDown(timer_text,list.get(position),position);
 
-        if (list.get(position).isChatEnabled())
+       /* if (list.get(position).isChatEnabled())
             chat_layout.setVisibility(View.VISIBLE);
         else
             chat_layout.setVisibility(View.GONE);
+*/
+
+        if (list.get(position).getNo_of_hours().equalsIgnoreCase("0")) {
+            job_hrs_layout.setVisibility(View.GONE);
+            instruction_layout.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

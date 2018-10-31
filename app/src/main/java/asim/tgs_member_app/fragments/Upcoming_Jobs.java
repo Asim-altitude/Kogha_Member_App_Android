@@ -30,6 +30,7 @@ import java.util.Observer;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.adapters.UpcomingJobAdapter;
 import asim.tgs_member_app.models.Constants;
+import asim.tgs_member_app.models.MOCustomerProfile;
 import asim.tgs_member_app.models.SuggestedJobObject;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
@@ -161,11 +162,21 @@ public class Upcoming_Jobs extends Fragment implements Observer
 
         try
         {
+
+            SharedPreferences settings = getActivity().getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+            String current_order = settings.getString(Constants.ORDER_ID,"0");
+
             if (!object.getString("message").equalsIgnoreCase("Invalid Key")) {
                 JSONArray data = object.getJSONArray("data");
                 if (data != null) {
+
+                    if (list_data==null)
+                        list_data = new ArrayList<>();
+                    else
+                        list_data.clear();
+
                     String am_pm,cust_name,cust_img;
-                    String order_id,order_item_id,meet_location,destination,datetime_ordered,meet_datetime,order_total
+                    String order_id,order_item_id,meet_location,destination,datetime_ordered,meet_datetime,order_total,job_status,status_id
                             ,total_distance,status,instructions,no_of_hours,member_share,booking_type,customer_id,datetime_accepted;
                    String server_time;
                     for (int i=0;i<data.length();i++)
@@ -190,6 +201,8 @@ public class Upcoming_Jobs extends Fragment implements Observer
                         server_time =  obj_json.getString("server_time");
                         cust_img =  obj_json.getString("customer_img");
                         cust_name =  obj_json.getString("customer_name");
+                        job_status = obj_json.getString("job_status");
+                        status_id = obj_json.getString("status");
 
                         suggestedJobObject.setOrder_id(order_id);
                         suggestedJobObject.setMeet_loc(meet_location);
@@ -209,6 +222,8 @@ public class Upcoming_Jobs extends Fragment implements Observer
                         suggestedJobObject.setServer_time(server_time);
                         suggestedJobObject.setCustomer_image(cust_img);
                         suggestedJobObject.setCustomer_name(cust_name);
+                        suggestedJobObject.setStatus_id(status_id);
+                        suggestedJobObject.setJob_status(job_status);
 /*
                         if (suggestedJobObject.getStatus().equalsIgnoreCase("pending"))
                             suggestedJobObject.setShow_options(true);
@@ -271,7 +286,8 @@ public class Upcoming_Jobs extends Fragment implements Observer
                            }
                        }
 
-                        list_data.add(suggestedJobObject);
+                       if (!current_order.equalsIgnoreCase(suggestedJobObject.getOrder_id()))
+                            list_data.add(suggestedJobObject);
                     }
                     //Notify Data Adapter
                     adapter.notifyDataSetChanged();

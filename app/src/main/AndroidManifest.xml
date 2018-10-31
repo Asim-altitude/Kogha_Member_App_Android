@@ -26,8 +26,8 @@
         android:xlargeScreens="true" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/app_icon"
+        android:allowBackup="false"
+        android:icon="@drawable/launcher_icon_member"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -58,6 +58,8 @@
                 <!-- action android:name="com.google.android.c2dm.intent.RECEIVE"/ -->
             </intent-filter>
         </service>
+
+        <service android:name=".service.LocationListnerServices" />
 
         <activity
             android:name=".SignUpActivity"
@@ -111,9 +113,15 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".service.BackgroundLocationService"
-            android:exported="false" />
+        <receiver android:name=".receiver.LocationChangeReciver">
+            <intent-filter>
+                <action android:name="LOCATION_CHANGED"/>
+            </intent-filter>
+
+        </receiver>
+
+        <service android:name=".utils.GPSTracker" />
+
         <!--
             service
             android:name=".service.ChatMessageNotifier"
@@ -152,8 +160,15 @@
 
         <activity android:name=".AdminApprovalMessageActivity" />
         <activity android:name=".PreferredLanguage" />
-        <activity android:name=".Current_job_screen"
-            android:theme="@style/DarkTheme"
+        <activity
+            android:name=".Current_job_screen"
+            android:theme="@style/DarkTheme" />
+        <activity android:name=".BumbleRideActivity" />
+
+        <activity android:name=".SetupPassword"
+            android:configChanges="locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             ></activity>
     </application>
 

@@ -31,6 +31,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -110,9 +111,17 @@ public class ChatActivity extends AppCompatActivity {
                         Chat_Message message = new Chat_Message();
                         message.setCustomer(customer);
                         message.setMember(member);
-                        DateFormat format1 = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+                        DateFormat format1 = new SimpleDateFormat("dd MMM yyyy  hh:mm", Locale.ENGLISH);
                         String time = format1.format(c.getTime());
-                        String am_pm="pm";
+
+                        String am_pm;
+                        int check = c.get(Calendar.AM_PM);
+                        if (check==1)
+                            am_pm = "PM";
+                        else
+                            am_pm = "AM";
+
+
                         time = time+" "+am_pm;
                         Message message1 = new Message(message_box.getText().toString(),time, "mem");
                         message1.setOrder_id(order_id);
@@ -130,9 +139,10 @@ public class ChatActivity extends AppCompatActivity {
                         String key = firebaseDatabase.getReference().child(FireBaseChatHead.TGS_CHAT).child(chat_id).push().getKey();
                         firebaseDatabase.getReference().child(FireBaseChatHead.TGS_CHAT).child(chat_id).child(key).setValue(message);
                         message_box.setText("");
+                        sendNotifcationCustomer(member.getMem_id(),cust_id,message1.getMessage_text(),chat_id);
                         showSoftwareKeyboard(false);
                         chat_recycler.smoothScrollToPosition(chat_list.size()-1);
-                        sendNotifcationCustomer(member.getMem_id(),cust_id,message1.getMessage_text(),chat_id);
+
 
                     }
                     catch (Exception e)

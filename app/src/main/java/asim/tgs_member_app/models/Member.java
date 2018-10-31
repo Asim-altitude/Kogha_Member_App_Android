@@ -15,11 +15,67 @@ public class Member extends BaseModel
     private String mem_image;
     private String mem_lat;
     private String mem_lon;
+    private String mem_phone;
     private String mem_email;
     private String mem_dob;
     private String mem_address;
-   // private String mem_id;
+    private String distnace = "Away";
+    private String distnace_km = "1";
+    private boolean isSelected = false;
+    private String[] service_names,service_ids;
+    private int approved;
+    private String service_name = "";
 
+    public String getService_name() {
+        return service_name;
+    }
+
+    public void setService_name(String service_name) {
+        this.service_name = service_name;
+    }
+
+    public int getApproved() {
+        return approved;
+    }
+
+    public void setApproved(int approved) {
+        this.approved = approved;
+    }
+
+    // private String mem_id;
+
+
+    public String[] getService_ids() {
+        return service_ids;
+    }
+
+    public void setService_ids(String[] service_ids) {
+        this.service_ids = service_ids;
+    }
+
+    public String[] getService_names() {
+        return service_names;
+    }
+
+    public void setService_names(String[] service_names) {
+        this.service_names = service_names;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getDistnace() {
+        return distnace;
+    }
+
+    public void setDistnace(String distnace) {
+        this.distnace = distnace;
+    }
 
     public Member() {
     }
@@ -34,8 +90,26 @@ public class Member extends BaseModel
         this.mem_email = mem_email;
         this.mem_dob = mem_dob;
         this.mem_address = mem_address;
+
+        this.distnace = "Away";
     }
 
+
+    public String getDistnace_km() {
+        return distnace_km;
+    }
+
+    public void setDistnace_km(String distnace_km) {
+        this.distnace_km = distnace_km;
+    }
+
+    public String getMem_phone() {
+        return mem_phone;
+    }
+
+    public void setMem_phone(String mem_phone) {
+        this.mem_phone = mem_phone;
+    }
 
     public String getMem_id() {
         return mem_id;

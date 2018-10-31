@@ -48,6 +48,8 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
    private EditText txtName;
    private EditText txtEmail;
    private EditText txtPhone;
+   private EditText txtPassport;
+   private EditText txtIC_number;
    private EditText txtPassword;
    private EditText txtCPassword;
    @SuppressWarnings("FieldCanBeLocal")
@@ -73,6 +75,8 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
       txtPhone = (EditText) findViewById(R.id.txtPhone);
       txtPassword = (EditText) findViewById(R.id.txtPassword);
       txtCPassword = (EditText) findViewById(R.id.txtCPassword);
+      txtIC_number = (EditText) findViewById(R.id.txtIC_Number);
+      txtPassport = (EditText) findViewById(R.id.txtPassport_Number);
       btnNext =(Button) findViewById(R.id.btnNext);
       back_navigation=(ImageView) findViewById(R.id.back_navigation);
       back_navigation.setOnClickListener(this);
@@ -163,32 +167,17 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
                focusView = txtPhone;
                cancel = true;
                //UtilsManager.showAlertMessage(this, "Warning", "Please Enter a Name");
-            } else if (txtPassword.getText().length() <= 0) {
-               txtPassword.setError("Please Choose Your Password");
-               focusView = txtPassword;
-               cancel = true;
-               //UtilsManager.showAlertMessage(this, "Warning", "Please Choose a Password");
-            } else if (txtCPassword.getText().length() <= 0) {
-               txtCPassword.setError("Please Confirm Your Password");
-               focusView = txtCPassword;
-               cancel = true;
-               //UtilsManager.showAlertMessage(this, "Warning", "Please Confirm Your Password");
-            } else if (!txtPassword.getText().toString().equals(txtCPassword.getText().toString())) {
-               txtCPassword.setError("Passwords do not match");
-               focusView = txtCPassword;
-               cancel = true;
-               //UtilsManager.showAlertMessage(this, "Warning", "Passwords do not match");
             }
 
             if(cancel) {
                focusView.requestFocus();
             } else {
               // showDialog("", "Sending verification code");
-               Intent intent = new Intent(getApplicationContext(),Select_Services_Activity.class);
-               startActivity(intent);
-               finish();
+              /* Intent intent = new Intent(getApplicationContext(),Select_Services_Activity.class);
+               startActivity(intent);*/
+               //finish();
              //  RequestConfirmationCode();
-              // signUpUser();
+               signUpUser();
             }
             break;
 
@@ -225,9 +214,9 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
       params.put("email", txtEmail.getText().toString());
       params.put("name", txtName.getText().toString());
       params.put("phone", txtPhone.getText().toString());
-      params.put("password", txtPassword.getText().toString());
+      params.put("ic_passport", txtIC_number.getText().toString());
 
-      httpClient.post(SignUpActivity.this, Constants.Host_Address + "register", params, new AsyncHttpResponseHandler() {
+      httpClient.post(SignUpActivity.this, Constants.Host_Address + "member_register", params, new AsyncHttpResponseHandler() {
 
          @Override
          public void onStart() {
@@ -248,9 +237,13 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
                editor.putString(Constants.PREFS_CUSTOMER_ID,member_id);
                editor.apply();
 
-               startActivity(new Intent(SignUpActivity.this,VerificationActivity.class)
+               startActivity(new Intent(SignUpActivity.this,Select_Services_Activity.class)
+                       .putExtra(Constants.PREFS_USER_EMAIL, txtEmail.getText().toString())
+                       .putExtra(Constants.PREFS_USER_ID,member_id));
+
+             /*  startActivity(new Intent(SignUpActivity.this,VerificationActivity.class)
                        .putExtra("email", txtEmail.getText().toString()).putExtra("member_id",member_id));
-               finish();
+            */   finish();
 
             }
             catch (Exception e)

@@ -37,7 +37,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CustomEditText);
 
-            String fontName = a.getString(R.styleable.CustomEditText_font);
+            String fontName = a.getString(R.styleable.CustomEditText_font_text);
 
 
 
@@ -45,7 +45,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
                 if (fontName != null) {
 
-                    Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/" + fontName);
+                    Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), "font_text/" + fontName);
 
                     setTypeface(myTypeface);
 

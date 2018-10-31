@@ -83,8 +83,13 @@ public class SelectServicesAdapter extends BaseAdapter {
         slot1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!item_list.get(position).get(0).isActive())
+                if (!item_list.get(position).get(0).isActive()) {
                     item_list.get(position).get(0).setActive(true);
+                    item_list.get(position).get(0).setSelected_id("0");
+
+                    item_list.get(position).get(1).setSelected_id("-1");
+                    item_list.get(position).get(2).setSelected_id("-1");
+                }
                 else
                     item_list.get(position).get(0).setActive(false);
 
@@ -97,8 +102,13 @@ public class SelectServicesAdapter extends BaseAdapter {
         slot2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!item_list.get(position).get(1).isActive())
+                if (!item_list.get(position).get(1).isActive()) {
                     item_list.get(position).get(1).setActive(true);
+                    item_list.get(position).get(1).setSelected_id("1");
+
+                    item_list.get(position).get(0).setSelected_id("-1");
+                    item_list.get(position).get(2).setSelected_id("-1");
+                }
                 else
                     item_list.get(position).get(1).setActive(false);
 
@@ -110,8 +120,13 @@ public class SelectServicesAdapter extends BaseAdapter {
         slot3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!item_list.get(position).get(2).isActive())
+                if (!item_list.get(position).get(2).isActive()) {
                     item_list.get(position).get(2).setActive(true);
+                    item_list.get(position).get(2).setSelected_id("2");
+
+                    item_list.get(position).get(0).setSelected_id("-1");
+                    item_list.get(position).get(1).setSelected_id("-1");
+                }
                 else
                     item_list.get(position).get(2).setActive(false);
 
@@ -122,23 +137,25 @@ public class SelectServicesAdapter extends BaseAdapter {
 
 
         try {
-            if (item_list.get(position).get(0).isActive()) {
+            if (item_list.get(position).get(0).isActive()
+                    && item_list.get(position).get(0).getSelected_id().equalsIgnoreCase("0")) {
                 slot1.setBackgroundResource(R.drawable.selected_service_item_bg);
-
             }
             else {
                 slot1.setBackgroundResource(R.drawable.unselected_service_item_bg);
-
             }
 
-            if (item_list.get(position).get(1).isActive()) {
+            if (item_list.get(position).get(1).isActive()
+                    && item_list.get(position).get(1).getSelected_id().equalsIgnoreCase("1")) {
                 slot2.setBackgroundResource(R.drawable.selected_service_item_bg);
             }
-            else {
+            else
+            {
                 slot2.setBackgroundResource(R.drawable.unselected_service_item_bg);
             }
 
-            if (item_list.get(position).get(2).isActive()) {
+            if (item_list.get(position).get(2).isActive()
+                    && item_list.get(position).get(2).getSelected_id().equalsIgnoreCase("2")) {
                 slot3.setBackgroundResource(R.drawable.selected_service_item_bg);
             }
             else {

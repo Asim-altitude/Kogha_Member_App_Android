@@ -84,17 +84,15 @@ public class Car_Details_Registeration extends AppCompatActivity {
 
         prefs = new MyPrefrences(Car_Details_Registeration.this);
 
-        car_image = (ImageView) findViewById(R.id.car_image);
+        car_image = findViewById(R.id.car_image);
 
         SharedPreferences settings = this.getSharedPreferences(Constants.PREFS_NAME, 0);
         mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
         mem_id = settings.getString(Constants.PREFS_USER_ID, "");
 
-     /*   car_number = (EditText) findViewById(R.id.car_number_textfield);
-        car_name_model = (EditText) findViewById(R.id.car_name_model_textfield);
-*/
-        confirm_registeration = (Button) findViewById(R.id.confirm_registeration);
-        back_navigation=(ImageView) findViewById(R.id.back_navigation);
+
+        confirm_registeration = findViewById(R.id.confirm_registeration);
+        back_navigation= findViewById(R.id.back_navigation);
         back_navigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +100,17 @@ public class Car_Details_Registeration extends AppCompatActivity {
             }
         });
 
-        skipBtn = (Button) findViewById(R.id.btnSkip);
+        skipBtn =  findViewById(R.id.btnSkip);
+
+        String doc_name = sharedPreferences.getString(Constants.CAR_DOC,"no");
+        if (doc_name.equalsIgnoreCase("done"))
+        {
+            try {
+                saveDocumentsOnServer();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,18 +127,12 @@ public class Car_Details_Registeration extends AppCompatActivity {
             }
         });
 
-        camera_btn = (LinearLayout) findViewById(R.id.camera_btn);
-        gallery_btn = (LinearLayout) findViewById(R.id.gallery_btn);
+        camera_btn = findViewById(R.id.camera_btn);
+        gallery_btn = findViewById(R.id.gallery_btn);
 
         confirm_registeration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                   /* if (!car_number.getText().toString().equalsIgnoreCase("")
-                            &&
-                            !car_name_model.getText().toString().equalsIgnoreCase("")
-                            )*/
-                       // startActivity(new Intent(getApplicationContext(), Registeration_completed_Screen.class));
 
                 if (isImageChosen) {
                         createArrays();
@@ -153,7 +155,6 @@ public class Car_Details_Registeration extends AppCompatActivity {
               TakeFromCamera();
             }
         });
-
         gallery_btn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -161,6 +162,8 @@ public class Car_Details_Registeration extends AppCompatActivity {
                 galleryIntent();
             }
         });
+
+
     }
 
 

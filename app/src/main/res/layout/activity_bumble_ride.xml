@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+
+    <FrameLayout
+        android:id="@+id/map_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Cancel Ride"
+            android:textColor="@color/white_color"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16sp"
+            android:textStyle="bold"
+            android:layout_margin="5dp"
+            android:background="@drawable/cancel_background"
+            android:id="@+id/cancel_ride_btn"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="End Ride"
+            android:textColor="@color/theme_primary"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15sp"
+            android:id="@+id/end_ride_btn"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        android:background="@drawable/white_rect"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/member_information_layout"
+        android:visibility="gone"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/message_layout"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver on the way"
+                android:textColor="@color/theme_primary"
+                android:textSize="15sp"
+                android:id="@+id/member_message"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/driver_name_image"
+            android:layout_marginLeft="10dp"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/customer_image"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Asim Shahzad"
+                android:textColor="@color/black_color"
+                android:textSize="15sp"
+                android:id="@+id/customer_name"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_color"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            />
+        <LinearLayout
+            android:layout_width="339dp"
+            android:layout_height="47dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/driver_contact_layout"
+            >
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/call"
+                android:tint="@color/theme_primary"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="030134535"
+                android:textColor="@color/black_color"
+                android:textSize="14sp"
+                android:id="@+id/customer_contact"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_gray_color"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/driver_chat_layout"
+            >
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/chat"
+                android:tint="@color/theme_primary"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Chat"
+                android:textColor="@color/black_color"
+                android:textSize="14sp"
+                android:id="@+id/custome_chat"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:id="@+id/rider_information_layout"
+        android:layout_below="@+id/member_information_layout"
+        android:layout_alignParentBottom="true"
+        >
+        <include
+            android:id="@+id/rider_layout"
+            layout="@layout/rider_information_dialog"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="I Have Reached"
+                android:id="@+id/reached_btn"
+                android:textColor="@color/white_color"
+                android:visibility="visible"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Start Job"
+                android:id="@+id/start_job_btn"
+                android:visibility="gone"
+                android:textColor="@color/white_color"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white_color"
+        android:padding="15sp"
+        android:id="@+id/payment_layout"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please wait while customer made his payment"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black_color"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_color"
+        android:id="@+id/loading_view"
+        android:visibility="visible"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading map..."
+                android:layout_marginTop="15sp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

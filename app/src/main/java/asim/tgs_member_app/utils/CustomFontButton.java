@@ -37,7 +37,7 @@ public class CustomFontButton extends android.support.v7.widget.AppCompatButton 
 
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CustomEditText);
 
-            String fontName = a.getString(R.styleable.CustomEditText_font);
+            String fontName = a.getString(R.styleable.CustomEditText_font_text);
 
 
 

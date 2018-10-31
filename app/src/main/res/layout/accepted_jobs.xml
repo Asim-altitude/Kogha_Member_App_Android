@@ -84,6 +84,16 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/theme_primary"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:id="@+id/job_status"
+                />
         </RelativeLayout>
 
         <RelativeLayout
@@ -170,6 +180,50 @@
 
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/drop_location"
+                android:layout_margin="10dp"
+                android:background="@drawable/rectangle_redish"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dest_location"
+                    android:textColor="@color/black_color"
+                    android:textSize="12dp"
+                    android:padding="2dp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kuala Lampur Federal Malaysia"
+                    android:textColor="@color/black_color"
+                    android:textStyle="normal"
+                    android:padding="2dp"
+                    android:textSize="12dp"
+                    android:maxLines="3"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/destination"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -237,6 +291,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/instruction_layout"
             >
             <ImageView
                 android:layout_width="30dp"
@@ -289,6 +344,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/job_hrs_layout"
             >
             <ImageView
                 android:layout_width="30dp"

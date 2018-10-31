@@ -74,8 +74,8 @@ public class VerificationActivity extends AppCompatActivity implements Observer,
       back_navigation.setOnClickListener(this);
       btnValidate.setOnClickListener(this);
       btnResendCode.setOnClickListener(this);
-      email = getIntent().getStringExtra("email");
-      member_id = getIntent().getStringExtra("member_id");
+      email = getIntent().getStringExtra(Constants.PREFS_USER_EMAIL);
+      member_id = getIntent().getStringExtra(Constants.PREFS_USER_ID);
    }
 
    @Override
@@ -151,6 +151,7 @@ public class VerificationActivity extends AppCompatActivity implements Observer,
       RequestParams params = new RequestParams();
       params.put("email", email);
       params.put("code", editTextCode.getText().toString());
+      params.put("account_type", "2");
 
       httpClient.post(VerificationActivity.this, Constants.Host_Address + "verify_registration_code", params, new AsyncHttpResponseHandler() {
 
@@ -169,7 +170,8 @@ public class VerificationActivity extends AppCompatActivity implements Observer,
                Log.e("response",response);
                   if (responseObj.getString("message").equalsIgnoreCase("Registration completed"))
                   {
-                     startActivity(new Intent(VerificationActivity.this,Select_Services_Activity.class).putExtra("member_id",member_id));
+                     startActivity(new Intent(VerificationActivity.this,SetupPassword.class)
+                     .putExtra(Constants.PREFS_USER_ID,member_id));
                      finish();
                   }
 

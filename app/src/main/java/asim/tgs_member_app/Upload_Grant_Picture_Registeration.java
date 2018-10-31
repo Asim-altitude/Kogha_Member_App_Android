@@ -48,26 +48,30 @@ public class Upload_Grant_Picture_Registeration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload__grant_picture__registeration);
         sharedPreferences = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
-      /*  if (Constants.hasProfessionalImage) {
-            startActivity(new Intent(Upload_Grant_Picture_Registeration.this, Upload_Driving_License_Registeration.class).putExtra("professional", ""));
-            finish();
-        }*/
 
-        back_navigation=(ImageView) findViewById(R.id.back_navigation);
+        back_navigation= findViewById(R.id.back_navigation);
         back_navigation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 finish();
             }
         });
 
-        full_image = (ImageView) findViewById(R.id.full_image);
+        full_image =  findViewById(R.id.full_image);
 
-        camera_btn = (LinearLayout) findViewById(R.id.camera_btn);
-        gallery_btn = (LinearLayout) findViewById(R.id.gallery_btn);
+        camera_btn =  findViewById(R.id.camera_btn);
+        gallery_btn =  findViewById(R.id.gallery_btn);
 
-        btn_next = (Button) findViewById(R.id.btnNext_upload_profile);
-        btnSkip_upload_profile = (Button) findViewById(R.id.btnSkip_upload_profile);
+        btn_next =  findViewById(R.id.btnNext_upload_profile);
+        btnSkip_upload_profile =  findViewById(R.id.btnSkip_upload_profile);
+
+        String doc_name = sharedPreferences.getString(Constants.GRANT_DOC,"no");
+        if (doc_name.equalsIgnoreCase("done"))
+        {
+            btnSkip_upload_profile.performClick();
+        }
+
         btnSkip_upload_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +110,9 @@ public class Upload_Grant_Picture_Registeration extends AppCompatActivity {
               galleryIntent();
             }
         });
+
+
+
     }
 
 

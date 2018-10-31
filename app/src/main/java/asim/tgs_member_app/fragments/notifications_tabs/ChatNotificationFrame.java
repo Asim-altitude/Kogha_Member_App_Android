@@ -37,6 +37,7 @@ public class ChatNotificationFrame extends Fragment {
 
     private TextView empty_notification;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

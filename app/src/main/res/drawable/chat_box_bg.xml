@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <corners
-        android:radius="6dp" />
+        android:radius="3dp" />
 
     <padding
         android:bottom="7dp"
@@ -13,7 +13,8 @@
 
     <stroke
         android:width="2dp"
-        android:color="@color/white_color" />
+        android:color="@color/chat_item_bg" />
 
-    <solid android:color="@color/white_color" />
+
+    <solid android:color="@color/chat_item_bg" />
 </shape>

@@ -156,7 +156,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         customerId = settings.getString(Constants.PREFS_USER_ID, "");
         profileImageString = settings.getString(Constants.PREFS_USER_IMAGE, null);
 
-        Log.e("profileImageString_", profileImageString);
 
         if (!(profileImageString.isEmpty() && profileImageString.equalsIgnoreCase(null))) {
 
@@ -171,7 +170,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         passport = settings.getString(Constants.PREFS_USER_PASSWORD,"");
         address = settings.getString(Constants.PREFS_USER_ADDRESS,"");
         city = "not available";//settings.getString(Constants.PREFS_CUSTOMER_ID,"");
-
 
         txtName.setText(settings.getString(Constants.PREFS_USER_NAME, ""));
         txtFullName.setText(settings.getString(Constants.PREFS_USER_NAME, ""));

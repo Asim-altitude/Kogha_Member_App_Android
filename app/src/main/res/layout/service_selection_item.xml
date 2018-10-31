@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/sub_services_container"
                 >
 
@@ -158,6 +158,13 @@
 
 
             </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bodyguard_recycler"
+                >
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

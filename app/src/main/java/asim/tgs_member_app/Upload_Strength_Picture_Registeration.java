@@ -48,15 +48,13 @@ public class Upload_Strength_Picture_Registeration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload__strength__picture__registeration);
 
-
         sharedPreferences = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
-/*
 
-        if (Constants.hasProfessionalImage) {
+       /* if (Constants.hasProfessionalImage) {
             startActivity(new Intent(Upload_Strength_Picture_Registeration.this, Upload_Driving_License_Registeration.class).putExtra("professional", ""));
             finish();
-        }
-*/
+        }*/
+
 
         back_navigation=(ImageView) findViewById(R.id.back_navigation);
         back_navigation.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +71,13 @@ public class Upload_Strength_Picture_Registeration extends AppCompatActivity {
 
         btn_next = (Button) findViewById(R.id.btnNext_upload_profile);
         btnSkip_upload_profile = (Button) findViewById(R.id.btnSkip_upload_profile);
+
+        String doc_name = sharedPreferences.getString(Constants.STRENGTH_DOC,"no");
+        if (doc_name.equalsIgnoreCase("done"))
+        {
+            btnSkip_upload_profile.performClick();
+        }
+
         btnSkip_upload_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +118,10 @@ public class Upload_Strength_Picture_Registeration extends AppCompatActivity {
               galleryIntent();
             }
         });
+
+
+
+
     }
 
 

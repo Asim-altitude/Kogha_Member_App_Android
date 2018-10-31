@@ -9,11 +9,22 @@ public class Service_Slot implements Serializable
 {
 
     private String slot_id,slot_name;
+    private String selected_id;
+
 
     public Service_Slot(String slot_id, String slot_name, boolean isActive) {
         this.slot_id = slot_id;
         this.slot_name = slot_name;
         this.isActive = isActive;
+        this.selected_id = "-1";
+    }
+
+    public String getSelected_id() {
+        return selected_id;
+    }
+
+    public void setSelected_id(String selected_id) {
+        this.selected_id = selected_id;
     }
 
     public Service_Slot() {

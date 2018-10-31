@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/white_rect"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        >
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/logo"
+            android:tint="@color/black_color"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:visibility="gone"
+            >
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Are You Sure to Cancel The Ride?"
+                android:textColor="@color/black_color"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:id="@+id/prompt_message"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your bodyguard might be on his way. He would be sad if you cancel it :("
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_box_bg"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/edit"
+                android:tint="@color/white_color"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:id="@+id/reason_cancel"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:hint="write your reason here."
+                android:gravity="start"
+                android:textColorHint="@color/dark_gray_color"
+                android:paddingTop="5dp"
+                android:textSize="14dp"
+                android:textColor="@color/white_color"
+                android:background="@android:color/transparent"
+                />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="25dp"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:text="Don't Cancel"
+                android:textColor="@color/white_color"
+                android:textAllCaps="true"
+                android:textSize="14dp"
+                android:background="@drawable/cancel_order_button"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/do_not_cancel"
+                />
+
+            <TextView
+                android:id="@+id/cancel_booking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Cancel"
+                android:textAllCaps="true"
+                android:textColor="@color/reddish"
+                android:background="@drawable/cancel_order_border_btn"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -10,6 +10,7 @@ public class MemberLocationObject
     private String mem_type;
     private String mem_lat;
     private String mem_lng;
+    private String current_job;
 
     public MemberLocationObject() {
     }
@@ -22,6 +23,13 @@ public class MemberLocationObject
         this.mem_lng = mem_lng;
     }
 
+    public String getCurrent_job() {
+        return current_job;
+    }
+
+    public void setCurrent_job(String current_job) {
+        this.current_job = current_job;
+    }
 
     public String getMem_id() {
         return mem_id;

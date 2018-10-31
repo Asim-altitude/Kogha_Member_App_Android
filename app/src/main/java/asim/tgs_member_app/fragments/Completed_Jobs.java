@@ -85,7 +85,7 @@ public class Completed_Jobs extends Fragment
     private void populateList(String member_id,String lat,String lon) {
 
         asyncHttpClient.setConnectTimeout(40000);
-        Log.e("suggested jobs",Constants.Host_Address + "members/get_my_completed_jobs/"+member_id+"/"+key);
+        Log.e("completed_jobs",Constants.Host_Address + "members/get_my_completed_jobs/"+member_id+"/"+key);
         asyncHttpClient.get(getContext(), Constants.Host_Address + "members/get_my_completed_jobs/"+member_id+"/"+key, new AsyncHttpResponseHandler() {
 
             @Override
@@ -148,8 +148,9 @@ public class Completed_Jobs extends Fragment
             if (!object.getString("message").equalsIgnoreCase("Invalid Key")) {
                 JSONArray data = object.getJSONArray("data");
                 if (data != null) {
+                    list_data.clear();
                     String order_id,meet_location,destination,datetime_ordered,meet_datetime,order_total
-                            ,total_distance,status,instructions,name,full_image;
+                            ,total_distance,status,instructions,name,full_image,completed_datetime,booking_type,unifrom;
                     for (int i=0;i<data.length();i++)
                     {
                         CompletedJobObject completedJobObject = new CompletedJobObject();
@@ -165,6 +166,13 @@ public class Completed_Jobs extends Fragment
                         destination =  obj_json.getString("destination");
                         name =  obj_json.getString("customer_name");
                         full_image =  obj_json.getString("customer_full_img");
+                        completed_datetime = obj_json.getString("completed_datetime");
+                        booking_type = obj_json.getString("booking_type");
+
+                        if (obj_json.has("uniform"))
+                            unifrom = obj_json.getString("uniform");
+                        else
+                            unifrom = "0";
 
                         completedJobObject.setOrder_id(order_id);
                         completedJobObject.setMeet_loc(meet_location);
@@ -177,6 +185,9 @@ public class Completed_Jobs extends Fragment
                         completedJobObject.setDestination(destination);
                         completedJobObject.setCustomer_name(name);
                         completedJobObject.setCustomer_image(full_image);
+                        completedJobObject.setCompleted_Time(completed_datetime);
+                        completedJobObject.setBooking_type(booking_type);
+                        completedJobObject.setUniform_id(unifrom);
 
                         list_data.add(completedJobObject);
                     }
