@@ -32,6 +32,7 @@
         android:layout_height="90dp"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:visibility="gone"
         android:id="@+id/tabs_lay"
         android:layout_below="@+id/current_layout"
         android:layout_toRightOf="@+id/sos_enable_lay"
@@ -84,11 +85,25 @@
         </LinearLayout>
     </LinearLayout>
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_below="@+id/current_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/black_color"
+        android:visibility="visible"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/theme_primary"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/white_color"
+        app:tabTextColor="@color/white_color" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/sos_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabs_lay"
+        android:layout_below="@id/tabs"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </RelativeLayout>

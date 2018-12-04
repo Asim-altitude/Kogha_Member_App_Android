@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -79,6 +80,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import asim.tgs_member_app.BumbleRideActivity;
 import asim.tgs_member_app.LoginActivity;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.fragments.DirectionModules.DirectionFinder;
@@ -90,6 +92,8 @@ import asim.tgs_member_app.models.Member;
 import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.models.Ride;
 import asim.tgs_member_app.models.RideStatus;
+import asim.tgs_member_app.service.LocationListnerServices;
+import asim.tgs_member_app.utils.DIstanceNotifier;
 import asim.tgs_member_app.utils.DistanceListner;
 import asim.tgs_member_app.utils.GPSTracker;
 import asim.tgs_member_app.utils.RideDirectionPointsDB;
@@ -161,6 +165,7 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
 
     DriverReachedCallback driverReachedCallback;
     DistanceListner distanceListner;
+    DIstanceNotifier dIstanceNotifier;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -169,6 +174,7 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
         {
             driverReachedCallback = (DriverReachedCallback) activity;
             distanceListner = (DistanceListner) activity;
+            dIstanceNotifier = (DIstanceNotifier) activity;
         }
         catch (Exception e)
         {
@@ -388,8 +394,6 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                                 if (ride.getRideStatus()== RideStatus.STATE_INITIAL)
                                 {
                                     builder.include(new LatLng(ride.getMeet_location().getLatitude(),ride.getMeet_location().getLongitude()));
-                                    LatLng latLng = new LatLng( Double.parseDouble(memberLocationObject.getMem_lat()),
-                                            Double.parseDouble(memberLocationObject.getMem_lng()));
                                    // drawLine(latLng,ride.getMeet_location());
 
                                     pickup = mMap.addMarker(new MarkerOptions()
@@ -413,6 +417,11 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                                   //  builder.include(new LatLng(ride.getMeet_location().getLatitude(),ride.getMeet_location().getLongitude()));
                                     builder.include(drop_lat_lng);
                                     drawLine(pickup_lat_lng,drop_lat_lng);
+                                    LatLng member_location = new LatLng( Double.parseDouble(memberLocationObject.getMem_lat()),
+                                            Double.parseDouble(memberLocationObject.getMem_lng()));
+
+                                    if (dIstanceNotifier!=null)
+                                        dIstanceNotifier.onDistanceChange(member_location);
 
                                     pickup = mMap.addMarker(new MarkerOptions()
                                             .position(pickup_lat_lng)
@@ -482,8 +491,13 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                             }
                             else if (ride.getRideStatus().equals(RideStatus.STATE_JOB_STARTED))
                             {
-                               /// drawLine(end, drop);
+
                                 drawLine(pickup_lat_lng,drop_lat_lng);
+                                LatLng member_location = new LatLng( Double.parseDouble(memberLocationObject.getMem_lat()),
+                                        Double.parseDouble(memberLocationObject.getMem_lng()));
+
+                                if (dIstanceNotifier!=null)
+                                    dIstanceNotifier.onDistanceChange(member_location);
                             }
                         }
 
@@ -699,6 +713,8 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
             if (points.size()>0)
             {
                 showPolyLineDirection();
+               /* if (smoothMovementThread.getStatus()!= AsyncTask.Status.RUNNING)
+                    smoothMovementThread.execute();*/
             }
             else
             {
@@ -794,8 +810,11 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
         googleMap.setMyLocationEnabled(false);
 
         updateMembersLocation();
+
+
     }
 
+    SmoothMovementThread smoothMovementThread = new SmoothMovementThread();
     private void setUpMap() {
 
         if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -1061,7 +1080,11 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
         // Output format
         String output = "json";
 
-        String API_KEY = getActivity().getResources().getString(R.string.DIRECTION_API_KEY);
+        String API_KEY;
+        if (Constants.DIRECTION_API_KEY.equalsIgnoreCase(""))
+            API_KEY = getActivity().getResources().getString(R.string.DIRECTION_API_KEY);
+        else
+            API_KEY = Constants.DIRECTION_API_KEY;
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters+"&key="+API_KEY+"";
@@ -1310,8 +1333,9 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> routes) {
             // traversing through routes
+            points = new ArrayList<LatLng>();
             for (int i = 0; i < routes.size(); i++) {
-                points = new ArrayList<LatLng>();
+
                 List<HashMap<String, String>> path = routes.get(i);
 
                 for (int j = 0; j < path.size(); j++) {
@@ -1328,6 +1352,8 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
 
             if (points.size()>0) {
                 showPolyLineDirection();
+              /*  if (smoothMovementThread.getStatus()!= AsyncTask.Status.RUNNING)
+                    smoothMovementThread.execute();*/
                 if (directionPointsDB==null)
                     directionPointsDB = new RideDirectionPointsDB(getActivity());
 
@@ -1413,5 +1439,61 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
         return (double) tmp / factor;
     }
 
+
+    class SmoothMovementThread extends AsyncTask<Boolean,Void,Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+
+            try {
+                startSmoothMovement();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            isMoving = false;
+            Toast.makeText(getActivity(),"Done",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    boolean isMoving = false;
+    private void startSmoothMovement() {
+        if (isMoving)
+            return;
+
+        isMoving = true;
+        String mem_id = members_saved.get(0).getMem_id();
+        String mem_name = members_saved.get(0).getMem_name();
+        for (int i=0;i<points.size();i++)
+        {
+            String lat =points.get(i).latitude+""; //intent.getStringExtra(LocationListnerServices.SERIVICE_LATITUDE);
+            String lng =points.get(i).longitude+""; //intent.getStringExtra(LocationListnerServices.SERIVICE_LONGITUDE);
+            Log.e("location_changed",lat+"-"+lng);
+
+
+            final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", lat + "", lng + "");
+            member.setCurrent_job("21");
+
+            String key = mem_id + "_member";
+            if (!mem_id.equalsIgnoreCase("")) {
+                FirebaseDatabase.getInstance().getReference().child("members").child(key).setValue(member);
+                Log.e("member_position","member position updated on firebase");
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 }

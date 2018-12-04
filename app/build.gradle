@@ -5,6 +5,9 @@ repositories {
     mavenLocal()
     jcenter()
     maven {
+        url  'http://dl.bintray.com/gigamole/maven/'
+    }
+    maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
         /* url "https://oss.sonatype.org/content/repositories/releases"*/
     }
@@ -15,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId "com.getranked.teamguard_member"
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -98,6 +101,7 @@ dependencies {
     compile 'com.daasuu:BubbleLayout:1.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jaredrummler:android-processes:1.1.1'
+    compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
     compile 'me.shaohui:bottomdialog:1.1.9'
     testCompile 'junit:junit:4.12'
 }

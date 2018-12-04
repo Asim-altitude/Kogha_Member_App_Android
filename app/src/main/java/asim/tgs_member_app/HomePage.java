@@ -158,7 +158,7 @@ public class HomePage extends AppCompatActivity  {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        setupNavigationView();
+      //  setupNavigationView();
 
 
         manager.beginTransaction().replace(R.id.content_main_frame,new Immediate_Jobs_Frame()).commit();
@@ -167,7 +167,7 @@ public class HomePage extends AppCompatActivity  {
     }
 
     FragmentManager manager = getSupportFragmentManager();
-    private void setupNavigationView() {
+   /* private void setupNavigationView() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.navigation_drawer_items);
         SharedPreferences settings = this.getSharedPreferences(Constants.PREFS_NAME, 0);
@@ -190,7 +190,7 @@ public class HomePage extends AppCompatActivity  {
             }
         });
 
-    }
+    }*/
 
     private static String getSizeName(Context context) {
         int screenLayout = context.getResources().getConfiguration().screenLayout;

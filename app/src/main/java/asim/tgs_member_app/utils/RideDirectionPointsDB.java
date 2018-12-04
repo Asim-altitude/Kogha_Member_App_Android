@@ -22,7 +22,8 @@ public class RideDirectionPointsDB
     public static final String DIRECTION_KEY = "direction_key";
     public RideDirectionPointsDB(Context context) {
 
-        prefs = context.getSharedPreferences(DIRECTION_DB,Context.MODE_PRIVATE);
+        if (context!=null)
+            prefs = context.getSharedPreferences(DIRECTION_DB,Context.MODE_PRIVATE);
     }
 
     public void saveDirectionPoints(ArrayList<LatLng> points)

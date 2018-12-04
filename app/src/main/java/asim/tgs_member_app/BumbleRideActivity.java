@@ -25,8 +25,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -43,10 +46,17 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import asim.tgs_member_app.chat.ChatActivity;
+import asim.tgs_member_app.chat.Chat_Message;
+import asim.tgs_member_app.chat.Customer;
 import asim.tgs_member_app.chat.FireBaseChatHead;
+import asim.tgs_member_app.chat.Message;
 import asim.tgs_member_app.fragments.BumbleRideJobMap;
 import asim.tgs_member_app.fragments.DriverReachedCallback;
 import asim.tgs_member_app.models.BumblePayment;
@@ -58,6 +68,8 @@ import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.models.Ride;
 import asim.tgs_member_app.models.RideStatus;
 import asim.tgs_member_app.utils.BumbleRidePrefs;
+import asim.tgs_member_app.utils.CalculateDistanceTime;
+import asim.tgs_member_app.utils.DIstanceNotifier;
 import asim.tgs_member_app.utils.DistanceListner;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
@@ -65,7 +77,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import me.shaohui.bottomdialog.BottomDialog;
 
 
-public class BumbleRideActivity extends AppCompatActivity implements DriverReachedCallback,DistanceListner {
+public class BumbleRideActivity extends AppCompatActivity implements DriverReachedCallback,DistanceListner,DIstanceNotifier {
 
     FirebaseDatabase firebaseDatabase;
     private String member_id,ride_id;
@@ -103,11 +115,13 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
     TextView fare_text,customer_name,customer_phone;
     CircleImageView customer_image;
     Button payment_btn;
-    LinearLayout chat_layout,contact_layout;
+    ImageView chat_layout,contact_layout;
     private String cust_imagePath,cust_name,cust_mobile;
 
     LocationManager locationManager;
     LinearLayout riderLayout,payment_layout;
+    TextView amount_fare,time_to_reach_text,final_destination,distance_calculated;
+    RelativeLayout estimated_time_reach_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +148,10 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
         end_ride_btn = findViewById(R.id.end_ride_btn);
         payment_layout = findViewById(R.id.payment_layout);
 
+        estimated_time_reach_layout = findViewById(R.id.estimated_time_to_reach_layout);
+        final_destination = findViewById(R.id.final_destination);
+        time_to_reach_text = findViewById(R.id.time_to_reach_text);
+        distance_calculated = findViewById(R.id.distance_calculated);
 
         cancel_ride_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,23 +161,23 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
             }
         });
 
-      /*  customer_name = findViewById(R.id.customer_name);
-        customer_image = findViewById(R.id.customer_image);
-        customer_phone = findViewById(R.id.customer_contact);
+        customer_name = findViewById(R.id.bodyguard_name);
+        customer_image = findViewById(R.id.bodyguard_image);
+       // customer_phone = findViewById(R.id.customer_contact);
 
-        customer_phone.setText(cust_mobile);
+        //customer_phone.setText(cust_mobile);
         customer_name.setText(cust_name);
         Log.e("image_path",Constants.Customer_Image_BASE_PATH+cust_imagePath);
         Glide.with(BumbleRideActivity.this).load(Constants.Customer_Image_BASE_PATH+cust_imagePath).into(customer_image);
 
-        chat_layout = findViewById(R.id.driver_chat_layout);
-        contact_layout = findViewById(R.id.driver_contact_layout);
+        chat_layout = findViewById(R.id.bodyguard_chat_btn);
+        contact_layout = findViewById(R.id.bodyguard_call_btn);
 
         contact_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+customer_phone.getText().toString().trim()));
+                intent.setData(Uri.parse("tel:"+cust_mobile));
                 startActivity(intent);
             }
         });
@@ -167,15 +185,15 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
         chat_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BumbleRideActivity.this, ChatActivity.class);
+               /* Intent intent = new Intent(BumbleRideActivity.this, ChatActivity.class);
                 intent.putExtra("chat_id",chat_id);
                 intent.putExtra("customer_id",customer_id);
-                startActivity(intent);
+                startActivity(intent);*/
+               showChatDialog(cust_name,cust_imagePath);
             }
         });
-*/
 
-        showCustomerInfo();
+        //showCustomerInfo();
         reached.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -491,7 +509,7 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
         total = sharedPreferences.getString(Constants.TOTAL, "");
         String pick = sharedPreferences.getString(Constants.MEET_LOCATION, "");
         String destination_ = sharedPreferences.getString(Constants.DESTINATION, "");
-
+        final_destination.setText(destination_);
         try {
             pickup_lat_lng = Constants.getLocationFromAddress(BumbleRideActivity.this, pick);
             destination_lat_lng = Constants.getLocationFromAddress(BumbleRideActivity.this, destination_);
@@ -589,7 +607,7 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
     private void endJobApi()
     {
         asyncHttpClient.setConnectTimeout(30000);
-        asyncHttpClient.get(BumbleRideActivity.this, Constants.Host_Address + "customers/stop_job/" + order_id + "/tgs_appkey_amin", new AsyncHttpResponseHandler() {
+        asyncHttpClient.get(BumbleRideActivity.this, Constants.Host_Address + "customers/stop_job/" + order_id + "/tgs_appkey_amin/1", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -606,7 +624,7 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
                     JSONObject object = new JSONObject(response);
                     Log.e("response stop",response);
                     upDateRideStatus("finished");
-                    UtilsManager.showAlertMessage(BumbleRideActivity.this,"","Wait while customer pays");
+                   // UtilsManager.showAlertMessage(BumbleRideActivity.this,"","Wait while customer pays");
                 }
                 catch (Exception e)
                 {
@@ -622,6 +640,7 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
                     String response = new String(responseBody);
                     JSONObject object = new JSONObject(response);
                     Log.e("response stop",response);
+                    upDateRideStatus("finished");
 
                 }
                 catch (Exception e)
@@ -685,6 +704,7 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
                         start_btn.setVisibility(View.GONE);
                         cancel_ride_btn.setVisibility(View.GONE);
                         end_ride_btn.setVisibility(View.VISIBLE);
+                        showRideInformation(pickup_lat_lng,destination_lat_lng);
                     }
 
                     if (status.equalsIgnoreCase(CANCELLED))
@@ -1211,12 +1231,12 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showChatDialog(driver_name,image);
+                showChatDialog(cust_name,cust_imagePath);
 
-                Intent intent = new Intent(BumbleRideActivity.this, ChatActivity.class);
+               /* Intent intent = new Intent(BumbleRideActivity.this, ChatActivity.class);
                 intent.putExtra("chat_id",chat_id);
                 intent.putExtra("customer_id",customer_id);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
         call_btn.setOnClickListener(new View.OnClickListener() {
@@ -1234,6 +1254,119 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
             }
         });
     }
+
+    /////***********************************************************************////////
+    //********************************CHAT MESSAGE AND NOTIFICATION*************************////////////
+    /////***********************************************************************////////
+    private Dialog dialog_chat;
+    private void showChatDialog(final String name,String imagePath)
+    {
+        dialog_chat = new Dialog(BumbleRideActivity.this,R.style.DialogTheme);
+        dialog_chat.setCanceledOnTouchOutside(false);
+        dialog_chat.setContentView(R.layout.chat_dialog_box);
+
+        dialog_chat.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        TextView b_name = (TextView) dialog_chat.findViewById(R.id.bodyguard_name);
+        final EditText message_box = (EditText) dialog_chat.findViewById(R.id.chat_box);
+        final CircleImageView b_image =   dialog_chat.findViewById(R.id.bodyguard_image);
+        final Button close_btn =  dialog_chat.findViewById(R.id.close_btn);
+        Button reply_btn =  dialog_chat.findViewById(R.id.send_btn);
+        ImageView cross_btn = dialog_chat.findViewById(R.id.cross_btn);
+        cross_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close_btn.performClick();
+            }
+        });
+
+        Glide.with(BumbleRideActivity.this)
+                .load(Constants.Customer_Image_BASE_PATH+imagePath).into(b_image);
+        b_name.setText(name);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_chat.dismiss();
+            }
+        });
+        reply_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (message_box.getText().toString().trim().length()>0) {
+                    sendchatMessage(message_box.getText().toString());
+                    sendNotifcationCustomer(members.get(0).getMem_id(),customer_id,message_box.getText().toString(),chat_id);
+                    message_box.setText("");
+                }
+            }
+        });
+
+
+
+        dialog_chat.show();
+
+    }
+
+    private void sendchatMessage(String message_text)
+    {
+        Customer customer = new Customer();
+        customer.setC_id(customer_id);
+        customer.setC_name(cust_name);
+        customer.setC_image(cust_imagePath);
+
+        Chat_Message message = new Chat_Message();
+        message.setCustomer(customer);
+        message.setMember(members.get(0));
+        DateFormat format1 = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+        Calendar c = Calendar.getInstance();
+        String time = format1.format(c.getTime());
+        String am_pm="pm";
+        time = time+" "+am_pm;
+        Message message1 = new Message(message_text,time, "mem");
+        message1.setShown(false);
+        message1.setServer_time(ServerValue.TIMESTAMP);
+        message.setMessage(message1);
+
+        String key = FirebaseDatabase.getInstance().getReference().child(FireBaseChatHead.TGS_CHAT).child(chat_id).push().getKey();
+        FirebaseDatabase.getInstance().getReference().child(FireBaseChatHead.TGS_CHAT).child(chat_id).child(key).setValue(message);
+
+    }
+
+
+    private void sendNotifcationCustomer(String member_id,String customer_id,String messge,String chat_id)
+    {
+        asyncHttpClient.setConnectTimeout(30000);
+
+        Log.e("url",Constants.Host_Address + "members/send_chat_notification_to_customer/" +member_id+"/"+customer_id+"/"+chat_id+"/"+messge+"/tgs_appkey_amin");
+        asyncHttpClient.get(BumbleRideActivity.this,Constants.Host_Address + "members/send_chat_notification_to_customer/" +member_id+"/"+customer_id+"/"+chat_id+"/"+messge+"/tgs_appkey_amin", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String response = new String(responseBody);
+                    Log.e("response ",response);
+                }
+                catch (Exception e)
+                {
+                    Log.e("error_notification",e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String response = new String(responseBody);
+                    Log.e("response ",response);
+                }
+                catch (Exception e)
+                {
+                    Log.e("error_notification",e.getMessage());
+                }
+            }
+        });
+
+
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
@@ -1273,4 +1406,69 @@ public class BumbleRideActivity extends AppCompatActivity implements DriverReach
         });
     }
 
+
+    //////////////////////////////////////////////////////////////////////
+    /////////////SHOW DISTNACE AND ESTIMATED TIME TO REACH////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    CalculateDistanceTime distance_task;
+    private void showRideInformation(LatLng start,LatLng end)
+    {
+        try
+        {
+
+          /*  if (distance_calculated.getText().toString().equals(""))
+            {
+                double distance_bw_locations = UtilsManager.CalculationByDistance(start, end);
+                int distance_km = (int) distance_bw_locations/1000;
+                if (distance_km<=0)
+                {
+                    distance_calculated.setText((int) distance_bw_locations+" Meters");
+                }
+                else
+                {
+                    distance_calculated.setText(distance_km + " KM");
+                }
+            }
+*/
+            if (start==null && end!=null)
+                return;
+
+            if (distance_task==null)
+                distance_task = new CalculateDistanceTime(BumbleRideActivity.this);
+
+            distance_task.getDirectionsUrl(start,end);
+
+
+            estimated_time_reach_layout.setVisibility(View.VISIBLE);
+            distance_task.setLoadListener(new CalculateDistanceTime.taskCompleteListener() {
+                @Override
+                public void taskCompleted(String[] time_distance, int id) {
+
+                    try {
+
+                        if (!time_distance[1].equalsIgnoreCase("away")) {
+                            time_to_reach_text.setText("" + time_distance[1]);
+                            distance_calculated.setText("" + time_distance[0]);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            });
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDistanceChange(LatLng driverlatLng) {
+        if (driverlatLng!=null)
+            showRideInformation(driverlatLng,destination_lat_lng);
+    }
 }

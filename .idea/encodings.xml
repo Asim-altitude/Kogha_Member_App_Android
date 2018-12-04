@@ -2,9 +2,11 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/java/asim/tgs_member_app/utils/GPSTracker.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/white_dot.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/attachment.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/camera.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/camera_icon.png" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/car.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/document.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/done.png" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/driving_license.png" charset="ISO-8859-1" />

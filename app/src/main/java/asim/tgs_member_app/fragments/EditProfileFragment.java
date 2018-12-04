@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -284,7 +286,22 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
-            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+            if (resultCode == RESULT_OK && requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                Uri resultUri = null;
+                if (resultCode == RESULT_OK)
+                    resultUri = result.getUri();
+
+                Bitmap bitmap = ImageCompressClass.getThumbnail(getContext(),resultUri);
+                String destinationUri = Environment.getExternalStorageDirectory() + File.separator + "kogha_profile.jpeg";
+                ImageCompressClass.SaveBitmap(bitmap,destinationUri);
+                profileImageString = destinationUri;
+
+                image_userProfilePic.setImageBitmap(bitmap);
+                isImageChosen =true;
+                prefs.setValue(OLD_IMAGE,profileImageString);
+            }
+            else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
                     && null != data) {
                 // Get the Image from data
 
@@ -299,13 +316,21 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 prefs.setValue(OLD_IMAGE,profileImageString);
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 profileImageString = cursor.getString(columnIndex);
-                Log.e("profile image",profileImageString);
+                Uri res_url=Uri.fromFile(new File((profileImageString)));
+                /*UCrop.of(res_url,Uri.fromFile(new File(destinationUri)))
+                        .withAspectRatio(16, 9)
+                        .withMaxResultSize(200, 200)
+                        .start(getActivity());*/
+                CropImage.activity(res_url)
+                        .start(getContext(), this);
+
+              /*  Log.e("profile image",profileImageString);
                 String file_profile = ImageCompressClass.compressImage(profileImageString);
                 Log.e("profile image",file_profile);
                 profileImageString = file_profile;
                 cursor.close();
                 Bitmap _bitmap = BitmapFactory.decodeFile(file_profile);
-                image_userProfilePic.setImageBitmap(_bitmap);
+                image_userProfilePic.setImageBitmap(_bitmap);*/
                 isImageChosen =true;
 
 

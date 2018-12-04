@@ -16,6 +16,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -34,6 +36,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import asim.tgs_member_app.BumbleRideActivity;
@@ -67,6 +70,7 @@ public class DashBoard_Frame extends Fragment
     private String pickup,detination,mem_share,customer_name,customer_image,cust_mobile,
             cust_id,order_id,total_distance,meet_date,service_id;
     private FirebaseDatabase firebaseDatabase;
+    TabLayout tabs;
 
     @Nullable
     @Override
@@ -84,6 +88,9 @@ public class DashBoard_Frame extends Fragment
         completed = (LinearLayout) rooTView.findViewById(R.id.selected_tab2);
         tabs_lay = (LinearLayout) rooTView.findViewById(R.id.tabs_lay);
         current_layout = (LinearLayout) rooTView.findViewById(R.id.current_layout);
+
+        tabs = rooTView.findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
 
         current_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,12 +168,64 @@ public class DashBoard_Frame extends Fragment
         return rooTView;
     }
 
+    public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        private final List<Fragment> _FragmentList = new ArrayList<>();
+        private final List<String> _FragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return _FragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return _FragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return _FragmentTitleList.get(position);
+        }
+
+        public void AddFragments(Fragment fragment, String title) {
+            _FragmentList.add(fragment);
+            _FragmentTitleList.add(title);
+
+        }
+
+    }
 
     private void setupViewPager(ViewPager viewPager,Bundle bundle) {
-        final UsefulViewPagerAdapter adapter = new UsefulViewPagerAdapter(getFragmentManager());
-
 
         int index=0;
+
+        index = settings.getInt(Constants.CURRENT_TAB,0);
+
+        if (bundle!=null)
+            index = bundle.getInt("index");
+
+
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getFragmentManager());
+
+        Upcoming_Jobs upcoming_jobs = new Upcoming_Jobs();
+        pagerAdapter.AddFragments(upcoming_jobs,"Upcoming Jobs");
+
+        Suggested_Jobs suggested_jobs = new Suggested_Jobs();
+        pagerAdapter.AddFragments(suggested_jobs,"Suggested Jobs");
+
+
+        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setCurrentItem(index);
+
+        // final UsefulViewPagerAdapter adapter = new UsefulViewPagerAdapter(getFragmentManager());
+
+
+       /* int index=0;
 
         index = settings.getInt(Constants.CURRENT_TAB,0);
 
@@ -219,7 +278,7 @@ public class DashBoard_Frame extends Fragment
         //  tab.select();
         //  setupTabIcons();
 
-        viewPager.setCurrentItem(index);
+        viewPager.setCurrentItem(index);*/
 
     }
 
@@ -391,14 +450,14 @@ public class DashBoard_Frame extends Fragment
                     }
                     else
                     {
-                        new RideDirectionPointsDB(getActivity()).clearSavedPoints();
+                        new RideDirectionPointsDB(getContext()).clearSavedPoints();
                     }
 
                   //  setUpTimer();
                 }
                 catch (Exception e)
                 {
-                    new RideDirectionPointsDB(getActivity()).clearSavedPoints();
+                    new RideDirectionPointsDB(getContext()).clearSavedPoints();
                     Log.e("refreshed",e.getMessage());
                     current_layout.setVisibility(View.GONE);
                     settings.edit().putString(Constants.CURRENT_JOB,"0").apply();

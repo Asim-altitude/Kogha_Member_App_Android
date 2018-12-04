@@ -54,6 +54,8 @@ public final class Constants {
    public static final String APPROVED = "approved";
    public static boolean can_login = true;
 
+   public static String DIRECTION_API_KEY = "";
+
    //static tags for registeration documents
    public static final String IC_CARD_DOC = "ic_card_doc";
    public static final String STRENGTH_DOC = "strength_doc";

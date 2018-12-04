@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
         android:id="@+id/map_frame"
@@ -224,6 +224,7 @@
         android:orientation="vertical"
         android:background="@color/white_color"
         android:padding="15sp"
+        android:visibility="gone"
         android:id="@+id/payment_layout"
         >
         <TextView
@@ -243,7 +244,7 @@
         android:layout_height="match_parent"
         android:background="@color/white_color"
         android:id="@+id/loading_view"
-        android:visibility="visible"
+        android:visibility="gone"
         >
 
         <LinearLayout
@@ -264,6 +265,186 @@
                 android:text="Loading map..."
                 android:layout_marginTop="15sp"
                 />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/estimated_time_to_reach_layout"
+        android:visibility="gone"
+        android:background="@color/white_color"
+        android:layout_alignParentBottom="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ride Details"
+                    android:textColor="@color/white_color"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:visibility="visible"
+                    android:gravity="center_horizontal"
+                    android:background="@color/theme_primary"
+                    />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    >
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:id="@+id/time_loader"
+                        android:visibility="gone"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp"
+                        >
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:cardBackgroundColor="@color/light_grey_new"
+                            app:cardCornerRadius="5dp"
+                            android:elevation="3dp"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Time to Reach"
+                                    android:textColor="@color/theme_primary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:padding="5dp"
+                                    android:gravity="center_horizontal"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="calculating"
+                                    android:textColor="@color/black_color"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:gravity="center_horizontal"
+                                    android:id="@+id/time_to_reach_text"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:cardBackgroundColor="@color/light_grey_new"
+                            app:cardCornerRadius="5dp"
+                            android:elevation="3dp"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Distance"
+                                    android:textColor="@color/theme_primary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:gravity="center_horizontal"
+                                    android:padding="5dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="@color/black_color"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:gravity="center_horizontal"
+                                    android:id="@+id/distance_calculated"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentStart="true" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/light_grey_new"
+                app:cardCornerRadius="5dp"
+                android:elevation="3dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Destination"
+                        android:textColor="@color/theme_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="left|center_vertical"
+                        android:paddingLeft="10dp"
+                        android:drawableLeft="@drawable/ic_location_red"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kuala Lampur, Malaysia"
+                        android:textColor="@color/black_color"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15sp"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/final_destination"
+                        android:layout_marginBottom="10dp"
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </RelativeLayout>
 

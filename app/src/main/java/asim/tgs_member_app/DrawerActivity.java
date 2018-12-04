@@ -25,9 +25,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -39,6 +41,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import asim.tgs_member_app.adapters.ExpandableSideMenu;
 import asim.tgs_member_app.chat.ChatActivity;
 import asim.tgs_member_app.fragments.Completed_Jobs;
 import asim.tgs_member_app.fragments.DashBoard_Frame;
@@ -91,11 +100,13 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
     private String approved = "yes";
 
     private int dashboard_tab_index = 0;
+    ExpandableListView side_menu_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        side_menu_list = findViewById(R.id.expandable_menu);
 
         loadUserPermissions();
 
@@ -105,7 +116,8 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         mHandler = new Handler();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+     //   navigationView = (NavigationView) findViewById(R.id.nav_view);
         SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         mem_name = settings.getString(Constants.PREFS_USER_NAME, "");
         mem_id = settings.getString(Constants.PREFS_USER_ID, "");
@@ -120,11 +132,11 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         getDeviceInfo();
 
         // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
-        TextView name = (TextView) navHeader.findViewById(R.id.txtName);
-        final CircleImageView imageView = (CircleImageView) navHeader.findViewById(R.id.userProfilePic);
+       // navHeader = navigationView.getHeaderView(0);
+        TextView name = (TextView)findViewById(R.id.txtName);
+        final CircleImageView imageView = (CircleImageView) findViewById(R.id.userProfilePic);
         name.setText(mem_name);
-        final ProgressBar progressBar = (ProgressBar) navHeader.findViewById(R.id.progress);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
         Glide.with(DrawerActivity.this).load(image).override(400,400).into(new SimpleTarget<GlideDrawable>() {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -133,20 +145,47 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             }
         });
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
         // load toolbar titles from string resources
 
         // initializing navigation menu
 
+
         if (approved.equalsIgnoreCase("no"))
         {
-            navigationView.getMenu().removeItem(R.id.nav_dashboard);
+          /*  navigationView.getMenu().removeItem(R.id.nav_dashboard);
             navigationView.getMenu().removeItem(R.id.suggested_jobs);
             navigationView.getMenu().removeItem(R.id.completed_jobs);
             navigationView.getMenu().removeItem(R.id.my_notifications);
-            navigationView.getMenu().removeItem(R.id.my_notifications);
+            navigationView.getMenu().removeItem(R.id.my_notifications);*/
+
+          PrepareMenu(false);
+
+            ExpandableSideMenu sideMenuAdapter = new ExpandableSideMenu(DrawerActivity.this, _listDataHeader, _listDataChild);
+            sideMenuAdapter.setApproved(false);
+            side_menu_list.setAdapter(sideMenuAdapter);
+
+        //    side_menu_list.setOnChildClickListener(onChildClickListener);
+            side_menu_list.setOnGroupClickListener(onUnApprovedGroupClickListner);
+        }
+        else
+        {
+            PrepareMenu(true);
+
+            ExpandableSideMenu sideMenuAdapter = new ExpandableSideMenu(DrawerActivity.this, _listDataHeader, _listDataChild);
+            sideMenuAdapter.setApproved(true);
+            side_menu_list.setAdapter(sideMenuAdapter);
+          //  side_menu_list.setOnChildClickListener(onChildClickListener);
+            side_menu_list.setOnGroupClickListener(onGroupClickListener);
         }
 
-        setUpNavigationView();
+        //setUpNavigationView();
+
+
 
         Bundle bundle = new Bundle();
         bundle.putInt("index",dashboard_tab_index);
@@ -165,6 +204,159 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         //startService(new Intent(DrawerActivity.this, BackgroundLocationService.class));
 
     }
+    private List<String> _listDataHeader; // header titles
+    // child data in format of header title, child title
+    private HashMap<String, List<String>> _listDataChild;
+
+    private void PrepareMenu(boolean isApproved) {
+
+        if (!isApproved)
+        {
+            _listDataHeader = new ArrayList<>();
+            _listDataChild = new HashMap<>();
+
+           /* _listDataHeader.add("Dashboard");
+            _listDataHeader.add("Suggested Jobs");
+            _listDataHeader.add("Completed Jobs");*/
+            //  _listDataHeader.add("Tracking ETA");
+            _listDataHeader.add("My Profile");
+            /*_listDataHeader.add("Notifications");*/
+            _listDataHeader.add("Allowed Services");
+            _listDataHeader.add("My Documents");
+            _listDataHeader.add("Languages");
+            _listDataHeader.add("Log out");
+
+      /*  ArrayList<String> my_orders = new ArrayList<>();
+        my_orders.add("Confirmed Orders");
+        my_orders.add("My Cart");
+        my_orders.add("Scheduled Jobs");
+
+        ArrayList<String> settings = new ArrayList<>();
+        settings.add("Edit Profile");
+        settings.add("SOS Settings");*/
+            _listDataChild.put(_listDataHeader.get(0), new ArrayList<String>());
+            _listDataChild.put(_listDataHeader.get(1), new ArrayList<String>());
+            _listDataChild.put(_listDataHeader.get(2), new ArrayList<String>());
+            // _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
+            _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
+            _listDataChild.put(_listDataHeader.get(4), new ArrayList<String>());
+          /*  _listDataChild.put(_listDataHeader.get(5), new ArrayList<String>());
+            _listDataChild.put(_listDataHeader.get(6), new ArrayList<String>());
+            */
+            return;
+        }
+        _listDataHeader = new ArrayList<>();
+        _listDataChild = new HashMap<>();
+
+        _listDataHeader.add("Dashboard");
+        _listDataHeader.add("Suggested Jobs");
+        _listDataHeader.add("Completed Jobs");
+        //  _listDataHeader.add("Tracking ETA");
+        _listDataHeader.add("My Profile");
+        _listDataHeader.add("Notifications");
+        _listDataHeader.add("Allowed Services");
+        _listDataHeader.add("My Documents");
+        _listDataHeader.add("Languages");
+        _listDataHeader.add("Log out");
+
+      /*  ArrayList<String> my_orders = new ArrayList<>();
+        my_orders.add("Confirmed Orders");
+        my_orders.add("My Cart");
+        my_orders.add("Scheduled Jobs");
+
+        ArrayList<String> settings = new ArrayList<>();
+        settings.add("Edit Profile");
+        settings.add("SOS Settings");*/
+        _listDataChild.put(_listDataHeader.get(0), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(1), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(2), new ArrayList<String>());
+        // _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(4), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(5), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(6), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(7), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(8), new ArrayList<String>());
+
+    }
+
+
+    private ExpandableListView.OnChildClickListener onChildClickListener = new ExpandableListView.OnChildClickListener() {
+        @Override
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+           /* if (groupPosition == 2 && childPosition == 0) {
+                startActivity(new Intent(HomePage.this, MyOrdersActivity_.class));
+            } else if (groupPosition == 2 && childPosition == 1) {
+                startActivity(new Intent(HomePage.this, MyCartActivity.class));
+            } else if (groupPosition == 2 && childPosition == 2) {
+                startActivity(new Intent(HomePage.this, Scheduled_Bookings.class));
+            } else if (groupPosition == 4 && childPosition == 0) {
+                startActivity(new Intent(HomePage.this, MyProfileActivity_.class));
+            }
+            if (groupPosition == 4 && childPosition == 1) {
+                startActivity(new Intent(HomePage.this, SOS_Setting_Activity.class));
+            }
+            drawer.closeDrawers();*/
+            return false;
+        }
+    };
+
+    private ExpandableListView.OnGroupClickListener onUnApprovedGroupClickListner = new ExpandableListView.OnGroupClickListener() {
+        @Override
+        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+            if (groupPosition == 0) {
+                startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
+            } else if (groupPosition == 1) {
+                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
+            } else if (groupPosition == 2) {
+                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
+            } else if (groupPosition == 3) {
+                startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
+            } else if (groupPosition == 4) {
+                Constants.logOutUser(DrawerActivity.this);
+                logOutUser();
+            }
+
+            drawer.closeDrawer(Gravity.START);
+
+            return false;
+        }
+    };
+
+    private ExpandableListView.OnGroupClickListener onGroupClickListener = new ExpandableListView.OnGroupClickListener() {
+        @Override
+        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
+            if (groupPosition == 0) {
+                manager.beginTransaction().replace(R.id.content_main_frame,new DashBoard_Frame()).commit();
+                setTitle(R.string.dashboard);
+            } else if (groupPosition == 1) {
+                manager.beginTransaction().replace(R.id.content_main_frame,new Suggested_Jobs()).commit();
+                setTitle(R.string.suggested_job);
+            } else if (groupPosition == 2) {
+                manager.beginTransaction().replace(R.id.content_main_frame,new Completed_Jobs()).commit();
+                setTitle(R.string.completed_jobs);
+            } else if (groupPosition == 3) {
+                startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
+            } else if (groupPosition == 4) {
+                startActivity(new Intent(DrawerActivity.this,NotificationListActivity.class));
+            } else if (groupPosition == 5) {
+                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
+            } else if (groupPosition == 6) {
+                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
+            }
+            else if (groupPosition == 7) {
+                startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
+            }
+            else if (groupPosition == 8) {
+                Constants.logOutUser(DrawerActivity.this);
+                logOutUser();
+            }
+            drawer.closeDrawer(Gravity.START);
+            return false;
+        }
+    };
 
     private void loadUserPermissions() {
         SharedPreferences sh_prefs = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
@@ -390,6 +582,8 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             checkGps();
             refreshData();
             startLocationService();
+            if (Constants.DIRECTION_API_KEY.equalsIgnoreCase(""))
+                getDirectionKey();
 
         }
         catch (Exception e)
@@ -551,14 +745,49 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         LocationListnerServices loactionService = new LocationListnerServices();
         loactionService.setContext(DrawerActivity.this);
         if (!UtilsManager.isMyServiceRunning(DrawerActivity.this,LocationListnerServices.class)) {
-        /*    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 startService(new Intent(DrawerActivity.this,LocationListnerServices.class));
             } else {
                 startForegroundService(new Intent(DrawerActivity.this,LocationListnerServices.class));
-            }*/
+            }
 
             startService(new Intent(DrawerActivity.this,LocationListnerServices.class));
         }
+    }
+
+    public void getDirectionKey()
+    {
+
+        asyncHttpClient.setConnectTimeout(20000);
+        asyncHttpClient.get(DrawerActivity.this, Constants.Host_Address + "customers/get_direction_key/tgs_appkey_amin/member", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try
+                {
+                    String response = new String(responseBody);
+                    JSONObject jsonObject = new JSONObject(response);
+                    Constants.DIRECTION_API_KEY = jsonObject.getString("data");
+                    Log.e("KEY_FOUND",Constants.DIRECTION_API_KEY);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try
+                {
+                    String response = new String(responseBody);
+                    Log.e("DIR_KEY_REQ_FAIL",response);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

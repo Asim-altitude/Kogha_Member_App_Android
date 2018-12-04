@@ -13,15 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:background="@color/white_color"
-        app:itemTextColor="@color/black_color"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/navigation_drawer_items" />
+        >
+        <include layout="@layout/nav_header"/>
+
+        <ExpandableListView
+            android:id="@+id/expandable_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="220dp"
+            android:groupIndicator="@null">
+
+        </ExpandableListView>
+
+    </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white_color">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginLeft="10dp"
+    >
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/home"
+        android:tint="@color/theme_primary"
+        android:layout_margin="5dp"
+        android:id="@+id/item_icon"
+        />
+
+    <asim.tgs_member_app.utils.CustomTextView
+        android:id="@+id/lblListHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:font_text="OpenSans_Regular.ttf"
+        android:textSize="17dp"
+        android:paddingLeft="10dp"
+        android:textColor="@color/black_color"
+        android:textStyle="normal"
+        android:text="Hold on Its Bold"
+        />
+
+</LinearLayout>
+
+</LinearLayout>

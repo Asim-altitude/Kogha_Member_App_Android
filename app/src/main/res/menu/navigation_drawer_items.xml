@@ -11,36 +11,36 @@
 
     <item
         android:id="@+id/suggested_jobs"
-        android:icon="@drawable/suggested"
+        android:icon="@drawable/suggested_jobs"
         android:title="@string/suggested_job"/>
 
     <item
         android:id="@+id/completed_jobs"
-        android:icon="@drawable/my_orders"
+        android:icon="@drawable/completed_jobs"
         android:title="@string/completed_jobs"/>
 
     <item
         android:id="@+id/my_profile"
-        android:icon="@drawable/my_profile"
+        android:icon="@drawable/profile"
         android:title="@string/my_profile"/>
 
     <item
         android:id="@+id/my_notifications"
-        android:icon="@drawable/notification"
+        android:icon="@drawable/notifications"
         android:title="@string/notifications"/>
     <item
         android:id="@+id/allowed_services"
-        android:icon="@drawable/services_icon"
+        android:icon="@drawable/services"
         android:title="@string/allowed_services"/>
 
     <item
         android:id="@+id/upload_documnets"
-        android:icon="@drawable/upload"
+        android:icon="@drawable/documents"
         android:title="@string/upload_documents"/>
 
     <item
         android:id="@+id/language"
-        android:icon="@drawable/language"
+        android:icon="@drawable/languages"
         android:title="@string/language"/>
 
     <item
