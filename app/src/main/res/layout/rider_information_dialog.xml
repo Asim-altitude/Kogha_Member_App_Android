@@ -27,7 +27,7 @@
             android:layout_marginTop="5dp"
             android:gravity="left"
             android:padding="10dp"
-            android:text="Customer Info"
+            android:text="Kogha Customer"
             android:textColor="@color/white_color"
             android:textSize="18dp"
             android:background="@drawable/bumbleride_header_pickup"

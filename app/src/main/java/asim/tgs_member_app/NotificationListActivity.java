@@ -1,17 +1,25 @@
 package asim.tgs_member_app;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
 import asim.tgs_member_app.fragments.UsefulViewPagerAdapter;
 import asim.tgs_member_app.fragments.notifications_tabs.ChatNotificationFrame;
 import asim.tgs_member_app.fragments.notifications_tabs.GeneralNotificationFrame;
@@ -25,14 +33,15 @@ public class NotificationListActivity extends AppCompatActivity {
     private LinearLayout general,chat,job;
 
     private void setupToolbar(){
+        androidx.appcompat.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // Show menu icon
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final androidx.appcompat.app.ActionBar ab = getSupportActionBar();
+        assert ab != null;
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("");
 
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
-        upArrow.setColorFilter(getResources().getColor(R.color.white_color), PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-
-        getSupportActionBar().setTitle(R.string.notifications);
+        ((TextView)findViewById(R.id.pageTitle)).setText("Notifications");
     }
 
     @Override
@@ -97,13 +106,13 @@ public class NotificationListActivity extends AppCompatActivity {
 
         final GeneralNotificationFrame gen = new GeneralNotificationFrame();
 
-        adapter.addFragment(gen, "General");
+        adapter.AddFragments(gen, "General");
 
         final ChatNotificationFrame chat_frame = new ChatNotificationFrame();
-        adapter.addFragment(chat_frame, "Chat");
+        adapter.AddFragments(chat_frame, "Chat");
 
         final JobNotificationFrame job_frame = new JobNotificationFrame();
-        adapter.addFragment(job_frame, "Job");
+        adapter.AddFragments(job_frame, "Job");
 
         viewPager.setAdapter(adapter);
 
@@ -151,5 +160,58 @@ public class NotificationListActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+
+    private Context updateBaseContextLocale(Context context) {
+        // SharedPreferences sharedPreferences = context.getSharedPreferences(,MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+        String language = settings.getString(Constants.PREF_LOCAL,"en");//sharedPreferences.getString(Constants.LANGUAGE,Locale.getDefault().getLanguage());//.getSavedLanguage(); // Helper method to get saved language from SharedPreferences
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            // update overrideConfiguration with your locale
+            // setLocale(overrideConfiguration); // you will need to implement this
+
+            createConfigurationContext(overrideConfiguration);
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateBaseContextLocale(this);
     }
 }

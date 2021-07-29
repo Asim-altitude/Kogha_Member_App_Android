@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +17,18 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -49,6 +52,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class SuggestedJobAdapter extends BaseAdapter
 {
+    private static final String TAG = "SuggestedJobAdapter";
     private List<SuggestedJobObject> list;
 
     private Context context;
@@ -69,7 +73,9 @@ public class SuggestedJobAdapter extends BaseAdapter
         settings = context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
         mem_id = settings.getString(Constants.PREFS_USER_ID,"117");
 
+
     }
+
     String mem_id;
 
     private Job_Accepted_Callback job_accepted_callback;
@@ -106,28 +112,55 @@ public class SuggestedJobAdapter extends BaseAdapter
         TextView destination_location = (TextView) convertView.findViewById(R.id.destination_location);
         TextView meet_date = (TextView) convertView.findViewById(R.id.meet_datetime);
         TextView posted_date = (TextView) convertView.findViewById(R.id.posted_datetime);
+        TextView order_date = (TextView) convertView.findViewById(R.id.order_datetime);
+        TextView bookingType = (TextView) convertView.findViewById(R.id.job_type);
         TextView total = (TextView) convertView.findViewById(R.id.order_total);
         TextView instructions = (TextView) convertView.findViewById(R.id.instructions);
         TextView job_hrs = (TextView) convertView.findViewById(R.id.job_hours);
         TextView timer_text = (TextView) convertView.findViewById(R.id.time_job);
+        TextView cust_name = (TextView) convertView.findViewById(R.id.customer_name);
+        TextView service_name = (TextView) convertView.findViewById(R.id.service_name);
         ImageView uniform = (ImageView) convertView.findViewById(R.id.uniform);
+        ImageView cust_image = (ImageView) convertView.findViewById(R.id.customer_img);
         LinearLayout uniform_layout = (LinearLayout) convertView.findViewById(R.id.uniform_layout);
+
+        LinearLayout doc_item_lay = (LinearLayout) convertView.findViewById(R.id.document_item_layout);
+        final LinearLayout doc_extra_info_lay = (LinearLayout) convertView.findViewById(R.id.document_extra_info);
+        final LinearLayout doc_info_lay = (LinearLayout) convertView.findViewById(R.id.doc_info_section_lay);
+
+        ImageView doc_image = (ImageView) convertView.findViewById(R.id.doc_image_view);
+        TextView delivery_person = (TextView) convertView.findViewById(R.id.delivery_person);
+        TextView item_description = (TextView) convertView.findViewById(R.id.doc_description);
+
+        TextView pick_contact = (TextView) convertView.findViewById(R.id.pickup_contact_number);
+        TextView pick_house_no = (TextView) convertView.findViewById(R.id.pickup_hous_no);
+
+        TextView dest_contact = (TextView) convertView.findViewById(R.id.destination_contact_number);
+        TextView dest_house_no = (TextView) convertView.findViewById(R.id.destination_hous_no);
+
 
         Button accept_job = (Button) convertView.findViewById(R.id.accept_job);
         Button cancel_job = (Button) convertView.findViewById(R.id.reject_job);
         LinearLayout meet_time_layout = (LinearLayout) convertView.findViewById(R.id.meet_time_layout);
+        LinearLayout order_time_layout = (LinearLayout) convertView.findViewById(R.id.order_time_layout);
         final LinearLayout option_layout = (LinearLayout) convertView.findViewById(R.id.option_layout);
         LinearLayout job_type_layout = (LinearLayout) convertView.findViewById(R.id.job_type_layout);
         LinearLayout instruction_layout = (LinearLayout) convertView.findViewById(R.id.instruction_layout);
 
         LinearLayout job_hrs_layout = (LinearLayout) convertView.findViewById(R.id.job_hrs_layout);
-        RecyclerView job_type_list = convertView.findViewById(R.id.job_type_list);
+        ListView job_type_list = convertView.findViewById(R.id.job_type_list);
+        ListView delivery_service_list = convertView.findViewById(R.id.services_list);
+
+        Picasso.with(context).load(list.get(position).getCustomer_image())
+                .placeholder(R.drawable.ic_avatar)
+                .into(cust_image);
+
+        cust_name.setText(list.get(position).getCustomer_name());
 
 
         if (list.get(position).getService_list().size() > 0) {
             job_type_layout.setVisibility(View.VISIBLE);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            job_type_list.setLayoutManager(layoutManager);
+
             job_services_adapter = new Job_Services_Adapter(list.get(position).getService_list(), context);
             if (list.get(position).getService_list().size()==1)
             {
@@ -135,8 +168,10 @@ public class SuggestedJobAdapter extends BaseAdapter
                 list.get(position).setService_type_selected_id(list.get(position).getService_list().get(0).getService_type_id());
                 list.get(position).setService_name(list.get(position).getService_list().get(0).getService_name());
                 job_services_adapter.setSelected_index(0);
+                Log.e(TAG, "getView: "+list.get(position).getSelected_index());
             }
             else {
+                job_services_adapter.setSelected_index(list.get(position).getSelected_index());
                 job_services_adapter.setJob_selection_notifier(new Job_Selection_Notifier() {
                     @Override
                     public void onJobSelection(int pos) {
@@ -144,14 +179,32 @@ public class SuggestedJobAdapter extends BaseAdapter
                         list.get(position).setSelected_service_id(list.get(position).getService_list().get(pos).getService_id());
                         list.get(position).setService_type_selected_id(list.get(position).getService_list().get(pos).getService_type_id());
                         list.get(position).setService_name(list.get(position).getService_list().get(pos).getService_name());
-                        job_services_adapter.setSelected_index(pos);
-                        job_services_adapter.notifyDataSetChanged();
+                       // list.get(position).setm
+                        list.get(position).setMember_share(list.get(position).getService_list().get(pos).getTotal());
+                        list.get(position).setOrder_item_id(list.get(position).getService_list().get(pos).getOrder_item_id());
+                        list.get(position).setSelected_index(pos);
+
+                        notifyDataSetChanged();
+
 
                     }
                 });
             }
 
             job_type_list.setAdapter(job_services_adapter);
+           // UtilsManager.setListViewHeightBasedOnChildren(job_type_list);
+            ViewGroup.LayoutParams params = job_type_list.getLayoutParams();
+            if (list.get(position).getService_list().size()==1 ){
+                params.height = 100;
+                job_type_list.setLayoutParams(params);
+            }
+            else if (list.get(position).getService_list().size()==2 ){
+                params.height = 200;
+                job_type_list.setLayoutParams(params);
+            } else if (list.get(position).getService_list().size()==3 ){
+                params.height = 300;
+                job_type_list.setLayoutParams(params);
+            }
 
         } else {
             job_type_layout.setVisibility(View.GONE);
@@ -163,15 +216,9 @@ public class SuggestedJobAdapter extends BaseAdapter
             @Override
             public void onClick(View v) {
 
-                String order_id = settings.getString(Constants.CURRENT_JOB,"0");
-                if (!order_id.equalsIgnoreCase("0"))
-                {
-                    UtilsManager.showAlertMessage(context, "", "You already have a job in progress.");
-                    return;
-                }
 
-
-                if (!list.get(position).getService_name().equalsIgnoreCase("0") && !list.get(position).getService_name().equalsIgnoreCase(""))
+                if (!list.get(position).getService_name().equalsIgnoreCase("0") &&
+                    !list.get(position).getService_name().equalsIgnoreCase(""))
                     AcceptJob(position);
                 else
                     UtilsManager.showAlertMessage(context, "", "Select service please");
@@ -227,11 +274,56 @@ public class SuggestedJobAdapter extends BaseAdapter
 
         }
 
+        if (object.getItem_type()!=null) {
+            if (!object.getItem_type().equalsIgnoreCase("null")) {
+                delivery_person.setText(object.getDelivery_person());
+                item_description.setText(object.getItem_desc());
+
+                Log.e(TAG, "getView: "+object.getDoc_image());
+                Picasso.with(context).load(object.getDoc_image())
+                        .placeholder(R.drawable.docx_icon)
+                        .into(doc_image);
+                doc_item_lay.setVisibility(View.VISIBLE);
+
+                convertView.findViewById(R.id.service_layout).setVisibility(View.VISIBLE);
+                service_name.setText(list.get(position).getMain_service_name());
+
+                pick_contact.setText(object.getPick_contact_obj().getContact());
+                pick_house_no.setText(object.getPick_contact_obj().getAddress());
+
+                dest_contact.setText(object.getDestination_contact_obj().getContact());
+                dest_house_no.setText(object.getDestination_contact_obj().getAddress());
+
+                job_type_list.setVisibility(View.GONE);
+                job_type_layout.setVisibility(View.GONE);
+            }
+        }else {
+            convertView.findViewById(R.id.service_layout).setVisibility(View.VISIBLE);
+            service_name.setText(list.get(position).getMain_service_name());
+        }
+
+        service_name.setText(list.get(position).getMain_service_name());
+
+        doc_item_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doc_info_lay.getVisibility()==View.VISIBLE){
+                    doc_info_lay.setVisibility(View.GONE);
+                    doc_extra_info_lay.setVisibility(View.GONE);
+                }else {
+                    doc_info_lay.setVisibility(View.VISIBLE);
+                    doc_extra_info_lay.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         if (object.getBooking_type().equalsIgnoreCase("Immediate") || object.getBooking_type().equalsIgnoreCase("")) {
             meet_time_layout.setVisibility(View.GONE);
+            order_time_layout.setVisibility(View.VISIBLE);
             list.get(position).setDatetime_meet("required immediatly");
         } else {
             meet_time_layout.setVisibility(View.VISIBLE);
+            order_time_layout.setVisibility(View.VISIBLE);
         }
 
         if (object.getInstructions().equals("N/A"))
@@ -245,6 +337,8 @@ public class SuggestedJobAdapter extends BaseAdapter
         instructions.setText(object.getInstructions());
 
         destination_location.setText(object.getDestination());
+        bookingType.setText(object.getBooking_type());
+        order_date.setText(ApplySlashFormat(object.getDatetime_ordered()));
 
         String comma_seperated_price = object.getMember_share();
         try {
@@ -298,8 +392,41 @@ public class SuggestedJobAdapter extends BaseAdapter
         }
 
 
+        if (list.get(position).getService_list().size() > 0){
+            if (object.getItem_type()!=null) {
+                if (!object.getItem_type().equalsIgnoreCase("null")) {
+                    Delivery_Services_Adapter delivery_services_adapter = new Delivery_Services_Adapter(list.get(position).getService_list(),context);
+                    delivery_service_list.setAdapter(delivery_services_adapter);
+                    delivery_service_list.setVisibility(View.VISIBLE);
+                    UtilsManager.setListViewHeightBasedOnChildren(delivery_service_list);
+                }
+            }
+        }
+
+
         return convertView;
     }
+
+    private String ApplySlashFormat(String date_string)
+    {
+        String date_final = "";
+        String am_pm = "pm";
+        if (date_string.contains("AM") || date_string.contains("AM") || date_string.contains("Am"))
+            am_pm = "am";
+        try {
+            date_string = date_string.replace(" AM","").replace(" PM","");
+            Log.e("date",date_string);
+            Date current_date = new SimpleDateFormat("dd/MM/yyyy h:mm").parse(date_string);
+            // return new SimpleDateFormat("dd-MM-yyyy h:mm").format(current_date)+" "+am_pm+"";
+            date_final = new SimpleDateFormat("dd MMM yyyy h:mm").format(current_date)+" "+am_pm+"";
+            return date_final;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date_final+" "+am_pm;
+    }
+
 
     private String ApplyFormat(String date_string)
     {

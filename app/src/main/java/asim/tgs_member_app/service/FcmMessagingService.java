@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -30,7 +30,6 @@ import java.util.TimerTask;
 import asim.tgs_member_app.DrawerActivity;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.chat.ChatActivity;
-import asim.tgs_member_app.chat.Chat_Message;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.Notification_Data;
 import asim.tgs_member_app.utils.NotificationUtils;
@@ -52,6 +51,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
         super.onCreate();
        // startTimer();
     }
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

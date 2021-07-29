@@ -1,66 +1,61 @@
 package asim.tgs_member_app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import androidx.core.view.GravityCompat;
 import asim.tgs_member_app.adapters.ExpandableSideMenu;
-import asim.tgs_member_app.chat.ChatActivity;
+import asim.tgs_member_app.finance.FinanceScreen;
 import asim.tgs_member_app.fragments.Completed_Jobs;
 import asim.tgs_member_app.fragments.DashBoard_Frame;
+import asim.tgs_member_app.fragments.DashboardUI;
 import asim.tgs_member_app.fragments.DummyFrame;
 import asim.tgs_member_app.fragments.Suggested_Jobs;
-import asim.tgs_member_app.fragments.Upcoming_Jobs;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberLocationObject;
-import asim.tgs_member_app.receiver.LocationChangeReciver;
-import asim.tgs_member_app.service.BackgroundLocationService;
-import asim.tgs_member_app.service.ChatMessageNotifier;
+import asim.tgs_member_app.models.PhoneContact;
 import asim.tgs_member_app.service.LocationListnerServices;
-import asim.tgs_member_app.service.ServiceForMemberLocation;
+import asim.tgs_member_app.sos.SOS_Settings_PREFS;
+import asim.tgs_member_app.sos.SoS_Call_Screen;
 import asim.tgs_member_app.utils.NotifyUpdates;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
@@ -68,11 +63,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
     private NavigationView navigationView;
-    private DrawerLayout drawer;
+    private androidx.drawerlayout.widget.DrawerLayout drawer;
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtName, txtWebsite;
-    private Toolbar toolbar;
+    private androidx.appcompat.widget.Toolbar toolbar;
     private FloatingActionButton fab;
 
     // urls to load navigation header background image
@@ -101,13 +96,48 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
 
     private int dashboard_tab_index = 0;
     ExpandableListView side_menu_list;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sos_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.sos_btn_icon:
+                //do something
+                try {
+                    if (list.size() > 0) {
+                        startActivity(new Intent(context, SoS_Call_Screen.class));
+                    } else {
+                        startActivity(new Intent(context, SOS_Settings_Screen.class));
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                  break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    ArrayList<PhoneContact> list = null;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar =  findViewById(R.id.toolbar);
         side_menu_list = findViewById(R.id.expandable_menu);
+        list = new SOS_Settings_PREFS(this).getSOSPhone(Constants.USER_SOS_PHONE);
 
+        context = this;
         loadUserPermissions();
 
         setSupportActionBar(toolbar);
@@ -115,7 +145,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         firebaseDatabase = FirebaseDatabase.getInstance();
         mHandler = new Handler();
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer =  findViewById(R.id.drawer_layout);
 
      //   navigationView = (NavigationView) findViewById(R.id.nav_view);
         SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
@@ -124,9 +154,8 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         settings.edit().putBoolean(Constants.PREFS_USER_ACTIVE,true).apply();
         final String image = settings.getString(Constants.PREFS_USER_IMAGE, "");
 
-
         if (getIntent().hasExtra("index"))
-            dashboard_tab_index = getIntent().getIntExtra("index",0);
+            dashboard_tab_index = 0;//getIntent().getIntExtra("index",0);
 
         //SAVE DEVICE INFO ON SERVER
         getDeviceInfo();
@@ -137,18 +166,12 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         final CircleImageView imageView = (CircleImageView) findViewById(R.id.userProfilePic);
         name.setText(mem_name);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
-        Glide.with(DrawerActivity.this).load(image).override(400,400).into(new SimpleTarget<GlideDrawable>() {
-            @Override
-            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                imageView.setImageDrawable(resource);
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+        Picasso.with(DrawerActivity.this).load(image).into(imageView);
+        progressBar.setVisibility(View.GONE);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        androidx.appcompat.app.ActionBarDrawerToggle actionBarDrawerToggle = new androidx.appcompat.app.ActionBarDrawerToggle(DrawerActivity.this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
         // load toolbar titles from string resources
 
@@ -163,14 +186,15 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             navigationView.getMenu().removeItem(R.id.my_notifications);
             navigationView.getMenu().removeItem(R.id.my_notifications);*/
 
-          PrepareMenu(false);
+            PrepareMenu(false);
 
             ExpandableSideMenu sideMenuAdapter = new ExpandableSideMenu(DrawerActivity.this, _listDataHeader, _listDataChild);
             sideMenuAdapter.setApproved(false);
             side_menu_list.setAdapter(sideMenuAdapter);
 
-        //    side_menu_list.setOnChildClickListener(onChildClickListener);
+            side_menu_list.setOnChildClickListener(onUnApprovedChildClickListener);
             side_menu_list.setOnGroupClickListener(onUnApprovedGroupClickListner);
+
         }
         else
         {
@@ -179,7 +203,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             ExpandableSideMenu sideMenuAdapter = new ExpandableSideMenu(DrawerActivity.this, _listDataHeader, _listDataChild);
             sideMenuAdapter.setApproved(true);
             side_menu_list.setAdapter(sideMenuAdapter);
-          //  side_menu_list.setOnChildClickListener(onChildClickListener);
+            side_menu_list.setOnChildClickListener(onChildClickListener);
             side_menu_list.setOnGroupClickListener(onGroupClickListener);
         }
 
@@ -189,7 +213,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
 
         Bundle bundle = new Bundle();
         bundle.putInt("index",dashboard_tab_index);
-        DashBoard_Frame dashBoard_frame = new DashBoard_Frame();
+        DashboardUI dashBoard_frame = new DashboardUI();
         dashBoard_frame.setArguments(bundle);
         if (approved.equalsIgnoreCase("yes")) {
             manager.beginTransaction().replace(R.id.content_main_frame, dashBoard_frame).commit();
@@ -221,10 +245,8 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             //  _listDataHeader.add("Tracking ETA");
             _listDataHeader.add("My Profile");
             /*_listDataHeader.add("Notifications");*/
-            _listDataHeader.add("Allowed Services");
-            _listDataHeader.add("My Documents");
             _listDataHeader.add("Languages");
-            _listDataHeader.add("Log out");
+            _listDataHeader.add("Logout");
 
       /*  ArrayList<String> my_orders = new ArrayList<>();
         my_orders.add("Confirmed Orders");
@@ -234,12 +256,16 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         ArrayList<String> settings = new ArrayList<>();
         settings.add("Edit Profile");
         settings.add("SOS Settings");*/
-            _listDataChild.put(_listDataHeader.get(0), new ArrayList<String>());
+            ArrayList<String> settings = new ArrayList<>();
+            settings.add("Edit profile");
+            settings.add("Allowed services");
+            settings.add("Documents");
+           // settings.add("Bank Info");
+            _listDataChild.put(_listDataHeader.get(0), settings);
             _listDataChild.put(_listDataHeader.get(1), new ArrayList<String>());
             _listDataChild.put(_listDataHeader.get(2), new ArrayList<String>());
+
             // _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
-            _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
-            _listDataChild.put(_listDataHeader.get(4), new ArrayList<String>());
           /*  _listDataChild.put(_listDataHeader.get(5), new ArrayList<String>());
             _listDataChild.put(_listDataHeader.get(6), new ArrayList<String>());
             */
@@ -251,13 +277,11 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         _listDataHeader.add("Dashboard");
         _listDataHeader.add("Suggested Jobs");
         _listDataHeader.add("Completed Jobs");
-        //  _listDataHeader.add("Tracking ETA");
+        _listDataHeader.add("Finance");
         _listDataHeader.add("My Profile");
         _listDataHeader.add("Notifications");
-        _listDataHeader.add("Allowed Services");
-        _listDataHeader.add("My Documents");
         _listDataHeader.add("Languages");
-        _listDataHeader.add("Log out");
+        _listDataHeader.add("Logout");
 
       /*  ArrayList<String> my_orders = new ArrayList<>();
         my_orders.add("Confirmed Orders");
@@ -267,16 +291,23 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         ArrayList<String> settings = new ArrayList<>();
         settings.add("Edit Profile");
         settings.add("SOS Settings");*/
+        ArrayList<String> settings = new ArrayList<>();
+        settings.add("Edit profile");
+        settings.add("Allowed services");
+        settings.add("Documents");
+        settings.add("Bank Info");
+        settings.add("SOS Settings");
+       // settings.add("Bank Info");
+
         _listDataChild.put(_listDataHeader.get(0), new ArrayList<String>());
         _listDataChild.put(_listDataHeader.get(1), new ArrayList<String>());
         _listDataChild.put(_listDataHeader.get(2), new ArrayList<String>());
-        // _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
         _listDataChild.put(_listDataHeader.get(3), new ArrayList<String>());
-        _listDataChild.put(_listDataHeader.get(4), new ArrayList<String>());
+        _listDataChild.put(_listDataHeader.get(4), settings);
         _listDataChild.put(_listDataHeader.get(5), new ArrayList<String>());
         _listDataChild.put(_listDataHeader.get(6), new ArrayList<String>());
         _listDataChild.put(_listDataHeader.get(7), new ArrayList<String>());
-        _listDataChild.put(_listDataHeader.get(8), new ArrayList<String>());
+
 
     }
 
@@ -285,19 +316,42 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-           /* if (groupPosition == 2 && childPosition == 0) {
-                startActivity(new Intent(HomePage.this, MyOrdersActivity_.class));
-            } else if (groupPosition == 2 && childPosition == 1) {
-                startActivity(new Intent(HomePage.this, MyCartActivity.class));
-            } else if (groupPosition == 2 && childPosition == 2) {
-                startActivity(new Intent(HomePage.this, Scheduled_Bookings.class));
-            } else if (groupPosition == 4 && childPosition == 0) {
-                startActivity(new Intent(HomePage.this, MyProfileActivity_.class));
+            if (groupPosition == 4 && childPosition == 0) {
+                startActivity(new Intent(DrawerActivity.this, MyProfileActivity.class));
             }
-            if (groupPosition == 4 && childPosition == 1) {
-                startActivity(new Intent(HomePage.this, SOS_Setting_Activity.class));
+            else if (groupPosition == 4 && childPosition == 1) {
+                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
+            } else if (groupPosition == 4 && childPosition == 2) {
+                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
+            } else if (groupPosition == 4 && childPosition == 3) {
+                startActivity(new Intent(DrawerActivity.this, BankScreen.class).putExtra("edit",true));
+            }else if (groupPosition == 4 && childPosition == 4) {
+                startActivity(new Intent(DrawerActivity.this, SOS_Settings_Screen.class));
             }
-            drawer.closeDrawers();*/
+
+
+            drawer.closeDrawers();
+            return false;
+        }
+    };
+
+    private ExpandableListView.OnChildClickListener onUnApprovedChildClickListener = new ExpandableListView.OnChildClickListener() {
+        @Override
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+            if (groupPosition == 0 && childPosition == 0) {
+                startActivity(new Intent(DrawerActivity.this, MyProfileActivity.class));
+            }
+            else if (groupPosition == 0 && childPosition == 1) {
+                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
+            } else if (groupPosition == 0 && childPosition == 2) {
+                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
+            }else if (groupPosition == 0 && childPosition == 3) {
+                startActivity(new Intent(DrawerActivity.this, BankScreen.class).putExtra("edit",true));
+            }
+
+
+            drawer.closeDrawers();
             return false;
         }
     };
@@ -306,54 +360,68 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
             if (groupPosition == 0) {
-                startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
+              //  startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
             } else if (groupPosition == 1) {
-                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
-            } else if (groupPosition == 2) {
-                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
-            } else if (groupPosition == 3) {
                 startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
-            } else if (groupPosition == 4) {
+                finish();
+                drawer.closeDrawer(Gravity.LEFT);
+            } else if (groupPosition == 2) {
                 Constants.logOutUser(DrawerActivity.this);
                 logOutUser();
+            } else if (groupPosition == 3) {
+               // startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
+            } else if (groupPosition == 4) {
+               /* Constants.logOutUser(DrawerActivity.this);
+                logOutUser();*/
             }
 
-            drawer.closeDrawer(Gravity.START);
+
 
             return false;
         }
     };
 
     private ExpandableListView.OnGroupClickListener onGroupClickListener = new ExpandableListView.OnGroupClickListener() {
+        @SuppressLint("WrongConstant")
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 
             if (groupPosition == 0) {
-                manager.beginTransaction().replace(R.id.content_main_frame,new DashBoard_Frame()).commit();
+                manager.beginTransaction().replace(R.id.content_main_frame,new DashboardUI()).commit();
                 setTitle(R.string.dashboard);
+                drawer.closeDrawer(Gravity.START);
             } else if (groupPosition == 1) {
                 manager.beginTransaction().replace(R.id.content_main_frame,new Suggested_Jobs()).commit();
                 setTitle(R.string.suggested_job);
+                drawer.closeDrawer(Gravity.START);
             } else if (groupPosition == 2) {
                 manager.beginTransaction().replace(R.id.content_main_frame,new Completed_Jobs()).commit();
                 setTitle(R.string.completed_jobs);
-            } else if (groupPosition == 3) {
-                startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
+                drawer.closeDrawer(Gravity.START);
+            }else if (groupPosition == 3) {
+                startActivity(new Intent(DrawerActivity.this,FinanceScreen.class));
+                drawer.closeDrawer(Gravity.START);
             } else if (groupPosition == 4) {
-                startActivity(new Intent(DrawerActivity.this,NotificationListActivity.class));
+                //startActivity(new Intent(DrawerActivity.this,MyProfileActivity.class));
             } else if (groupPosition == 5) {
-                startActivity(new Intent(DrawerActivity.this, AllowedServices.class));
+                startActivity(new Intent(DrawerActivity.this,NotificationListActivity.class));
+                drawer.closeDrawer(Gravity.START);
             } else if (groupPosition == 6) {
-                startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
-            }
-            else if (groupPosition == 7) {
                 startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
-            }
-            else if (groupPosition == 8) {
+                drawer.closeDrawer(Gravity.START);
+            } else if (groupPosition == 7) {
+               // startActivity(new Intent(DrawerActivity.this, UploadedDocumentsScreen.class));
                 Constants.logOutUser(DrawerActivity.this);
                 logOutUser();
             }
-            drawer.closeDrawer(Gravity.START);
+           /* else if (groupPosition == 8) {
+                startActivity(new Intent(DrawerActivity.this, LanguageSelection.class));
+            }
+            else if (groupPosition == 9) {
+                Constants.logOutUser(DrawerActivity.this);
+                logOutUser();
+            }*/
+
             return false;
         }
     };
@@ -368,7 +436,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             Constants.can_login = true;
     }
 
-    FragmentManager manager = getSupportFragmentManager();
+    androidx.fragment.app.FragmentManager manager = getSupportFragmentManager();
     private void setToolbarTitle() {
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
@@ -428,7 +496,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
                     default:
                         navItemIndex = 0;
                 }
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(Gravity.LEFT);
                 //Checking if the item is in checked state or not, if not make it in checked state
 
                 return true;
@@ -436,7 +504,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         });
 
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        androidx.appcompat.app.ActionBarDrawerToggle actionBarDrawerToggle = new androidx.appcompat.app.ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -475,7 +543,6 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         // when user is in other fragment than home
 
 
-        super.onBackPressed();
     }
 
 
@@ -579,6 +646,7 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         super.onResume();
         try
         {
+            updateBaseContextLocale(this);
             checkGps();
             refreshData();
             startLocationService();
@@ -599,11 +667,10 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
         String image = settings.getString(Constants.PREFS_USER_IMAGE, "");
         Log.e("image",image);
 
-        navHeader = navigationView.getHeaderView(0);
-        TextView name = (TextView) navHeader.findViewById(R.id.txtName);
-        CircleImageView imageView = (CircleImageView) navHeader.findViewById(R.id.userProfilePic);
+        TextView name =  findViewById(R.id.txtName);
+        CircleImageView imageView =  findViewById(R.id.userProfilePic);
         name.setText(mem_name);
-        Glide.with(getApplicationContext()).load(image).into(imageView);
+        Picasso.with(DrawerActivity.this).load(image).into(imageView);
     }
 
     @Override
@@ -613,13 +680,16 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
     }
 
 
-
     @Override
     public void onJobAccepted(int code) {
         if (manager==null)
             manager = getSupportFragmentManager();
 
-        manager.beginTransaction().replace(R.id.content_main_frame,new DashBoard_Frame()).commit();
+        Bundle bundle = new Bundle();
+        bundle.putInt("index",1);
+        DashboardUI dashboardUI = new DashboardUI();
+        dashboardUI.setArguments(bundle);
+        manager.beginTransaction().replace(R.id.content_main_frame,dashboardUI).commit();
     }
 
     @Override
@@ -789,5 +859,54 @@ public class DrawerActivity extends AppCompatActivity implements NotifyUpdates{
             }
         });
     }
+
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+
+    private Context updateBaseContextLocale(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+        String language = settings.getString(Constants.PREF_LOCAL,"en");//LocalHelper.getLanguage(context);//sharedPreferences.getString(Constants.LANGUAGE,Locale.getDefault().getLanguage());//.getSavedLanguage(); // Helper method to get saved language from SharedPreferences
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            // update overrideConfiguration with your locale
+            // setLocale(overrideConfiguration); // you will need to implement this
+
+            createConfigurationContext(overrideConfiguration);
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
 
 }

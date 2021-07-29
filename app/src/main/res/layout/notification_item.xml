@@ -23,24 +23,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
                 >
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp">
+                    >
 
                     <View
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:background="@drawable/circle_thick" />
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/notification"
                         android:tint="@color/white_color" />
@@ -51,11 +50,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
                     android:text="Job Alert"
                     android:layout_marginRight="20dp"
                     android:textColor="@color/black_color"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     app:font_text="OpenSans_Bold.ttf" />
             </LinearLayout>
@@ -68,8 +66,8 @@
                 android:padding="10dp"
                 android:text="time"
                 android:textColor="@color/theme_primary"
-                android:textSize="14dp"
-                android:textStyle="bold"
+                android:textSize="12dp"
+                android:textStyle="normal"
                 android:visibility="visible" />
         </RelativeLayout>
 
@@ -81,10 +79,9 @@
             android:id="@+id/notification_body"
             android:textSize="13dp"
             android:textColor="@color/black_color"
-            android:layout_marginTop="10dp"
             android:minLines="2"
             android:gravity="start"
-            android:padding="10dp"
+            android:layout_margin="10dp"
             />
 
     </LinearLayout>

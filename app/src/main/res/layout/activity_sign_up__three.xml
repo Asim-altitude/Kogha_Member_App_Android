@@ -1,0 +1,245 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:src="@drawable/kogha_logo"
+                    android:tint="@color/black_color"
+
+                    />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:id="@+id/back_btn"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/black_color"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:text="3/6"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_gray_color"
+            />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:background="@drawable/white_rect"
+            >
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_semibold.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="Email Verification"
+                android:textSize="@dimen/header_registeration_size"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/black_color"
+                />
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_r.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter your OTP Code here"
+                android:textSize="@dimen/sub_header_third_registeration_size"
+                android:textStyle="normal"
+                android:gravity="center_horizontal"
+                android:textColor="@color/dark_gray_color"
+                />
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/done_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:padding="25dp"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+            <com.jkb.vcedittext.VerificationCodeEditText
+                android:id="@+id/verification_code_input"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:inputType="number"
+                android:textColor="@color/black_color"
+                android:textSize="30sp"
+                app:bottomLineHeight="2dp"
+                android:hint="000000"
+                app:bottomLineNormalColor="@color/black_color"
+                app:bottomLineSelectedColor="@color/theme_primary"
+                app:figures="4"
+                app:selectedBackgroundColor="@android:color/transparent"
+                app:verCodeMargin="10dp" />
+
+            <asim.tgs_member_app.custom.CustomTextView
+                android:id="@+id/code_message"
+                app:font_text="m_light.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/theme_primary"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:text="Invalid Verification Code"
+                android:gravity="center_horizontal"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:background="@drawable/disabled_btn"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/next_btn"
+                android:elevation="5dp"
+                android:visibility="gone"
+                android:layout_marginTop="15dp"
+                >
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="NEXT"
+                    android:textColor="@color/white_color"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ico_next"
+                    android:tint="@color/white_color"
+                    android:layout_marginLeft="5dp"
+                    />
+            </LinearLayout>
+
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_r.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Didn't you received any code"
+                android:textSize="@dimen/sub_header_third_registeration_size"
+                android:textStyle="normal"
+                android:gravity="center_horizontal"
+                android:textColor="@color/dark_gray_color"
+                android:layout_marginTop="40dp"
+                />
+            <asim.tgs_member_app.custom.CustomTextView
+                android:id="@+id/resend_btn"
+                app:font_text="m_r.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resend new code"
+                android:textSize="@dimen/sub_header_registeration_size"
+                android:textStyle="normal"
+                android:gravity="center_horizontal"
+                android:textColor="@color/step_color"
+                />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

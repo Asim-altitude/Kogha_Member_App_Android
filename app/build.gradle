@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
-
+def test_version = "1.0"
 repositories {
     mavenCentral()
     mavenLocal()
     jcenter()
     maven {
-        url  'http://dl.bintray.com/gigamole/maven/'
+        url 'http://dl.bintray.com/gigamole/maven/'
     }
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
@@ -13,15 +13,14 @@ repositories {
     }
 }
 android {
-    compileSdkVersion 27
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.getranked.teamguard_member"
         minSdkVersion 17
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 29
+        versionCode 2
+        versionName "1.1"
     }
     aaptOptions {
         cruncherEnabled = false
@@ -65,9 +64,11 @@ android {
         }
     }
 }
+def play_version = '11.0.2'
+def appcompat_version = "1.1.0"
 //def AAVersion = '3.3.2'
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     //  apt "org.androidannotations:androidannotations:$AAVersion"
     // compile "org.androidannotations:androidannotations-api:$AAVersion"
     //noinspection GradleCompatible
@@ -76,34 +77,48 @@ dependencies {
 
     //compile 'de.hdodenhof:circleimageview:2.0.0'
 
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:recyclerview-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:cardview-v7:27.1.1'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
-    compile 'com.google.android.gms:play-services-location:11.0.2'
-    compile 'com.google.android.gms:play-services-places:11.0.2'
-    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.andreabaccega:android-form-edittext:1.2.1@aar'
-    compile 'de.hdodenhof:circleimageview:1.2.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.firebase:firebase-core:11.0.2'
-    compile 'com.google.firebase:firebase-database:11.0.2'
-    compile 'com.google.firebase:firebase-messaging:11.0.2'
-    compile 'com.daasuu:BubbleLayout:1.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.jaredrummler:android-processes:1.1.1'
-    compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
-    compile 'me.shaohui:bottomdialog:1.1.9'
-    testCompile 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
+    testImplementation 'junit:junit:4.12'
+    //implementation 'com.android.support:appcompat-v7:29.0.0'
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.recyclerview:recyclerview:$appcompat_version"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.google.android.material:material:1.1.0'
+    //implementation "androidx.design:design:1.0.0"
+    //implementation 'com.android.support:recyclerview-v7:29.0.0'
+
+    // implementation 'com.android.support:design:29.0.0'
+    // implementation 'com.android.support:cardview-v7:29.0.0'
+    // implementation 'com.google.maps.android:android-maps-utils:2.0.3'
+    implementation 'com.google.android.gms:play-services-maps:11.0.2'
+    implementation 'com.google.android.gms:play-services-location:11.0.2'
+    implementation 'com.google.android.gms:play-services-places:11.0.2'
+    implementation 'com.google.android.gms:play-services-vision:' + play_version + ''
+
+    implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
+    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'com.andreabaccega:android-form-edittext:1.2.1@aar'
+    implementation 'de.hdodenhof:circleimageview:1.2.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.google.firebase:firebase-core:11.0.2'
+    implementation 'com.google.firebase:firebase-database:11.0.2'
+    implementation 'com.google.firebase:firebase-messaging:11.0.2'
+    implementation 'com.daasuu:BubbleLayout:1.2.0'
+    implementation 'com.justkiddingbaby:vercodeedittext:1.1.0'
+    implementation 'com.github.florent37:arclayout:1.0.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.jaredrummler:android-processes:1.1.1'
+    implementation 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
+    implementation 'me.shaohui:bottomdialog:1.1.9'
+    implementation 'com.molpay:molpay-mobile-xdk-android:3.17.0'
+
+    testImplementation 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
 /* compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'*/

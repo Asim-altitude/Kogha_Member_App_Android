@@ -1,0 +1,416 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:src="@drawable/kogha_logo"
+                    android:tint="@color/black_color"
+
+                    />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:id="@+id/back_btn"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/black_color"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:text="4/6"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_gray_color"
+            />
+
+    </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_semibold.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="Provide Your Documents"
+                android:textSize="@dimen/header_registeration_size"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/black_color"
+                />
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:layout_height="110dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:id="@+id/side_lay"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/dotted_bg"
+                                >
+                                <ImageView
+                                    android:id="@+id/side"
+                                    android:layout_width="110dp"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/ico_userside"
+                                    android:layout_margin="10dp"
+                                    />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    >
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Side Photo"
+                                        android:textColor="@color/black_color"
+                                        android:textSize="@dimen/sub_header_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Provide Side Photo"
+                                        android:textColor="@color/dark_gray_color"
+                                        android:textSize="@dimen/sub_header_third_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:layout_height="110dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:id="@+id/cv_lay"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/dotted_bg"
+                                >
+                                <ImageView
+                                    android:id="@+id/cv"
+                                    android:layout_width="110dp"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/ico_cv"
+                                    android:layout_margin="10dp"
+                                    />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    >
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Resume/CV/Biodata"
+                                        android:textColor="@color/black_color"
+                                        android:textSize="@dimen/sub_header_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+
+                                        />
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Upload Your Resume/CV/Biodata"
+                                        android:textColor="@color/dark_gray_color"
+                                        android:textSize="@dimen/sub_header_third_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        android:id="@+id/cv_name"
+                                        />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:visibility="gone"
+                                        android:layout_marginTop="5dp"
+                                        >
+                                        <asim.tgs_member_app.custom.CustomTextView
+                                            app:font_text="m_r.otf"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Format "
+                                            android:textColor="@color/black_color"
+                                            android:textSize="@dimen/sub_header_third_registeration_size"
+                                            android:gravity="left"
+                                            android:textStyle="bold"
+                                            android:visibility="visible"
+                                            />
+                                        <asim.tgs_member_app.custom.CustomTextView
+                                            app:font_text="m_light.otf"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="( pdf, docx)"
+                                            android:textColor="@color/dark_gray_color"
+                                            android:textSize="@dimen/sub_header_third_registeration_size"
+                                            android:gravity="left"
+                                            android:textStyle="bold"
+                                            android:visibility="visible"
+                                            />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:layout_height="110dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:id="@+id/pass_lay"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/dotted_bg"
+                                >
+                                <ImageView
+                                    android:id="@+id/pass"
+                                     android:layout_width="110dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="10dp"
+                                    android:src="@drawable/ico_icpassport"
+                                    />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    >
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Malaysian ID"
+                                        android:textColor="@color/black_color"
+                                        android:textSize="@dimen/sub_header_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Provide Malaysian ID"
+                                        android:textColor="@color/dark_gray_color"
+                                        android:textSize="@dimen/sub_header_third_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:layout_height="110dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:id="@+id/driving_lay"
+                                android:visibility="gone"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/dotted_bg"
+                                >
+                                <ImageView
+                                    android:id="@+id/driving"
+                                    android:layout_width="110dp"
+                                    android:layout_height="110dp"
+                                    android:src="@drawable/ico_driving"
+                                    />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    >
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Malaysian Driving Licence"
+                                        android:textColor="@color/black_color"
+                                        android:textSize="@dimen/sub_header_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                    <asim.tgs_member_app.custom.CustomTextView
+                                        app:font_text="m_r.otf"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Upload Malaysian Driving Licence"
+                                        android:textColor="@color/dark_gray_color"
+                                        android:textSize="@dimen/sub_header_third_registeration_size"
+                                        android:gravity="left"
+                                        android:textStyle="bold"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            >
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:background="@drawable/next_btn_drawable"
+                            android:padding="10dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/next_btn"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="20dp"
+                            android:elevation="5dp"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="Next"
+                                android:textColor="@color/white_color"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+
+
+</LinearLayout>

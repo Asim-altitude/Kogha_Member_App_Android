@@ -3,11 +3,11 @@ package asim.tgs_member_app;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ExpandedMenuView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +26,16 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-import asim.tgs_member_app.adapters.SelectServicesAdapter;
 import asim.tgs_member_app.adapters.SignUp_Services_Adapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberService;
 import asim.tgs_member_app.models.Order_Service_Info;
 import asim.tgs_member_app.models.Service_Slot;
 import asim.tgs_member_app.utils.ServiceSelectionCallBack;
-import asim.tgs_member_app.utils.UpdateHeight;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
 
@@ -61,7 +56,6 @@ public class Select_Services_Activity extends AppCompatActivity  {
     private RecyclerView bodyguard_recycle,bodyguard_cum_driver_recycle,driver_chauffer_recycle,bumble_recycle;
     private SignUp_Services_Adapter b_services_adapter,b_c_services_adapter,driver_services_adapter,bumble_services_adapter;
     RecyclerView.LayoutManager layoutManager;
-
 
     private Order_Service_Info bodyguard_selected=null,bodyguard_cum_selected=null,driver_selected=null,bumble_selected=null;
 
@@ -398,7 +392,6 @@ public class Select_Services_Activity extends AppCompatActivity  {
             progressDialog.dismiss();
     }
 
-
     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
     private void getServicesFromServer()
     {
@@ -496,10 +489,15 @@ public class Select_Services_Activity extends AppCompatActivity  {
                     services_list.add(ConvertObjectList(service_driver));
                     services_list.add(ConvertObjectList(service_bumble));
 
-                    b_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bodyguard),Select_Services_Activity.this);
-                    b_c_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bcd),Select_Services_Activity.this);
-                    driver_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_driver),Select_Services_Activity.this);
-                    bumble_services_adapter = new SignUp_Services_Adapter(ConvertObjectList(service_bumble),Select_Services_Activity.this);
+                    ArrayList<Order_Service_Info> list1_ = ConvertObjectList(service_bodyguard);
+                    ArrayList<Order_Service_Info> list2_ = ConvertObjectList(service_bcd);
+                    ArrayList<Order_Service_Info> list3_ = ConvertObjectList(service_driver);
+                    ArrayList<Order_Service_Info> list4_ = ConvertObjectList(service_bumble);
+
+                    b_services_adapter = new SignUp_Services_Adapter(list1_,Select_Services_Activity.this);
+                    b_c_services_adapter = new SignUp_Services_Adapter(list2_,Select_Services_Activity.this);
+                    driver_services_adapter = new SignUp_Services_Adapter(list3_,Select_Services_Activity.this);
+                    bumble_services_adapter = new SignUp_Services_Adapter(list4_,Select_Services_Activity.this);
 
                     b_services_adapter.setS_code(0);
                     b_c_services_adapter.setS_code(1);
@@ -554,15 +552,32 @@ public class Select_Services_Activity extends AppCompatActivity  {
                         }
                     });
 
-                    bodyguard_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
-                    bodyguard_cum_driver_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
-                    driver_chauffer_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
-                    bumble_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, LinearLayoutManager.HORIZONTAL, false));
+                    bodyguard_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, RecyclerView.VERTICAL, false));
+                    bodyguard_cum_driver_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, RecyclerView.VERTICAL, false));
+                    driver_chauffer_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, RecyclerView.VERTICAL, false));
+                    bumble_recycle.setLayoutManager(new LinearLayoutManager(Select_Services_Activity.this, RecyclerView.VERTICAL, false));
 
-                    bodyguard_recycle.setAdapter(b_services_adapter);
+                  /*  bodyguard_recycle.setAdapter(b_services_adapter);
                     bodyguard_cum_driver_recycle.setAdapter(b_c_services_adapter);
                     driver_chauffer_recycle.setAdapter(driver_services_adapter);
                     bumble_recycle.setAdapter(bumble_services_adapter);
+*/
+
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) bodyguard_cum_driver_recycle.getLayoutParams();
+                    layoutParams.height = 80 * list2_.size();
+                    bodyguard_cum_driver_recycle.setLayoutParams(layoutParams);
+
+                    layoutParams = (LinearLayout.LayoutParams) bodyguard_recycle.getLayoutParams();
+                    layoutParams.height = 80 * list1_.size();
+                    bodyguard_recycle.setLayoutParams(layoutParams);
+
+                    layoutParams = (LinearLayout.LayoutParams) driver_chauffer_recycle.getLayoutParams();
+                    layoutParams.height = 80 * list3_.size();
+                    driver_chauffer_recycle.setLayoutParams(layoutParams);
+
+                    layoutParams = (LinearLayout.LayoutParams) bumble_recycle.getLayoutParams();
+                    layoutParams.height = 80 * list4_.size();
+                    bumble_recycle.setLayoutParams(layoutParams);
 
                 }
                 catch (Exception e)

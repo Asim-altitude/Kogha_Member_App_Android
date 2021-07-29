@@ -1,11 +1,10 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_color"
     android:orientation="vertical"
-    android:padding="15dp"
-    >
+    android:padding="15dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -102,17 +101,48 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@id/profile_layout_top"
-        android:layout_marginTop="15dp"
+
         >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:background="@drawable/rounded_textview">
+        >
 
         <!-- INPUT -->
-        <EditText
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <asim.tgs_member_app.custom.CustomTextView
+            app:font_text="m_r.otf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/dark_gray_color"
+            android:textStyle="bold"
+            android:text="Full Name"
+            />
+        <asim.tgs_member_app.custom.CustomEditText
+            app:font_text="m_r.otf"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="12dp"
+            android:textColor="@color/black_color"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:hint=" e.g 'Mohd Arshad Bin Mohd Akbar'"
+            android:background="@drawable/grey_rect_empty"
+            android:imeOptions="actionNext"
+            android:id="@+id/txtFullName"
+            />
+        </LinearLayout>
+       <!-- <EditText
             android:id="@+id/txtFullName"
             android:layout_toRightOf="@+id/username_icon"
             android:hint="@string/your_name"
@@ -125,103 +155,196 @@
             android:textColorHint="@color/dark_gray_color"
             android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="44dp"/>
+            android:layout_height="44dp"/>-->
 
         <!-- ICON -->
-        <ImageView
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/username_icon"
-            android:src="@drawable/ic_user"
-            android:layout_width="20dp"
-            android:tint="@color/theme_primary"
-            android:layout_height="20dp" />
+
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_textview">
 
-        <!-- INPUT -->
-        <EditText
-            android:id="@+id/txtEmailAddress"
-            android:layout_toRightOf="@+id/email_icon"
-            android:hint="@string/your_email"
-            android:padding="10dp"
-            android:maxLines="1"
-            android:focusable="true"
-            android:drawableRight="@drawable/ic_edit_white"
-            android:drawableTint="@color/dark_gray_color"
-            android:textColor="@color/black_color"
-            android:textColorHint="@color/dark_gray_color"
-            android:background="@color/transparent"
-            android:inputType="textEmailAddress"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"/>
-
-        <!-- ICON -->
-        <ImageView
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/email_icon"
-            android:src="@drawable/ic_email"
-            android:layout_width="20dp"
-            android:tint="@color/theme_primary"
-            android:layout_height="20dp" />
+            >
 
-    </RelativeLayout>
+            <!-- INPUT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/dark_gray_color"
+                    android:textStyle="bold"
+                    android:text="Email Address"
+                    />
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="12dp"
+                    android:textColor="@color/black_color"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:gravity="center_vertical"
+                    android:hint=" e.g 'abc@gmail.com'"
+                    android:background="@drawable/grey_rect_empty"
+                    android:imeOptions="actionNext"
+                    android:id="@+id/txtEmailAddress"
+                    />
+            </LinearLayout>
+            <!-- <EditText
+                 android:id="@+id/txtFullName"
+                 android:layout_toRightOf="@+id/username_icon"
+                 android:hint="@string/your_name"
+                 android:padding="10dp"
+                 android:maxLines="1"
+                 android:focusable="true"
+                 android:drawableRight="@drawable/ic_edit_white"
+                 android:drawableTint="@color/dark_gray_color"
+                 android:textColor="@color/black_color"
+                 android:textColorHint="@color/dark_gray_color"
+                 android:background="@color/transparent"
+                 android:layout_width="match_parent"
+                 android:layout_height="44dp"/>-->
 
-    <RelativeLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_textview">
+            <!-- ICON -->
 
-        <!-- INPUT -->
-        <EditText
-            android:id="@+id/txtPhone"
-            android:layout_toRightOf="@+id/phone_icon"
-            android:hint="@string/your_phone"
-            android:padding="10dp"
-            android:maxLines="1"
-            android:focusable="true"
-            android:drawableRight="@drawable/ic_edit_white"
-            android:textColor="@color/black_color"
-            android:drawableTint="@color/dark_gray_color"
-            android:textColorHint="@color/dark_gray_color"
-            android:background="@color/transparent"
-            android:inputType="phone"
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"/>
-
-        <!-- ICON -->
-        <ImageView
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/phone_icon"
-            android:src="@drawable/ic_mobile"
-            android:layout_width="20dp"
-            android:tint="@color/theme_primary"
-            android:layout_height="20dp" />
+            >
 
-    </RelativeLayout>
+            <!-- INPUT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                >
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/dark_gray_color"
+                    android:textStyle="bold"
+                    android:text="Contact Number"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/grey_rect_empty"
+                    android:layout_marginTop="5dp"
+                    >
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_r.otf"
+                        android:layout_width="60dp"
+                        android:layout_height="50dp"
+                        android:textSize="16dp"
+                        android:textColor="@color/black_color"
+                        android:textStyle="bold"
+                        android:text="+60"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:gravity="center"
+                        android:background="@drawable/contact_prefix_rect"
+
+                        />
+                    <asim.tgs_member_app.custom.CustomEditText
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black_color"
+                        android:textStyle="bold"
+                        android:text=""
+                        android:maxLength="11"
+                        android:maxLines="1"
+                        android:hint=" '0193647##'"
+                        android:inputType="number"
+                        android:id="@+id/txtPhone"
+                        android:background="@null"
+                        android:paddingLeft="5dp"
+                        />
+
+                </LinearLayout>
+                <asim.tgs_member_app.custom.CustomTextView
+                    android:id="@+id/contact_message"
+                    app:font_text="m_light.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="@color/theme_primary"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    android:text="Contact Number should not be less than 9"
+                    />
+
+            </LinearLayout>
+            <!-- <EditText
+                 android:id="@+id/txtFullName"
+                 android:layout_toRightOf="@+id/username_icon"
+                 android:hint="@string/your_name"
+                 android:padding="10dp"
+                 android:maxLines="1"
+                 android:focusable="true"
+                 android:drawableRight="@drawable/ic_edit_white"
+                 android:drawableTint="@color/dark_gray_color"
+                 android:textColor="@color/black_color"
+                 android:textColorHint="@color/dark_gray_color"
+                 android:background="@color/transparent"
+                 android:layout_width="match_parent"
+                 android:layout_height="44dp"/>-->
+
+            <!-- ICON -->
+
+
+        </RelativeLayout>
+
     </LinearLayout>
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/next_btn_drawable"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/btnUpdate"
+            android:layout_marginTop="20dp"
+            android:elevation="5dp"
+            >
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_button"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/white_color"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="20dp"
-        android:text="@string/update_info"/>
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_semibold.otf"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

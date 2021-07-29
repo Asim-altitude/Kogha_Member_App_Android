@@ -9,7 +9,7 @@ import asim.tgs_member_app.restclient.BaseModel;
 
 public class Order_Service_Info extends BaseModel {
 
-    private String service_id,service_type_id,service_name;
+    private String service_id,service_type_id,service_name,hour,total,order_item_id,item_total,basic_service;
     private int quantity;
     private int selected = -1;
 
@@ -51,5 +51,45 @@ public class Order_Service_Info extends BaseModel {
 
     public void setService_type_id(String service_type_id) {
         this.service_type_id = service_type_id;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getOrder_item_id() {
+        return order_item_id;
+    }
+
+    public void setOrder_item_id(String order_item_id) {
+        this.order_item_id = order_item_id;
+    }
+
+    public String getItem_total() {
+        return item_total;
+    }
+
+    public void setItem_total(String item_total) {
+        this.item_total = item_total;
+    }
+
+    public String getBasic_service() {
+        return basic_service;
+    }
+
+    public void setBasic_service(String basic_service) {
+        this.basic_service = basic_service;
     }
 }

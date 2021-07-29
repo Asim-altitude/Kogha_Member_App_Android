@@ -1,5 +1,5 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_gravity="center"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
@@ -18,8 +19,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="120dp"
+                android:layout_gravity="center"
+
                 >
 
                 <ImageView
@@ -37,7 +38,7 @@
                     android:gravity="right"
                     android:visibility="gone"
                     android:textColor="@color/theme_primary"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
 
                     />
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/black_color"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:text="@string/member_login_title"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
@@ -62,83 +63,95 @@
                 android:layout_height="110dp"
                 android:background="@drawable/ic_home"/>
 
-            <RelativeLayout
-                android:layout_marginTop="80dp"
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                 >
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/nameContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:hint="Email"
-                        android:id="@+id/username"
-                        android:textColor="@color/black_color"
-                        android:textColorHint="@color/theme_primary"
-                        android:inputType="text" />
-
-                </android.support.design.widget.TextInputLayout>
-                <!-- INPUT -->
-                        <!-- ICON -->
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
                 >
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/passContainer"
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:textSize="14dp"
+                    android:textColor="@color/dark_gray_color"
+                    android:textStyle="bold"
+                    android:text="Enter Email"
+                    />
+                <asim.tgs_member_app.custom.CustomEditText
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/black_color"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:hint=" e.g 'abc@gmail.com'"
+                    android:background="@drawable/grey_rect_empty"
+                    android:imeOptions="actionNext"
+                    android:id="@+id/username"
+                    />
+            </LinearLayout>   <!-- INPUT -->
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:hint="Password"
-                        android:id="@+id/password"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:textColor="@color/black_color"
-                        android:textColorHint="@color/theme_primary"
-                        />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                >
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/dark_gray_color"
+                    android:textStyle="bold"
+                    android:text="Enter Password"
+                    />
+                <asim.tgs_member_app.custom.CustomEditText
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/black_color"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:inputType="textPassword"
+                    android:hint=" e.g 'xxxxxx'"
+                    android:background="@drawable/grey_rect_empty"
+                    android:imeOptions="actionNext"
+                    android:id="@+id/password"
+                    />
+            </LinearLayout>   <!-- INPUT -->
 
-                </android.support.design.widget.TextInputLayout>
 
-
-                <!-- INPUT -->
-            </RelativeLayout>
-
-            <Button
+            <asim.tgs_member_app.custom.CustomButton
+                app:font_text="m_semibold.otf"
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/tab_selected_bg"
-                android:textSize="18sp"
+                android:layout_margin="10dp"
+                android:background="@drawable/next_btn_drawable"
+                android:textSize="18dp"
                 android:textColor="@color/white_color"
+                android:elevation="5dp"
                 android:text="@string/action_sign_in"/>
 
             <LinearLayout
-                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -154,13 +167,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                    <TextView
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/register"
-                        android:textSize="16sp"
-                        android:textColor="@color/black_color"
-                        android:id="@+id/btnSignUp"/>
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        >
+                        <asim.tgs_member_app.custom.CustomTextView
+                            app:font_text="m_light.otf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/register"
+                            android:textSize="14dp"
+                            android:textColor="@color/black_color"
+                            android:id="@+id/btnSignUp"/>
+                        <View
+                            android:layout_width="60dp"
+                            android:layout_height="1dp"
+                            android:background="@color/light_black_color"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -169,17 +196,18 @@
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
                     >
-                <TextView
-                    android:id="@+id/btnForgotPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="@string/forget_password"
-                    android:textColor="@color/black_color"
-                    android:textSize="16sp" />
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_light.otf"
+                        android:id="@+id/btnForgotPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="@string/forget_password"
+                        android:textColor="@color/black_color"
+                        android:textSize="14dp" />
                     <View
-                        android:layout_width="125dp"
+                        android:layout_width="120dp"
                         android:layout_height="1dp"
                         android:background="@color/light_black_color"
                         />

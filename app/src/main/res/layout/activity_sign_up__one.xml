@@ -1,0 +1,651 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:src="@drawable/kogha_logo"
+                    android:tint="@color/black_color"
+
+                    />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:id="@+id/back_btn"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/black_color"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:text="2/6"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_gray_color"
+            />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="5dp"
+                >
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_semibold.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="Your Preferred Member Type"
+                    android:textSize="@dimen/header_registeration_size"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/black_color"
+                    />
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/kogha_service_lay"
+                    android:visibility="visible"
+                    >
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:visibility="visible"
+                            android:id="@+id/personal_header_lay"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"       android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/black_color"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:src="@drawable/direction_icon"
+                                android:rotation="90"
+                                android:visibility="gone"
+                                android:tint="@color/dark_gray_color"
+                                />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/personal_body"
+                            >
+                            <ListView
+                                android:id="@+id/bodyguard_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                            </ListView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:visibility="visible"
+                            android:id="@+id/cum_driver_header_lay"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/black_color"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:src="@drawable/direction_icon"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:tint="@color/dark_gray_color"
+                                />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:visibility="visible"
+                            android:id="@+id/cum_driver_body"
+                            >
+                            <ListView
+                                android:id="@+id/bodyguard_cum_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                            </ListView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:visibility="visible"
+                            android:id="@+id/static_header_lay"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/black_color"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:src="@drawable/direction_icon"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:tint="@color/dark_gray_color"
+                                />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/static_body"
+                            android:visibility="visible"
+                            >
+                            <ListView
+                                android:id="@+id/bodyguard_driver_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                            </ListView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:visibility="visible"
+                            android:id="@+id/bumble_header_lay"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/black_color"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:src="@drawable/direction_icon"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:tint="@color/dark_gray_color"
+                                />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/bumble_body"
+                            android:visibility="visible"
+                            >
+                            <ListView
+                                android:id="@+id/bumble_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                            </ListView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/white_rectangle_btn"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:visibility="visible"
+                            android:id="@+id/document_header_lay"
+                            >
+
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_semibold.otf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/black_color"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:src="@drawable/direction_icon"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:tint="@color/dark_gray_color"
+                                />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/document_body"
+                            android:visibility="visible"
+                            >
+                            <ListView
+                                android:id="@+id/document_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                            </ListView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:background="@drawable/white_rectangle_btn"
+                            >
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:visibility="visible"
+                                android:id="@+id/delivery_header_lay"
+                                >
+
+                                <asim.tgs_member_app.custom.CustomTextView
+                                    app:font_text="m_semibold.otf"       android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Delivery Service"
+                                    android:textColor="@color/black_color"
+                                    android:gravity="center"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/sub_header_third_registeration_size"
+
+                                    />
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="10dp"
+                                    android:src="@drawable/direction_icon"
+                                    android:rotation="90"
+                                    android:visibility="gone"
+                                    android:tint="@color/dark_gray_color"
+                                    />
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="10dp"
+                                android:id="@+id/delivery_body"
+                                >
+                                <ListView
+                                    android:id="@+id/delivery_recycler"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="visible">
+
+                                </ListView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/white_rectangle_btn"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="10dp"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/upload_lay"
+                            android:background="@drawable/dotted_bg"
+                            android:visibility="gone"
+
+                            >
+                            <ImageView
+                                android:id="@+id/doc_image_view"
+                                android:layout_width="160dp"
+                                android:layout_height="140dp"
+                                android:src="@drawable/ico_certificate"
+                                android:scaleType="centerCrop"
+                                android:layout_marginTop="10dp"
+                                 />
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_light.otf"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Upload Certificate"
+                                android:textColor="@color/dark_gray_color"
+                                android:textSize="16sp"
+                                android:gravity="center_horizontal"
+                                android:layout_margin="5dp"
+                                />
+                            <asim.tgs_member_app.custom.CustomTextView
+                                app:font_text="m_r.otf"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:text="Capture File"
+                                android:textColor="@color/step_color"
+                                android:background="@drawable/step_round_rect_empty"
+                                android:textSize="18sp"
+                                android:gravity="center_horizontal"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:visibility="gone"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            >
+                            <LinearLayout
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/bumbleride_header_pickup"
+                                android:padding="10dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                >
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/arrow_right"
+                                    android:tint="@color/white_color"
+                                    android:rotation="180"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="BACK"
+                                    android:textColor="@color/white_color"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:background="@drawable/next_btn_drawable"
+                            android:padding="10dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/next_btn"
+                            android:layout_marginBottom="5dp"
+                            android:elevation="5dp"
+                            >
+
+                            <TextView
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="Next"
+                                android:textColor="@color/white_color"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

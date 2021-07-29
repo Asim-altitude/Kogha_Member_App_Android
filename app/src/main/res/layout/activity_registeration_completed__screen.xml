@@ -1,88 +1,128 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-    <ScrollView
-        android:layout_height="match_parent"
-        android:layout_width="fill_parent"
-        android:id="@+id/scrollView4"
-        android:paddingLeft="16dp"
-        android:scrollbars="none"
-        android:paddingRight="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
         <LinearLayout
-            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_width="fill_parent">
-
-            <ImageView
-                android:layout_marginTop="10dp"
-                android:contentDescription="@string/app_name"
-                android:layout_width="25dp"
-                android:layout_height="22dp"
-                android:id="@+id/back_navigation"
-                android:src="@drawable/back_arrow"/>
-
-            <ImageView
-                android:layout_marginTop="-20dp"
-                android:contentDescription="@string/app_name"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:id="@+id/splashImage"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo"/>
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/done"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                />
-
-            <TextView
+            android:orientation="vertical"
+            >
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registeration successfully done."
-                android:textColor="@color/white_color"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="THANK YOU"
-                android:textColor="@color/white_color"
-                android:textStyle="bold"
-                android:textSize="45sp"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
+                android:layout_height="60dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="for being a part of us."
-                android:textColor="@color/white_color"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:gravity="center_horizontal"
-               />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:src="@drawable/kogha_logo"
+                    android:tint="@color/black_color"
 
+                    />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_marginTop="20dp"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:id="@+id/back_btn"
+                    android:padding="5dp"
+                    android:tint="@color/black_color"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:background="@drawable/white_rect"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:visibility="visible"
+            android:gravity="center"
+            android:layout_margin="15dp"
+            >
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ico_tick"
+                />
+        </LinearLayout>
+
+        <asim.tgs_member_app.custom.CustomTextView
+            app:font_text="m_semibold.otf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thank You!"
+            android:textSize="25sp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black_color"
+            android:layout_marginTop="15dp"
+            />
+
+        <asim.tgs_member_app.custom.CustomTextView
+            app:font_text="m_light.otf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your account has been created successfully"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black_color"
+            android:layout_marginTop="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/next_btn_drawable"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/done_btn"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:elevation="5dp"
+            >
+
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_semibold.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Password"
+                android:textColor="@color/white_color"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

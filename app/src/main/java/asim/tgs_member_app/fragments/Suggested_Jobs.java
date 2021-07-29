@@ -5,9 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.Nullable;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,15 +28,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
+import androidx.fragment.app.Fragment;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.adapters.SuggestedJobAdapter;
 import asim.tgs_member_app.adapters.UpcomingJobAdapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.models.Order_Service_Info;
+import asim.tgs_member_app.models.StopContactObj;
 import asim.tgs_member_app.models.SuggestedJobObject;
 import asim.tgs_member_app.utils.Job_Accepted_Callback;
 import asim.tgs_member_app.utils.NotifyUpdates;
@@ -48,6 +48,8 @@ import cz.msebera.android.httpclient.Header;
  */
 public class Suggested_Jobs extends Fragment implements NotifyUpdates
 {
+    private static final String TAG = "Suggested_Jobs";
+
     private ListView suggested_jobs_list;
     private List<SuggestedJobObject> list_data;
     private UpcomingJobAdapter adapter;
@@ -57,6 +59,7 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
     private int pageNum =0;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String member_id,lat,lon;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,8 +70,15 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
         swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.theme_primary));
 
         member_id = settings.getString(Constants.PREFS_USER_ID,"0");
-         lat = settings.getString(Constants.PREFS_USER_LAT,"0");
-         lon = settings.getString(Constants.PREFS_USER_LNG,"0");
+         lat = settings.getString(Constants.PREFS_USER_LAT,"4.2105");
+         lon = settings.getString(Constants.PREFS_USER_LNG,"101.9758");
+
+         if (lat.equalsIgnoreCase("null"))
+             lat = "4.2105";
+
+        if (lon.equalsIgnoreCase("null"))
+            lon = "101.9758";
+
         key ="tgs_appkey_amin";// settings.getString(Constants.PREFS_ACCESS_TOKEN,"tgs_appkey_amin");
 
         list_data = new ArrayList<>();
@@ -85,9 +95,11 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 pageNum =0;
                 populateList(member_id,lat,lon);
                 swipeRefreshLayout.setRefreshing(true);
+
             }
         });
 
@@ -144,8 +156,9 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
 
 
                     responseData = new String(responseBody,"UTF-8");
-                    String end_point =responseData.substring(responseData.indexOf("}")+1,responseData.length());
-                    Log.e("response success",end_point);
+                    Log.e(TAG,responseData);
+                    String end_point = responseData.substring(responseData.indexOf("}")+1,responseData.length());
+
                     JSONObject object = null;
                     try {
 
@@ -241,8 +254,10 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
 
                     String am_pm="";
                     String order_id,meet_location,destination,datetime_ordered,meet_datetime,order_total
-                            ,server_time,uniform
-                            ,total_distance,status,instructions,no_of_hours,member_share,booking_type,customer_id,order_item_id;
+                            ,server_time,uniform,item_desc,delivery_person,doc_image,item_type
+                            ,total_distance,status,instructions,main_service_name,no_of_hours,member_share,booking_type,customer_id,customer_name,customer_image,order_item_id;
+
+
                     for (int i=0;i<data.length();i++)
                     {
                         SuggestedJobObject suggestedJobObject = new SuggestedJobObject();
@@ -252,6 +267,28 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
                         datetime_ordered =  obj_json.getString("datetime_ordered");
                         meet_datetime =  obj_json.getString("meet_datetime");
                         order_total =  obj_json.getString("order_total");
+
+                        item_desc =  obj_json.getString("lalamove_description");
+                        doc_image =  obj_json.getString("lalamove_image");
+                        delivery_person =  obj_json.getString("lalamove_receiver_name");
+                        item_type =  obj_json.getString("lalamove_type");
+                        main_service_name = obj_json.getString("main_service_name");
+
+
+                        StopContactObj pick_contact_obj = new StopContactObj();
+                        StopContactObj dest_contact_obj = new StopContactObj();
+
+                        String pickup_address =  obj_json.getString("pickup_address");
+                        String pickup_contact =  obj_json.getString("pickup_contact");
+                        String destination_address =  obj_json.getString("destination_address");
+                        String destination_contact =  obj_json.getString("destination_contact");
+
+                        pick_contact_obj.setAddress(pickup_address);
+                        pick_contact_obj.setContact(pickup_contact);
+
+                        dest_contact_obj.setContact(destination_contact);
+                        dest_contact_obj.setAddress(destination_address);
+
                         total_distance =  obj_json.getString("total_distance");
                         status =  obj_json.getString("status");
                         instructions =  obj_json.getString("instructions");
@@ -261,10 +298,23 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
                         order_item_id =  obj_json.getString("order_item_id");
                         booking_type =  obj_json.getString("booking_type");
                         customer_id =  obj_json.getString("customer_id");
+                        customer_name =  obj_json.getString("name");
+                        customer_image =  obj_json.getString("image_url");
                         server_time =  obj_json.getString("server_time");
                         uniform = obj_json.getString("uniform");
 
                         suggestedJobObject.setOrder_id(order_id);
+
+                        suggestedJobObject.setItem_desc(item_desc);
+                        suggestedJobObject.setDelivery_person(delivery_person);
+                        suggestedJobObject.setItem_type(item_type);
+                        suggestedJobObject.setDoc_image(doc_image);
+
+                        suggestedJobObject.setPick_contact_obj(pick_contact_obj);
+                        suggestedJobObject.setDestination_contact_obj(dest_contact_obj);
+
+                        suggestedJobObject.setCustomer_image(customer_image);
+                        suggestedJobObject.setCustomer_name(customer_name);
                         suggestedJobObject.setMeet_loc(meet_location);
                         suggestedJobObject.setDatetime_meet(meet_datetime);
                         suggestedJobObject.setDatetime_ordered(datetime_ordered);
@@ -280,11 +330,13 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
                         suggestedJobObject.setBooking_type(booking_type);
                         suggestedJobObject.setServer_time(server_time);
                         suggestedJobObject.setUniform(uniform);
+                        suggestedJobObject.setSelected_index(0);
+                        suggestedJobObject.setMain_service_name(main_service_name);
 
                         JSONArray order_details = obj_json.getJSONArray("order_details");
 
-                        String service_id,service_type_id;
-                        String service_name = "";
+                        String service_id,service_type_id,hour;
+                        String service_name = "",service_total="",item_id,item_total,basic_service;
                         ArrayList<Order_Service_Info> order_service_infos = new ArrayList<Order_Service_Info>();
                         for (int j=0;j<order_details.length();j++)
                         {
@@ -295,10 +347,26 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
                             service_type_id = obj.getString("service_type_id");
                             service_name = obj.getString("service_type_name");
 
+                            hour = obj.getString("no_of_hours");
+                            item_total = obj.getString("member_share");
+                            basic_service = obj.getString("basic_service");
+                            service_total = obj.getString("member_share");
+                            item_id = obj.getString("item_id");
+
+
                             Order_Service_Info order_service_info = new Order_Service_Info();
                             order_service_info.setService_id(service_id);
                             order_service_info.setService_type_id(service_type_id);
                             order_service_info.setService_name(service_name);
+                            order_service_info.setHour(hour);
+                            order_service_info.setTotal(service_total);
+                            order_service_info.setOrder_item_id(item_id);
+                            order_service_info.setItem_total(item_total);
+                            order_service_info.setBasic_service(basic_service);
+
+                            if (j==0){
+                                suggestedJobObject.setMember_share(service_total);
+                            }
 
                             boolean added = false;
                             for (int k=0;k<order_service_infos.size();k++)
@@ -341,11 +409,36 @@ public class Suggested_Jobs extends Fragment implements NotifyUpdates
 
 
 
+                    if (suggestedJobObject.getItem_type()!=null){
+                        if (!suggestedJobObject.getItem_type().equalsIgnoreCase("null")){
+                            suggestedJobObject.setMember_share(member_share);
+                        }
+                    }
+
+
                         suggestedJobObject.setService_list(order_service_infos);
+
+                        suggestedJobObject.setSelected_service_id(order_service_infos.get(0).getService_id());
+                        suggestedJobObject.setService_type_selected_id(order_service_infos.get(0).getService_type_id());
+                        suggestedJobObject.setService_name(order_service_infos.get(0).getService_name());
+
                         list_data.add(suggestedJobObject);
                         calculatejobpostedTime(list_data.size()-1,suggestedJobObject.getDatetime_ordered(),suggestedJobObject.getServer_time());
+
+
                     }
                     //Notify Data Adapter
+
+                  /*  for (int i=0;i<list_data.size();i++){
+                        Order_Service_Info order_service_info = list_data.get(i).getService_list().get(0);
+                        list_data.get(i).setService_name(order_service_info.getService_name());
+                        list_data.get(i).setSelected_index(0);
+                        list_data.get(i).setMember_share(order_service_info.getTotal());
+                        list_data.get(i).setService_type_selected_id(order_service_info.getService_type_id());
+                        list_data.get(i).setSelected_service_id(order_service_info.getService_id());
+                    }*/
+
+                    Log.e(TAG, "parseResult: SIZE "+list_data.size());
                     suggestedJobAdapter = new SuggestedJobAdapter(list_data,getContext());
                     suggestedJobAdapter.setCallBack(new Job_Accepted_Callback() {
                         @Override

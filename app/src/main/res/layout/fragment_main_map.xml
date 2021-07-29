@@ -21,6 +21,7 @@
         android:textIsSelectable="true"
         android:text="location points"
         android:id="@+id/location_text"
+        android:visibility="gone"
         />
 
     <LinearLayout

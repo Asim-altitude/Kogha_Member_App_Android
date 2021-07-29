@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
     </FrameLayout>
 
 
@@ -36,16 +35,18 @@
             />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:text="End Ride"
-            android:textColor="@color/theme_primary"
-            android:textSize="16sp"
-            android:gravity="center_vertical"
+            android:textColor="@color/white_color"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:gravity="center"
             android:visibility="gone"
+            android:background="@drawable/cancel_background"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="15sp"
+            android:layout_margin="10dp"
             android:id="@+id/end_ride_btn"
             />
     </RelativeLayout>
@@ -184,6 +185,7 @@
         android:visibility="visible"
         android:orientation="vertical"
         android:id="@+id/rider_information_layout"
+        android:background="@color/white_color"
         android:layout_below="@+id/member_information_layout"
         android:layout_alignParentBottom="true"
         >
@@ -276,6 +278,7 @@
         android:background="@color/white_color"
         android:layout_alignParentBottom="true"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -286,18 +289,37 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ride Details"
-                    android:textColor="@color/white_color"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    android:visibility="visible"
-                    android:gravity="center_horizontal"
-                    android:background="@color/theme_primary"
-                    />
+                    android:id="@+id/ride_details_btn"
+                    android:background="@color/light_gray_color"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ride Details"
+                        android:textColor="@color/theme_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="visible"
+                        android:gravity="center_horizontal"
+                        />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/minus"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/show_hide_icon_btn"
+                        android:layout_marginRight="10dp"
+                        />
+                </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -320,12 +342,12 @@
                         android:orientation="horizontal"
                         android:paddingTop="10dp"
                         >
-                        <android.support.v7.widget.CardView
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/light_grey_new"
-                            app:cardCornerRadius="5dp"
                             android:elevation="3dp"
+                            android:background="@color/light_gray"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
                             >
@@ -359,14 +381,13 @@
                                     android:layout_alignParentTop="true"
                                     android:layout_alignParentStart="true" />
                             </LinearLayout>
-                        </android.support.v7.widget.CardView>
+                        </LinearLayout>
 
-                        <android.support.v7.widget.CardView
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/light_grey_new"
-                            app:cardCornerRadius="5dp"
-                            android:elevation="3dp"
+                             android:elevation="3dp"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
                             >
@@ -398,17 +419,64 @@
                                     android:layout_alignParentTop="true"
                                     android:layout_alignParentStart="true" />
                             </LinearLayout>
-                        </android.support.v7.widget.CardView>
+                        </LinearLayout>
                     </LinearLayout>
 
                 </RelativeLayout>
             </LinearLayout>
-            <android.support.v7.widget.CardView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/light_grey_new"
-                app:cardCornerRadius="5dp"
+                android:orientation="vertical"
+                android:id="@+id/ride_extra_detail_lay"
+                >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:elevation="3dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pickup"
+                        android:textColor="@color/theme_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="left|center_vertical"
+                        android:paddingLeft="10dp"
+                        android:drawableLeft="@drawable/ic_location_red"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kuala Lampur, Malaysia"
+                        android:textColor="@color/black_color"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15sp"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/pickup_location"
+                        android:layout_marginBottom="10dp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                  android:elevation="3dp"
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 >
@@ -444,7 +512,10 @@
                         android:layout_marginBottom="10dp"
                         />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 

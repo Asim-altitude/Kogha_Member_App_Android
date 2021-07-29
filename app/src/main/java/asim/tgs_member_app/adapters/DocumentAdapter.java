@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -30,6 +31,7 @@ import java.util.regex.Pattern;
 
 import asim.tgs_member_app.LoginActivity;
 import asim.tgs_member_app.R;
+import asim.tgs_member_app.SingleImageViewScreen;
 import asim.tgs_member_app.VerificationActivity;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberDocument;
@@ -77,12 +79,15 @@ public class DocumentAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.my_document_item_layout,null);
 
         TextView doc_name = (TextView) convertView.findViewById(R.id.document_name);
-        TextView delete_doc = convertView.findViewById(R.id.delete_doc);
+        ImageView delete_doc = convertView.findViewById(R.id.delete_doc);
         ImageView doc_image = (ImageView) convertView.findViewById(R.id.document_image);
         TextView document_uploaded_date = (TextView) convertView.findViewById(R.id.document_uploaded_date);
         doc_name.setText(documents.get(position).getDoc_name());
-        Glide.with(context).load(documents.get(position).getDoc_image()).placeholder(R.drawable.loading_).into(doc_image);
+       // Glide.with(context).load(documents.get(position).getDoc_image()).placeholder(R.drawable.loading_).into(doc_image);
 
+        Picasso.with(context)
+                .load(documents.get(position).getDoc_image())
+                .into(doc_image);
         doc_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -105,19 +110,7 @@ public class DocumentAdapter extends BaseAdapter {
     Dialog dialog;
     TouchImageView imageView;
     private void openImageDialog(int position) {
-        dialog = new Dialog(context, R.style.DialogTheme);
-        imageView = new TouchImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(500,500));
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setPadding(8, 8, 8, 8);
-        imageView.setImageResource(R.drawable.loading);
-        imageView.setBackgroundColor(Color.BLACK);
-
-        Glide.with(context).load(documents.get(position).getDoc_image()).into(imageView);
-
-        dialog.setContentView(imageView);
-
-        dialog.show();
+       context.startActivity(new Intent(context,SingleImageViewScreen.class).putExtra("url",documents.get(position).getDoc_image()));
     }
 
     AsyncHttpClient httpClient = new AsyncHttpClient();

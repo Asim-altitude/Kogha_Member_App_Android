@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:background="@drawable/bg"
     android:gravity="center"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You account is currently under approval."
-        android:textColor="@color/white_color"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:background="@drawable/white_rectangle_btn"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        >
+        <asim.tgs_member_app.custom.CustomTextView
+            app:font_text="m_semibold.otf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account under approval"
+            android:textColor="@color/black_color"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="10dp"
+            />
+        <asim.tgs_member_app.custom.CustomTextView
+            app:font_text="m_r.otf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You account is currently under approval.Please wait for approval"
+            android:textColor="@color/theme_primary"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:gravity="center"
+             android:layout_marginBottom="10dp"
+            />
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -4,7 +4,9 @@
     package="asim.tgs_member_app">
 
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,9 +16,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -26,26 +28,43 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
-        tools:replace="allowBackup"
+        android:name=".app.MyApplication"
         android:allowBackup="false"
         android:icon="@drawable/launcher_icon_member"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="allowBackup">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="face" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.getranked.teamguard_member.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDHMVQCO0KvLss_GvZYL8impb-3SLkj75Q" />
 
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask" />
 
         <service android:name=".service.FcmInstanceIdService">
             <intent-filter>
@@ -60,13 +79,11 @@
                 <!-- action android:name="com.google.android.c2dm.intent.RECEIVE"/ -->
             </intent-filter>
         </service>
-
-        <service android:name=".service.LocationListnerServices" />
+        <service android:name=".service.BackgroundLocationService" />
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-
 
         <activity
             android:name=".SignUpActivity"
@@ -105,7 +122,6 @@
         <activity
             android:name=".NotificationListActivity"
             android:configChanges="locale"
-            android:theme="@style/DarkTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <receiver
@@ -119,12 +135,10 @@
                 <category android:name="com.google.android.gcm.demo.app" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".receiver.LocationChangeReciver">
             <intent-filter>
-                <action android:name="LOCATION_CHANGED"/>
+                <action android:name="LOCATION_CHANGED" />
             </intent-filter>
-
         </receiver>
 
         <service android:name=".utils.GPSTracker" />
@@ -171,12 +185,61 @@
             android:name=".Current_job_screen"
             android:theme="@style/DarkTheme" />
         <activity android:name=".BumbleRideActivity" />
-
-        <activity android:name=".SetupPassword"
+        <activity
+            android:name=".SetupPassword"
             android:configChanges="locale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".registration.SignUp_One"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".registration.SignUp_Two"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".registration.SignUp_Three"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".registration.SignUp_Four"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".registration.SignUp_Five"
+            android:launchMode="singleTask" />
+        <activity android:name=".finance.TopUpScreen" />
+        <activity android:name=".finance.FinanceScreen" />
+        <activity
+            android:name=".registration.camera.CaptureFaceScreen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".finance.payment.MOLPaymentPage" />
+        <activity android:name=".registration.CaptureImageScreen" />
+        <activity android:name=".registration.ui.FaceDetectRGBActivity" />
+        <activity
+            android:name=".registration.ComingSoonScreen"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".registration.ServiceDocumentScreen" />
+        <activity
+            android:name=".registration.camera.CaptureFrontBodyScreen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".registration.camera.CaptureMalaysianIDScreen" />
+        <activity
+            android:name=".registration.DocumentDirectoryScreen"
+            android:theme="@style/DarkTheme" />
+        <activity android:name=".BankScreen" />
+        <activity android:name=".AddBankInfoScreen" />
+        <activity android:name=".registration.SignUp_Checklist" />
+        <activity android:name=".SingleImageViewScreen" />
+        <activity android:name=".SOS_Settings_Screen"
+            android:theme="@style/DarkTheme"
             ></activity>
+        <activity android:name=".sos.SoS_Call_Screen"
+            android:theme="@style/DarkTheme"
+            />
     </application>
 
 </manifest>

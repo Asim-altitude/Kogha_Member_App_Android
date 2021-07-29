@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import androidx.fragment.app.Fragment;
 import asim.tgs_member_app.ChangePasswordActivity;
 import asim.tgs_member_app.ForgotPasswordActivity;
 import asim.tgs_member_app.R;
@@ -42,7 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 
-public class ChangePasswordFragment extends Fragment  {
+public class ChangePasswordFragment extends Fragment {
 
    public View rootView;
 

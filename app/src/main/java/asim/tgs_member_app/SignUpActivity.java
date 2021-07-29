@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -89,10 +89,10 @@ public class SignUpActivity extends AppCompatActivity implements Observer, View.
     * Render the toolbar
     */
    private void setupToolbar(){
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+      androidx.appcompat.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
       // Show menu icon
-      final ActionBar ab = getSupportActionBar();
+      final androidx.appcompat.app.ActionBar ab = getSupportActionBar();
       assert ab != null;
       ab.setDisplayHomeAsUpEnabled(true);
       ab.setTitle("Sign Up");

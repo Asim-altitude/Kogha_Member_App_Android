@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kogha_Member_App_Android.iml" filepath="$PROJECT_DIR$/Kogha_Member_App_Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TGS_Member_App.iml" filepath="$PROJECT_DIR$/TGS_Member_App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

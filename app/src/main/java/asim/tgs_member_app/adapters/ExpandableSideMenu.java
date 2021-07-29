@@ -138,25 +138,29 @@ public class ExpandableSideMenu extends BaseExpandableListAdapter
         }
         else if (groupPosition==3)
         {
-            lblListIcon.setImageResource(R.drawable.profile);
+            lblListIcon.setImageResource(R.drawable.finance);
         }
         else if (groupPosition==4)
         {
-            lblListIcon.setImageResource(R.drawable.notifications);
+            lblListIcon.setImageResource(R.drawable.profile);
         }
         else if (groupPosition==5)
         {
-            lblListIcon.setImageResource(R.drawable.services);
+            lblListIcon.setImageResource(R.drawable.notifications);
         }
         else if (groupPosition==6)
         {
-            lblListIcon.setImageResource(R.drawable.documents);
+            lblListIcon.setImageResource(R.drawable.language);
         }
         else if (groupPosition==7)
         {
-            lblListIcon.setImageResource(R.drawable.languages);
+            lblListIcon.setImageResource(R.drawable.logout);
         }
         else if (groupPosition==8)
+        {
+            lblListIcon.setImageResource(R.drawable.languages);
+        }
+        else if (groupPosition==9)
         {
             lblListIcon.setImageResource(R.drawable.logout);
         }

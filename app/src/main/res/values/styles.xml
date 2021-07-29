@@ -1,5 +1,8 @@
 <resources>
 
+    <style name="Widget.Support.CoordinatorLayout" parent="android:Widget">
+        <item name="statusBarBackground">@android:color/black</item>
+    </style>
     <!-- Base application theme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here -->
@@ -8,9 +11,9 @@
         <item name="colorPrimaryDark">@color/black_color</item>
         <item name="colorAccent">@color/theme_primary_dark</item>
         <item name="android:windowBackground">@color/theme_background</item>
-        <item name="android:textColorPrimary">@color/black_color</item>
+        <item name="android:textColorPrimary">@color/white_color</item>
         <item name="actionMenuTextColor">@color/theme_icons</item>
-        <item name="android:textColorSecondary">@color/theme_primary_dark</item>
+        <item name="android:textColorSecondary">@color/white_color</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorButtonNormal">@color/theme_primary_dark</item>
@@ -30,9 +33,9 @@
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/black_color</item>
-        <item name="colorPrimaryDark">#000</item>
-        <item name="colorAccent">@color/theme_primary</item>
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary</item>
+        <item name="colorAccent">@color/step_color</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">

@@ -1,5 +1,6 @@
 package asim.tgs_member_app.models;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public final class Constants {
    public static final String PREFS_NAME = "com.getranked.teamguard.member.prefs";
    public static final String PREFS_ACCESS_TOKEN = "prefs_access_token";
    public static final String PREFS_USER_NAME = "prefs_user_name";
+   public static final String PREFS_USER_FULL_NAME = "prefs_user_full_name";
+   public static final String PREFS_USER_GROUP = "prefs_user_group";
    public static final String PREFS_USER_EMAIL = "prefs_user_email";
    public static final String PREFS_USER_MOBILE = "prefs_user_mobile";
    public static final String PREFS_USER_PASSWORD = "prefs_user_password";
@@ -50,6 +53,8 @@ public final class Constants {
    public static final String PREF_LOCAL = "prefs_local";
    public static final String CURRENT_JOB = "current_job";
    public static final String CURRENT_TAB = "current_tab";
+   public static final String IS_IN_REGISTRATION = "is_in_registration";
+   public static final String REGISTRATION_STEP = "registration_step";
 
    public static final String APPROVED = "approved";
    public static boolean can_login = true;
@@ -69,6 +74,21 @@ public final class Constants {
    public static final String TOTAL = "total";
    public static final String MEET_LOCATION = "meet_location";
    public static final String DESTINATION = "destination";
+
+   public static final String FRONT = "front";
+   public static final String SIDE = "side";
+   public static final String BACK = "back";
+
+   public static final String DOC_LIST_JSON = "doc_list_json";
+
+   public static final String CERTIFICATE = "certificate";
+   public static final String CV = "cv";
+   public static final String PASS = "passport";
+   public static final String DRIVE = "driving";
+   public static final String BODYGUARD = "bodyguard";
+   public static final String SECURITY_GUARD = "security_guard";
+
+
 
    public static boolean hasDrivingLicense = false;
    public static boolean hasProfessionalImage = false;
@@ -133,7 +153,7 @@ public final class Constants {
       return (rad * 180.0 / Math.PI);
    }
 
-   public static void logOutUser(Context context)
+   public static void logOutUser(Activity context)
    {
       try {
          SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE);
@@ -141,6 +161,7 @@ public final class Constants {
          preferences.edit().clear().apply();
          preferences.edit().putBoolean(PREFS_USER_ACTIVE,false).apply();
          context.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+         context.finish();
          context.stopService(new Intent(context, BackgroundLocationService.class));
 
       }

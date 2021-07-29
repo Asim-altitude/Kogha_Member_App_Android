@@ -1,35 +1,37 @@
 package asim.tgs_member_app;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
 import asim.tgs_member_app.fragments.ChangePasswordFragment;
 import asim.tgs_member_app.fragments.EditProfileFragment;
-import asim.tgs_member_app.fragments.Suggested_Jobs;
-import asim.tgs_member_app.fragments.Upcoming_Jobs;
-import asim.tgs_member_app.fragments.UsefulViewPagerAdapter;
-import asim.tgs_member_app.utils.UtilsManager;
+import asim.tgs_member_app.models.Constants;
 
 
 public class MyProfileActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private androidx.viewpager.widget.ViewPager viewPager;
 
     private LinearLayout upcoming,completed,tabs_lay,current_layout;
+    private com.google.android.material.tabs.TabLayout tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,14 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         upcoming = (LinearLayout) findViewById(R.id.selected_tab1);
         completed = (LinearLayout) findViewById(R.id.selected_tab2);
-        tabs_lay = (LinearLayout) findViewById(R.id.tabs_lay);
+       // tabs_lay = (LinearLayout) findViewById(R.id.tabs_lay);
 
 
-        ((TextView)findViewById(R.id.pageTitle)).setText(R.string.my_profile);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager =  findViewById(R.id.viewPager);
+
+        tabs = findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
 
         upcoming.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,35 +76,75 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         setupViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager,TabLayout tab) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), tab.getTabCount());
-        viewPager.setAdapter(adapter);
+    public class ViewPagerAdapter extends androidx.fragment.app.FragmentStatePagerAdapter {
+        private final List<androidx.fragment.app.Fragment> _FragmentList = new ArrayList<>();
+        private final List<String> _FragmentTitleList = new ArrayList<>();
 
-        View root = tabLayout.getChildAt(0);
-        if (root instanceof LinearLayout) {
-            ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setColor(getResources().getColor(R.color.white_color));
-            drawable.setSize(2, 1);
-            ((LinearLayout) root).setDividerPadding(10);
-            ((LinearLayout) root).setDividerDrawable(drawable);
+        public ViewPagerAdapter(androidx.fragment.app.FragmentManager fm) {
+            super(fm);
         }
+
+
+
+        @Override
+        public androidx.fragment.app.Fragment getItem(int position) {
+            return _FragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return _FragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return _FragmentTitleList.get(position);
+        }
+
+        public void AddFragments(androidx.fragment.app.Fragment fragment, String title) {
+            _FragmentList.add(fragment);
+            _FragmentTitleList.add(title);
+
+        }
+
     }
 
-
-    private void setupViewPager(ViewPager viewPager) {
-        final UsefulViewPagerAdapter adapter = new UsefulViewPagerAdapter(getSupportFragmentManager());
-
+    private void setupViewPager(androidx.viewpager.widget.ViewPager viewPager) {
 
         int index=0;
 
 
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         final EditProfileFragment edit_ = new EditProfileFragment();
+        pagerAdapter.AddFragments(edit_,"Profile");
 
-        adapter.addFragment(edit_,getResources().getString(R.string.edit_my_profile));
+        ChangePasswordFragment changePasswordFragment = new ChangePasswordFragment();
+        pagerAdapter.AddFragments(changePasswordFragment,"Change Password");
 
-        ChangePasswordFragment change_pass_frame = new ChangePasswordFragment();
-        adapter.addFragment(change_pass_frame,getResources().getString(R.string.change_my_password));
+
+        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setCurrentItem(index);
+
+        // final UsefulViewPagerAdapter adapter = new UsefulViewPagerAdapter(getFragmentManager());
+
+
+       /* int index=0;
+
+        index = settings.getInt(Constants.CURRENT_TAB,0);
+
+        if (bundle!=null)
+         index = bundle.getInt("index");
+
+
+
+        final Upcoming_Jobs upcoming_ = new Upcoming_Jobs();
+
+        adapter.addFragment(upcoming_,getResources().getString(R.string.Upcoming_jobs));
+
+        Suggested_Jobs completed_ = new Suggested_Jobs();
+        adapter.addFragment(completed_,getResources().getString(R.string.suggested_jobs));
 
 
         viewPager.setAdapter(adapter);
@@ -139,9 +183,11 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         //  tab.select();
         //  setupTabIcons();
 
-        viewPager.setCurrentItem(index);
+        viewPager.setCurrentItem(index);*/
 
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -163,56 +209,18 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    //------------------ViewPager Adapter class------------------//
-    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        //integer to count number of tabs
-        int tabCount;
-        private String tabTitles[] = getApplicationContext().getResources().getStringArray(R.array.profile_tabs);
-        //Constructor to the class
-        public ViewPagerAdapter(FragmentManager fm, int tabCount) {
-            super(fm);
-            //Initializing tab count
-            this.tabCount= tabCount;
-        }
 
-        //Overriding method getItem
-        @Override
-        public Fragment getItem(int position) {
-            //Returning the current tabs
-            switch (position) {
-                case 0:
-                    return new EditProfileFragment();
-                case 1:
-                    return new ChangePasswordFragment();
-                default:
-                    return null;
-            }
-        }
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Generate title based on item position
-            return tabTitles[position];
-        }
-
-        //Overriden method getCount to get the number of tabs
-        @Override
-        public int getCount() {
-            return tabCount;
-        }
-    }
-
-    /**
-     * Render the toolbar
-     */
     private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Show menu icon
-        final ActionBar ab = getSupportActionBar();
+        final androidx.appcompat.app.ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("");
+
+        ((TextView)findViewById(R.id.pageTitle)).setText("My Profile");
     }
 
     @Override
@@ -231,4 +239,53 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+
+    private Context updateBaseContextLocale(Context context) {
+        // SharedPreferences sharedPreferences = context.getSharedPreferences(,MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+        String language = settings.getString(Constants.PREF_LOCAL,"en");//sharedPreferences.getString(Constants.LANGUAGE,Locale.getDefault().getLanguage());//.getSavedLanguage(); // Helper method to get saved language from SharedPreferences
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            // update overrideConfiguration with your locale
+            // setLocale(overrideConfiguration); // you will need to implement this
+
+            createConfigurationContext(overrideConfiguration);
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
+
 }

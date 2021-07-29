@@ -3,53 +3,46 @@ package asim.tgs_member_app.fragments;
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -80,8 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import asim.tgs_member_app.BumbleRideActivity;
-import asim.tgs_member_app.LoginActivity;
+import androidx.fragment.app.Fragment;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.fragments.DirectionModules.DirectionFinder;
 import asim.tgs_member_app.fragments.DirectionModules.DirectionFinderListener;
@@ -92,13 +84,10 @@ import asim.tgs_member_app.models.Member;
 import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.models.Ride;
 import asim.tgs_member_app.models.RideStatus;
-import asim.tgs_member_app.service.LocationListnerServices;
 import asim.tgs_member_app.utils.DIstanceNotifier;
 import asim.tgs_member_app.utils.DistanceListner;
 import asim.tgs_member_app.utils.GPSTracker;
 import asim.tgs_member_app.utils.RideDirectionPointsDB;
-import de.hdodenhof.circleimageview.CircleImageView;
-import me.shaohui.bottomdialog.BottomDialog;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
@@ -201,41 +190,44 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
     private  boolean location_found = false;
     private void getCurrentLocation()
     {
-        if (settings==null)
-            settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
-        String lat =  settings.getString(Constants.PREFS_USER_LAT, "");
-        String lon =  settings.getString(Constants.PREFS_USER_LNG, "");
+        try {
+            if (settings == null)
+                settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
-        if (!lat.equals("") && !lon.equals(""))
-        {
-            latitudeGPS = Double.parseDouble(lat);
-            longitudeGPS = Double.parseDouble(lon);
+            String lat = settings.getString(Constants.PREFS_USER_LAT, "");
+            String lon = settings.getString(Constants.PREFS_USER_LNG, "");
 
-            return;
-        }
+            if (!lat.equals("") && !lon.equals("") || !lat.equalsIgnoreCase("null") || !lon.equalsIgnoreCase("null")) {
+                latitudeGPS = Double.parseDouble(lat);
+                longitudeGPS = Double.parseDouble(lon);
 
-        Location location;
-        gpsTracker = new GPSTracker(getContext());
-        if (gpsTracker.canGetLocation())
-        {
-            location = gpsTracker.getLocation();
-            if (location!=null) {
-                location_found = true;
-                settings.edit().putString(Constants.PREFS_USER_LAT, location.getLatitude() + "").apply();
-                settings.edit().putString(Constants.PREFS_USER_LNG, location.getLongitude() + "").apply();
-
+                return;
             }
+
+            Location location;
+            gpsTracker = new GPSTracker(getContext());
+            if (gpsTracker.canGetLocation()) {
+                location = gpsTracker.getLocation();
+                if (location != null) {
+                    location_found = true;
+                    settings.edit().putString(Constants.PREFS_USER_LAT, location.getLatitude() + "").apply();
+                    settings.edit().putString(Constants.PREFS_USER_LNG, location.getLongitude() + "").apply();
+
+                }
+            } else {
+                if (settings == null)
+                    settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+
+                String mem_id = settings.getString(Constants.PREFS_USER_ID, "117");
+                String mem_name = settings.getString(Constants.PREFS_USER_NAME, "Asim Shahzad");
+
+                getLastLocation(mem_id, mem_name);
+            }
+
         }
-        else
-        {
-            if (settings==null)
-                settings = getActivity().getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
-
-            String mem_id = settings.getString(Constants.PREFS_USER_ID,"117");
-            String mem_name = settings.getString(Constants.PREFS_USER_NAME,"Asim Shahzad");
-
-            getLastLocation(mem_id,mem_name);
+        catch (Exception e){
+            e.printStackTrace();
         }
 
     }
@@ -771,7 +763,7 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                                         longitudeGPS))
                                 .icon(BitmapDescriptorFactory.fromResource(resource)));
 
-                        builder.include(new LatLng(latitudeGPS,longitudeGPS));
+                        //builder.include(new LatLng(latitudeGPS,longitudeGPS));
 
                         member_markers.add(marker);
 
@@ -781,10 +773,18 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                         pickup = mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(ride.getPickup_loc())
+                                .title(ride.getPickup_loc())
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_red)));
 
-                        builder.include(new LatLng(latitudeGPS,longitudeGPS));
+                        LatLng latLng1 = new LatLng(ride.getDrop_location().getLatitude(),ride.getDrop_location().getLongitude());
+
+                        destination = mMap.addMarker(new MarkerOptions()
+                                .position(latLng1)
+                                .title(ride.getDestination_loc())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_black)));
+
                         builder.include(latLng);
+                        builder.include(latLng1);
 
                         int padding = 150; // offset from edges of the map in pixels
                         bounds = builder.build();
@@ -798,7 +798,7 @@ public class BumbleRideJobMap extends Fragment implements OnMapReadyCallback,Goo
                         }
 
                         bounds = builder.build();
-                        mMap.moveCamera(cu);
+                        mMap.animateCamera(cu);
 
                     }
 

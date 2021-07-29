@@ -15,25 +15,25 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+
+import androidx.core.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -53,10 +53,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.regex.Pattern;
 
+import androidx.fragment.app.Fragment;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.adapters.ServicesAdapter;
 import asim.tgs_member_app.models.Constants;
@@ -77,17 +75,18 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "EditProfileFragment";
 
     public View rootView;
 
     private TextView txtName;
     private EditText txtFullName;
-    private EditText txtEmailAddress;
+    private TextView txtEmailAddress;
     private EditText txtPhone;
     @SuppressWarnings("FieldCanBeLocal")
     private MOCustomerProfile jsonResponse;
     @SuppressWarnings("FieldCanBeLocal")
-    private Button btnUpdate;
+    private LinearLayout btnUpdate;
     private ImageView image_userProfilePic;
 
     private String accessToken;
@@ -123,8 +122,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         services_list = (ListView) rootView.findViewById(R.id.services_list);
         services = new ArrayList<>();
-        serviceadapter = new ServicesAdapter(getContext(),services);
-        services_list.setAdapter(serviceadapter);
+       /* serviceadapter = new ServicesAdapter(getContext(),services);
+        services_list.setAdapter(serviceadapter);*/
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -146,9 +145,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         txtName = (TextView) rootView.findViewById(R.id.txtName);
         txtFullName = (EditText) rootView.findViewById(R.id.txtFullName);
-        txtEmailAddress = (EditText) rootView.findViewById(R.id.txtEmailAddress);
+        txtEmailAddress =  rootView.findViewById(R.id.txtEmailAddress);
         txtPhone = (EditText) rootView.findViewById(R.id.txtPhone);
-        btnUpdate = (Button) rootView.findViewById(R.id.btnUpdate);
+        btnUpdate =  rootView.findViewById(R.id.btnUpdate);
         image_userProfilePic = (ImageView) rootView.findViewById(R.id.userProfilePic);
         rootView.findViewById(R.id.btnPlus).setOnClickListener(this);
         image_userProfilePic.setOnClickListener(this);
@@ -321,9 +320,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                         .withAspectRatio(16, 9)
                         .withMaxResultSize(200, 200)
                         .start(getActivity());*/
+
                 CropImage.activity(res_url)
                         .start(getContext(), this);
-
               /*  Log.e("profile image",profileImageString);
                 String file_profile = ImageCompressClass.compressImage(profileImageString);
                 Log.e("profile image",file_profile);
@@ -531,6 +530,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         progressDialog.show();
+    }
+
+
+    private void hideDialog(){
+        if (progressDialog!=null)
+            progressDialog.dismiss();
     }
 
     private void updateInformation() {
@@ -826,6 +831,132 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     }
 
+
+    AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+    public void saveProfileInfo(){
+
+        if (!isImageChosen)
+        {
+            profileImageString = prefs.getValue(OLD_IMAGE);
+        }
+
+        RequestParams params = new RequestParams();
+        try {
+            params.put("member_id",mem_id);
+            params.put("full_name", txtFullName.getText().toString());
+            params.put("ic_passport", passport);
+            params.put("city", city);
+            params.put("address", address);
+            params.put("display_name", txtFullName.getText().toString());
+            params.put("mobile_number", txtPhone.getText().toString());
+            params.put("profile_img", new FileInputStream(profileImageString));
+            params.put("id", customerId);
+            params.put("key", "tgs_appkey_amin");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        String url_val = Constants.Host_Address + "members/update_profile";
+        asyncHttpClient.post(url_val, params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showDialog();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+
+                    hideDialog();
+                    String res = new String(responseBody);
+                    Log.e(TAG, "onSuccess: "+res);
+                    JSONObject responseObject = new JSONObject(res);
+                    String status = responseObject.getString("status");
+                    String errorCode = responseObject.getString("errorCode");
+                    String message = responseObject.getString("message");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+                        JSONArray data = responseObject.getJSONArray("data");
+                        JSONObject json = data.getJSONObject(0);
+
+
+                        if (json!=null) {
+
+                            try {
+
+                                String customer_name_value = json.getString("member_name");
+                                String customer_mobile_value = json.getString("member_mobile");
+                                String customer_email_value = json.getString("member_email");
+                                String customer_full_img_value = json.getString("member_full_img");
+                                String profile_img = json.getString("profile_img");
+
+                                txtName.setText(customer_name_value);
+                                txtFullName.setText(customer_name_value);
+                                txtPhone.setText(customer_mobile_value);
+                                txtEmailAddress.setText(customer_email_value);
+
+                                profileImageString = customer_full_img_value;
+
+                                Picasso.with(getActivity())
+                                        .load(profileImageString)
+                                        .into(image_userProfilePic);
+
+                                SharedPreferences.Editor editor1 = settings.edit();
+                                editor1.putString(Constants.PREFS_USER_MOBILE, customer_mobile_value);
+                                editor1.putString(Constants.PREFS_USER_IMAGE, customer_full_img_value);
+                                editor1.putString(Constants.PREFS_USER_NAME, customer_name_value);
+                                editor1.putString(Constants.PREFS_USER_EMAIL, customer_email_value);
+                                editor1.putString(Constants.PREFS_PROFILE_IMG, profile_img);
+                                editor1.apply();
+
+                                UtilsManager.showAlertMessage(getContext(), "", "Profile Updated Successfully");
+
+                            }
+                            catch (Exception e) {
+                                Log.e("error occured",e.getMessage());
+                                //  UtilsManager.showAlertMessage(getContext(), "", "Profile Updated Successfully");
+                            }
+                        }
+                        else {
+                            UtilsManager.showAlertMessage(getContext(), "", "Profile could not be updated");
+                        }
+
+
+
+                        //   UtilsManager.showAlertMessage(getContext(),"","Data Updated");
+
+                    }
+                    else{
+                        progressDialog.dismiss();
+                        UtilsManager.showAlertMessage(getActivity(), "", message);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    hideDialog();
+                    String response = new String(responseBody);
+                    Log.e(TAG, "onFailure: "+response);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
     public String receiveResponse(HttpURLConnection conn)
             throws IOException {
         conn.setConnectTimeout(10000);
@@ -882,8 +1013,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
                     // showDialog();
                     // getData(txtFullName.getText().toString(), txtEmailAddress.getText().toString(), txtPhone.getText().toString(), profileImageString, customerId, accessToken);
-                    UpdateProfile updateTask = new UpdateProfile(txtFullName.getText().toString(), txtEmailAddress.getText().toString(), txtPhone.getText().toString(), profileImageString, customerId, accessToken,v);
-                    updateTask.execute();
+                   /* UpdateProfile updateTask = new UpdateProfile(txtFullName.getText().toString(), txtEmailAddress.getText().toString(), txtPhone.getText().toString(), profileImageString, customerId, accessToken,v);
+                    updateTask.execute();*/
+
+                   saveProfileInfo();
 
                     v.setEnabled(false);
                 }

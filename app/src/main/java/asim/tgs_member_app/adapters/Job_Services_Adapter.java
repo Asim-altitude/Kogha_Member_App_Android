@@ -1,12 +1,14 @@
 package asim.tgs_member_app.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 
 
 import java.util.List;
@@ -18,7 +20,7 @@ import asim.tgs_member_app.utils.Job_Selection_Notifier;
 /**
  * Created by Asim Shahzad on 12/5/2017.
  */
-public class Job_Services_Adapter extends RecyclerView.Adapter<Job_Services_Adapter.MyViewHolder>
+public class Job_Services_Adapter extends BaseAdapter
 {
 
     private List<Order_Service_Info> services;
@@ -26,7 +28,7 @@ public class Job_Services_Adapter extends RecyclerView.Adapter<Job_Services_Adap
     private LayoutInflater layoutInflater;
     private View layoutView;
 
-    private int selected_index =-1;
+    private int selected_index =0;
 
 
     public int getSelected_index() {
@@ -48,59 +50,64 @@ public class Job_Services_Adapter extends RecyclerView.Adapter<Job_Services_Adap
         this.job_selection_notifier = job_selection_notifier;
     }
 
+
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-
-        layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_service_data_item, parent, false);
-        MyViewHolder _ViewHolder = new MyViewHolder(layoutView);
-
-        return _ViewHolder;
+    public int getCount() {
+        return services.size();
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position)
-    {
-        holder.service_name.setText(services.get(position).getService_name());
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+
+        if (convertView==null)
+            convertView = LayoutInflater.from(context).inflate(R.layout.pending_job_service_item,null);
+
+        RadioButton service_name =  convertView.findViewById(R.id.service_name);
+
+
+        if (services.get(position).getHour().equalsIgnoreCase("0")){
+            service_name.setText(services.get(position).getService_name());
+
+        }else {
+            service_name.setText(services.get(position).getService_name() + ": " + services.get(position).getHour() + "hours");
+        }
 
         if (selected_index!=position) {
-            holder.service_name.setBackgroundResource(R.drawable.service_unselected);
-            holder.service_name.setTextColor(context.getResources().getColor(R.color.theme_primary));
+            service_name.setChecked(false);//R.drawable.service_unselected);
+            // holder.service_name.setTextColor(context.getResources().getColor(R.color.theme_primary));
         }
         else
         {
-            holder.service_name.setBackgroundResource(R.drawable.service_selected);
-            holder.service_name.setTextColor(context.getResources().getColor(R.color.white_color));
+            service_name.setChecked(true);
+            // holder.service_name.setBackgroundResource(R.drawable.service_selected);
+            //holder.service_name.setTextColor(context.getResources().getColor(R.color.white_color));
         }
 
-        holder.service_name.setOnClickListener(new View.OnClickListener() {
+        service_name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                job_selection_notifier.onJobSelection(position);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    if (job_selection_notifier!=null)
+                        job_selection_notifier.onJobSelection(position);
+                }
             }
         });
 
+        return convertView;
     }
 
-    @Override
-    public int getItemCount() {
-        return services.size();
 
-    }
-
-    //holder
-    public class MyViewHolder extends RecyclerView.ViewHolder
-    {
-        public TextView service_name;;
-
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            service_name = (TextView) itemView.findViewById(R.id.service_name);
-
-        }
-
-    }
 
     private String getDate(String date)
     {

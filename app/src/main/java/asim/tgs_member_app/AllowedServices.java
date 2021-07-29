@@ -1,10 +1,10 @@
 package asim.tgs_member_app;
 
-import android.support.v7.app.ActionBar;
+import androidx.appcompat.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -26,8 +27,6 @@ import java.util.List;
 import asim.tgs_member_app.adapters.ServicesAdapter;
 import asim.tgs_member_app.models.Constants;
 import cz.msebera.android.httpclient.Header;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class AllowedServices extends AppCompatActivity {
@@ -45,7 +44,8 @@ public class AllowedServices extends AppCompatActivity {
 
         services_list = (ListView) findViewById(R.id.services_list);
         services = new ArrayList<>();
-        serviceadapter = new ServicesAdapter(AllowedServices.this,services);
+        sub_services = new ArrayList<>();
+        serviceadapter = new ServicesAdapter(AllowedServices.this,services,sub_services);
         services_list.setAdapter(serviceadapter);
 
         GetMemberServices();
@@ -57,7 +57,9 @@ public class AllowedServices extends AppCompatActivity {
         final ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.services);
+        ab.setTitle("");
+
+        ((TextView)findViewById(R.id.pageTitle)).setText("Allowed Services");
     }
 
     @Override
@@ -137,23 +139,30 @@ public class AllowedServices extends AppCompatActivity {
     }
 
     List<String> services;
+    List<String> sub_services;
     private void parseServicesResponse(JSONObject response) {
 
         try {
             JSONArray servicesList = response.getJSONArray("data");
 
-            String service_name;
+            String service_name,service_class;
             if (services==null)
                 services = new ArrayList<>();
+            if (sub_services==null)
+                sub_services = new ArrayList<>();
 
+            services.clear();
+            sub_services.clear();
             for (int i=0;i<servicesList.length();i++)
             {
                 JSONObject object = servicesList.getJSONObject(i);
                 service_name = object.getString("service_name");
+                service_class = object.getString("service_class");
                 services.add(service_name);
+                sub_services.add(service_class);
             }
             serviceadapter.notifyDataSetChanged();
-            setListViewHeightBasedOnChildren(services_list);
+           // setListViewHeightBasedOnChildren(services_list);
 
         }
         catch (Exception e)

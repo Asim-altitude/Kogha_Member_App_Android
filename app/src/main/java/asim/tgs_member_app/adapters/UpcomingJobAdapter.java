@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -37,7 +39,11 @@ import asim.tgs_member_app.R;
 import asim.tgs_member_app.chat.ChatActivity;
 import asim.tgs_member_app.chat.Customer;
 import asim.tgs_member_app.models.Constants;
+import asim.tgs_member_app.models.OTWStateObject;
 import asim.tgs_member_app.models.SuggestedJobObject;
+import asim.tgs_member_app.registration.ui.utils.Util;
+import asim.tgs_member_app.service.BackgroundLocationService;
+import asim.tgs_member_app.utils.OTWRidePrefs;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -47,16 +53,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UpcomingJobAdapter extends BaseAdapter
 {
+    private static final String TAG = "UpcomingJobAdapter";
 
     private List<SuggestedJobObject> list;
     private Context context;
     private LayoutInflater layoutInflater;
+    private OTWStateObject otwStateObject;
+    private OTWRidePrefs otwRidePrefs = null;
 
     public UpcomingJobAdapter(List<SuggestedJobObject> list, Context context) {
         this.list = list;
         this.context = context;
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        otwRidePrefs = new OTWRidePrefs(context);
+        otwStateObject = otwRidePrefs.getOTWState();
     }
 
     @Override
@@ -85,7 +96,12 @@ public class UpcomingJobAdapter extends BaseAdapter
         TextView meet_location = (TextView) convertView.findViewById(R.id.meet_location);
         TextView destination = (TextView) convertView.findViewById(R.id.destination);
         TextView meet_date = (TextView) convertView.findViewById(R.id.meet_datetime);
+        TextView accepted_date_time = (TextView) convertView.findViewById(R.id.accepted_datetime);
+        TextView order_datetime = (TextView) convertView.findViewById(R.id.order_datetime);
         TextView total = (TextView) convertView.findViewById(R.id.order_total);
+        Button otw_button = (Button) convertView.findViewById(R.id.otw_button);
+        TextView type = (TextView) convertView.findViewById(R.id.job_type);
+        TextView service_name = (TextView) convertView.findViewById(R.id.service_name);
         TextView instructions = (TextView) convertView.findViewById(R.id.instructions);
         TextView job_hrs = (TextView) convertView.findViewById(R.id.job_hours);
         TextView job_starts_in_heading_text = (TextView) convertView.findViewById(R.id.job_starts_in_heading_text);
@@ -95,6 +111,24 @@ public class UpcomingJobAdapter extends BaseAdapter
         final CircleImageView customer_img = (CircleImageView) convertView.findViewById(R.id.customer_img);
         TextView customer_name = (TextView) convertView.findViewById(R.id.customer_name);
         TextView job_status = (TextView) convertView.findViewById(R.id.job_status);
+
+
+        LinearLayout doc_item_lay = (LinearLayout) convertView.findViewById(R.id.document_item_layout);
+        final LinearLayout doc_info_lay = (LinearLayout) convertView.findViewById(R.id.doc_info_section_lay);
+        final LinearLayout doc_extra_info_lay = (LinearLayout) convertView.findViewById(R.id.document_extra_info);
+        ListView delivery_service_list = convertView.findViewById(R.id.services_list);
+
+
+        ImageView doc_image = (ImageView) convertView.findViewById(R.id.doc_image_view);
+        TextView delivery_person = (TextView) convertView.findViewById(R.id.delivery_person);
+        TextView item_description = (TextView) convertView.findViewById(R.id.doc_description);
+
+        TextView pick_contact = (TextView) convertView.findViewById(R.id.pickup_contact_number);
+        TextView pick_house_no = (TextView) convertView.findViewById(R.id.pickup_hous_no);
+
+        TextView dest_contact = (TextView) convertView.findViewById(R.id.destination_contact_number);
+        TextView dest_house_no = (TextView) convertView.findViewById(R.id.destination_hous_no);
+
 
         Button accept_job = (Button) convertView.findViewById(R.id.accept_job);
         Button cancel_job = (Button) convertView.findViewById(R.id.reject_job);
@@ -112,11 +146,100 @@ public class UpcomingJobAdapter extends BaseAdapter
             }
         });
 
-        SuggestedJobObject object = list.get(position);
+        final SuggestedJobObject object = list.get(position);
         cancel_job.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CancelJob(position);
+
+            }
+        });
+
+        if (object.getOtw_state().equalsIgnoreCase("1") &&
+                (object.getStatus_id().equalsIgnoreCase("2")
+                || object.getStatus_id().equalsIgnoreCase("5") ||
+                        object.getStatus_id().equalsIgnoreCase("6"))){
+            if (otwStateObject==null){
+                otwStateObject = new OTWStateObject();
+                otwStateObject.setOrder_id(object.getOrder_id());
+                otwStateObject.setOtw_state(1);
+                otwStateObject.setPickup(object.getMeet_loc());
+                otwStateObject.setDestination(object.getDestination());
+                otwStateObject.setCustomer_id(object.getCustomer_id());
+                otwRidePrefs.saveOTWState(otwStateObject);
+            }else {
+                otw_button.setVisibility(View.GONE);
+                if (otwStateObject.getOtw_state()==0 && otwStateObject.isFinished()){
+                    otw_button.setVisibility(View.GONE);
+                }
+                else if (otwStateObject.getOtw_state()==1){
+                    otw_button.setText("On The Way");
+                }else if (otwStateObject.getOtw_state()==2){
+                    otw_button.setText("I have Reached");
+                }
+            }
+
+
+        }else {
+            otw_button.setVisibility(View.GONE);
+        }
+
+        if (object.getItem_type()!=null) {
+            if (!object.getItem_type().equalsIgnoreCase("null")) {
+                delivery_person.setText(object.getDelivery_person());
+                item_description.setText(object.getItem_desc());
+
+                Log.e(TAG, "getView: "+object.getDoc_image());
+                Picasso.with(context).load(object.getDoc_image())
+                        .placeholder(R.drawable.docx_icon)
+                        .into(doc_image);
+                doc_item_lay.setVisibility(View.VISIBLE);
+                doc_info_lay.setVisibility(View.GONE);
+
+                pick_contact.setText(object.getPick_contact_obj().getContact());
+                pick_house_no.setText(object.getPick_contact_obj().getAddress());
+
+                dest_contact.setText(object.getDestination_contact_obj().getContact());
+                dest_house_no.setText(object.getDestination_contact_obj().getAddress());
+
+
+            }
+        }
+
+        doc_item_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doc_info_lay.getVisibility()==View.VISIBLE){
+                    doc_info_lay.setVisibility(View.GONE);
+                    doc_extra_info_lay.setVisibility(View.GONE);
+                }else {
+                    doc_info_lay.setVisibility(View.VISIBLE);
+                    doc_extra_info_lay.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        otw_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                String member_id = context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE).getString(Constants.PREFS_USER_ID,"0");
+
+                if (otwStateObject.getOtw_state()==1){
+                   /* otwStateObject.setOtw_state(2);
+                    otwRidePrefs.saveOTWState(otwStateObject);
+                    notifyDataSetChanged();*/
+                    callOTWServer(object.getMain_id(),object.getCustomer_id(),object.getOrder_id(),"5",member_id,"Member is on the way.");
+
+                }else if (otwStateObject.getOtw_state()==2){
+                    callOTWServer(object.getMain_id(),object.getCustomer_id(),object.getOrder_id(),"6",member_id,"Your member has reached at pickup.");
+
+                   /* otwStateObject.setOtw_state(0);
+                    otwStateObject.setFinished(true);
+                    otwRidePrefs.saveOTWState(otwStateObject);
+                    notifyDataSetChanged();*/
+                }
 
             }
         });
@@ -136,20 +259,29 @@ public class UpcomingJobAdapter extends BaseAdapter
         }
         else
         {
-            if (list.get(position).getStatus_id().equalsIgnoreCase("1"))
+            if (list.get(position).getStatus_id().equalsIgnoreCase("1")) {
                 job_status.setText("Job Applied");
-            else if (list.get(position).getStatus_id().equalsIgnoreCase("2"))
+                chat_layout.setVisibility(View.INVISIBLE);
+            }
+            else if (list.get(position).getStatus_id().equalsIgnoreCase("2")) {
                 job_status.setText("Job Accepted");
-            else
+                chat_layout.setVisibility(View.VISIBLE);
+            }
+            else {
                 job_status.setText("Job Rejected");
+                chat_layout.setVisibility(View.INVISIBLE);
+            }
 
-            chat_layout.setVisibility(View.INVISIBLE);
+
+
         }
 
         destination.setText(list.get(position).getDestination());
 
         customer_name.setText(object.getCustomer_name());
-        Glide.with(context).load("http://getrankedprojects.net/tgs/uploads/customer_profile_images/thumbs/"+object.getCustomer_image()+"")
+        String full_image_path = "http://kogha.my/system/uploads/customer_profile_images/"+object.getCustomer_image();
+        Log.e(TAG, "getView: "+full_image_path );
+        Picasso.with(context).load(full_image_path)
                 .placeholder(R.drawable.ic_avatar)
         .into(customer_img);
 
@@ -172,9 +304,20 @@ public class UpcomingJobAdapter extends BaseAdapter
 
 
         if (object.getInstructions()!=null) {
-            if (object.getInstructions().equals("N/A"))
+            if (object.getInstructions().equals("N/A") || object.getInstructions().equalsIgnoreCase("")) {
                 object.setInstructions("no instructions ");
+                instruction_layout.setVisibility(View.GONE);
+            }else {
+                instruction_layout.setVisibility(View.VISIBLE);
+                instructions.setText(object.getInstructions());
+            }
+
+        }else {
+            instruction_layout.setVisibility(View.GONE);
         }
+
+
+        service_name.setText(object.getService_type_name());
 
         try {
             if (list.get(position).getBooking_type()!=null)
@@ -184,7 +327,7 @@ public class UpcomingJobAdapter extends BaseAdapter
                         ) {
                     job_starts_in_layout.setVisibility(View.GONE);
                     list.get(position).setChatEnabled(true);
-                    meet_date_layout.setVisibility(View.GONE);
+                    meet_date_layout.setVisibility(View.VISIBLE);
                 }
             else
                 {
@@ -212,13 +355,16 @@ public class UpcomingJobAdapter extends BaseAdapter
             e.printStackTrace();
         }*/
 
-        meet_date.setText(ApplyFormat(list.get(position).getDatetime_meet()));
+        order_datetime.setText(ApplySlashFormat(list.get(position).getDatetime_ordered()));
+        meet_date.setText(ApplySlashFormat(list.get(position).getDatetime_meet()));
+        accepted_date_time.setText(list.get(position).getDatetime_accepted());
 
         if (object.getJob_starts_in().equalsIgnoreCase("started")) {
             job_starts_in_heading_text.setText("Job started");
             timer_text.setVisibility(View.GONE);
         }
 
+        type.setText(object.getBooking_type());
         meet_location.setText(object.getMeet_loc());
         String comma_seperated_price = object.getMember_share();
         try {
@@ -240,7 +386,7 @@ public class UpcomingJobAdapter extends BaseAdapter
         }
 
 
-        instructions.setText(object.getInstructions());
+
 
         total.setText(Constants.currency+comma_seperated_price);
         job_hrs.setText(object.getNo_of_hours()+" "+context.getResources().getString(R.string.hours)+"");
@@ -269,7 +415,102 @@ public class UpcomingJobAdapter extends BaseAdapter
             instruction_layout.setVisibility(View.GONE);
         }
 
+
+
+        if (list.get(position).getService_list().size() > 0){
+            if (object.getItem_type()!=null) {
+                if (!object.getItem_type().equalsIgnoreCase("null")) {
+                    Delivery_Services_Adapter delivery_services_adapter = new Delivery_Services_Adapter(list.get(position).getService_list(),context);
+                    delivery_service_list.setAdapter(delivery_services_adapter);
+                    delivery_service_list.setVisibility(View.VISIBLE);
+                    UtilsManager.setListViewHeightBasedOnChildren(delivery_service_list);
+                }
+            }
+        }
+
         return convertView;
+    }
+
+    private ProgressDialog progressDialog;
+    private void showDialog(String message){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(message);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+    }
+
+    private void hideDialoge(){
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+        }
+    }
+
+    AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+    private void callOTWServer(final String main_id,final String customer_id,final String order_id,final String otw_state,final String member_id,final String message) {
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("main_id",main_id);
+        requestParams.put("order_id",order_id);
+        requestParams.put("status",otw_state);
+        requestParams.put("customer_id",customer_id);
+        requestParams.put("member_id",member_id);
+        requestParams.put("key","tgs_appkey_amin");
+        requestParams.put("message",message);
+
+        asyncHttpClient.post(context, Constants.Host_Address + "members/change_status", requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showDialog("Please wait");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    hideDialoge();
+                    String response = new String(responseBody);
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.getString("status").equalsIgnoreCase("success")){
+                        if (otw_state.equalsIgnoreCase("5")){
+                            otwStateObject.setOtw_state(2);
+                            otwRidePrefs.saveOTWState(otwStateObject);
+                            notifyDataSetChanged();
+
+                            if (!UtilsManager.isMyServiceRunning(context,BackgroundLocationService.class)){
+                                UtilsManager.startLocationService(context,0);
+                            }
+
+                        }else if (otw_state.equalsIgnoreCase("6")){
+                            otwStateObject.setOtw_state(0);
+                            otwStateObject.setFinished(true);
+                            otwRidePrefs.saveOTWState(otwStateObject);
+                            notifyDataSetChanged();
+
+                            if (UtilsManager.isMyServiceRunning(context,BackgroundLocationService.class)){
+                                UtilsManager.startLocationService(context,1);
+                            }
+
+                        }
+
+                        Toast.makeText(context,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(context,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+
     }
 
     private String ApplyFormat(String date_string)
@@ -287,6 +528,30 @@ public class UpcomingJobAdapter extends BaseAdapter
             e.printStackTrace();
         }
 
+        if (date_string.toLowerCase().contains("am") || date_string.toLowerCase().contains("pm"))
+            return date_string;
+
+        return date_string+" "+am_pm;
+    }
+
+    private String ApplySlashFormat(String date_string)
+    {
+        String am_pm = "pm";
+        if (date_string.contains("am") || date_string.contains("AM") || date_string.contains("Am"))
+            am_pm = "am";
+        try {
+            date_string = date_string.replace(" am","").replace(" pm","");
+            Log.e("date",date_string);
+            Date current_date = new SimpleDateFormat("dd/MM/yyyy h:mm").parse(date_string);
+            // return new SimpleDateFormat("dd-MM-yyyy h:mm").format(current_date)+" "+am_pm+"";
+            return new SimpleDateFormat("dd MMM yyyy h:mm").format(current_date)+" "+am_pm+"";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date_string.toLowerCase().contains("am") || date_string.toLowerCase().contains("pm"))
+            return date_string;
+
         return date_string+" "+am_pm;
     }
 
@@ -295,10 +560,11 @@ public class UpcomingJobAdapter extends BaseAdapter
     private void showCountDown(final TextView timer_text, final SuggestedJobObject suggestedJobObject,final int position)
     {
         String start_date = suggestedJobObject.getDatetime_meet().replace("AM","").replace("PM","");
-        String ordered_date = suggestedJobObject.getDatetime_ordered().replace(" AM","").replace(" PM","");
+        String ordered_date = suggestedJobObject.getDatetime_meet().replace(" AM","").replace(" PM","");
         String server_time = suggestedJobObject.getServer_time().replace(" AM","").replace(" PM","");
 
         try {
+
             String dateString = start_date;
             SimpleDateFormat dateFormat = new SimpleDateFormat(dateString);
             final Date convertedDate = new SimpleDateFormat("dd-MM-yyyy h:mm").parse(dateString);
@@ -514,7 +780,6 @@ public class UpcomingJobAdapter extends BaseAdapter
     }
 
     AsyncHttpClient httpClient = new AsyncHttpClient();
-    ProgressDialog progressDialog;
     SharedPreferences settings;
     String key;
     private void AcceptJobApi(final int position)

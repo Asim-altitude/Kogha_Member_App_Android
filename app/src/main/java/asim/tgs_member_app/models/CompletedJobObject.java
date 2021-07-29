@@ -1,5 +1,7 @@
 package asim.tgs_member_app.models;
 
+import java.util.List;
+
 import asim.tgs_member_app.restclient.BaseModel;
 
 /**
@@ -10,15 +12,16 @@ public class CompletedJobObject extends BaseModel {
 
     private String order_id
             ,meet_loc,destination,datetime_ordered,
-            datetime_meet,order_total,
-            total_distance,status,instructions,no_of_hours,member_share,
+            datetime_meet,order_total,item_desc,delivery_person,doc_image,item_type,
+            total_distance,status,instructions,no_of_hours,member_share,main_service_name,sub_services,sub_prices,
             order_item_id;
-    private String booking_type,customer_id,datetime_accepted;
+    private String booking_type,customer_id,datetime_accepted,datetime_started;
     private boolean show_options = true;
     private String job_starts_in = "not started yet";
     private boolean isChatEnabled = false;
     private String server_time;
     private String customer_name,customer_image,completed_time,uniform_id;
+    private List<Order_Service_Info> order_service_infoList;
 
     public String getUniform_id() {
         return uniform_id;
@@ -206,5 +209,86 @@ public class CompletedJobObject extends BaseModel {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public String getDatetime_started() {
+        return datetime_started;
+    }
+
+    public void setDatetime_started(String datetime_started) {
+        this.datetime_started = datetime_started;
+    }
+
+    public String getCompleted_time() {
+        return completed_time;
+    }
+
+    public void setCompleted_time(String completed_time) {
+        this.completed_time = completed_time;
+    }
+
+    public String getItem_desc() {
+        return item_desc;
+    }
+
+    public void setItem_desc(String item_desc) {
+        this.item_desc = item_desc;
+    }
+
+    public String getDelivery_person() {
+        return delivery_person;
+    }
+
+    public void setDelivery_person(String delivery_person) {
+        this.delivery_person = delivery_person;
+    }
+
+    public String getDoc_image() {
+        return doc_image;
+    }
+
+    public void setDoc_image(String doc_image) {
+        this.doc_image = doc_image;
+    }
+
+    public String getItem_type() {
+        return item_type;
+    }
+
+    public void setItem_type(String item_type) {
+        this.item_type = item_type;
+    }
+
+    public String getMain_service_name() {
+        return main_service_name;
+    }
+
+    public void setMain_service_name(String main_service_name) {
+        this.main_service_name = main_service_name;
+    }
+
+    public String getSub_services() {
+        return sub_services;
+    }
+
+    public void setSub_services(String sub_services) {
+        this.sub_services = sub_services;
+    }
+
+    public String getSub_prices() {
+        return sub_prices;
+    }
+
+    public void setSub_prices(String sub_prices) {
+        this.sub_prices = sub_prices;
+    }
+
+
+    public List<Order_Service_Info> getOrder_service_infoList() {
+        return order_service_infoList;
+    }
+
+    public void setOrder_service_infoList(List<Order_Service_Info> order_service_infoList) {
+        this.order_service_infoList = order_service_infoList;
     }
 }

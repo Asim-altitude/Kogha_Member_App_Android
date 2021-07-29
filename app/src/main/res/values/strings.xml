@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KOGHA Member</string>
 
@@ -21,13 +22,13 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
 
+
     <string name="already_account">Already Registered</string>
     <string name="authentication_code_not_received"><u>Authentication Code not Received</u></string>
     <string name="not_registered_account">Not Registered Yet?</string>
     <string name="forget_password">Forgot Password?</string>
 
     <string name="create_account">Create Account</string>
-
 
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -50,7 +51,7 @@
     <string name="enter_your_passport">Passport Number</string>
     <string name="enter_your_password">Enter Your Password</string>
     <string name="re_enter_your_password">Re-Enter Password</string>
-    <string name="register">Register</string>
+    <string name="register">Register?</string>
     <string name="next">Next</string>
     <string name="save_pass">Save Password</string>
     <string name="skip">Skip</string>
@@ -130,6 +131,8 @@
     <string name="meet_location">Meetup Location</string>
     <string name="dest_location">Destination</string>
     <string name="meet_date_time">Meet date &amp; Time</string>
+    <string name="accepted_date_time">Accepted Time</string>
+    <string name="order_date_time">Order Date &amp; Time</string>
     <string name="instructions">Instructions</string>
     <string name="job_posted">Job posted</string>
     <string name="job_hrs">Job hours</string>

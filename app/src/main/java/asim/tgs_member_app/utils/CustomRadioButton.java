@@ -3,7 +3,7 @@ package asim.tgs_member_app.utils;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 import asim.tgs_member_app.R;
@@ -13,7 +13,7 @@ import asim.tgs_member_app.R;
  * Created by PC-GetRanked on 7/11/2018.
  */
 
-public class CustomRadioButton extends android.support.v7.widget.AppCompatRadioButton {
+public class CustomRadioButton extends androidx.appcompat.widget.AppCompatRadioButton {
 
     public CustomRadioButton(Context context) {
         super(context);

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_color"
+    >
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:keepScreenOn="true">
+
+        <asim.tgs_member_app.registration.camera.camera_files.CameraSourcePreview
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <asim.tgs_member_app.registration.camera.camera_files.GraphicOverlay
+                android:id="@+id/faceOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </asim.tgs_member_app.registration.camera.camera_files.CameraSourcePreview>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/capture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ico_tick"
+        android:tint="@color/green_color"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/capturedLayout"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/black_color"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:id="@+id/capturedImageView"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <asim.tgs_member_app.custom.CustomTextView
+                android:id="@+id/confirm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Confirm"
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                />
+            <asim.tgs_member_app.custom.CustomTextView
+                android:id="@+id/retake"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Re-Take"
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                />
+            <asim.tgs_member_app.custom.CustomTextView
+                android:id="@+id/cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Cancel"
+                android:textColor="@color/white_color"
+                android:textSize="16dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/capture_manual"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:padding="5dp"
+        android:tint="@color/white_color"
+        android:src="@drawable/capture_image"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>
+
+
+

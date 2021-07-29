@@ -23,6 +23,7 @@
             android:textStyle="bold"
             android:textSize="18dp"
             android:gravity="center"
+            android:visibility="gone"
             />
 
         <ListView

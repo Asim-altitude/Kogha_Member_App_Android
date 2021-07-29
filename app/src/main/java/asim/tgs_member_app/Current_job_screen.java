@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,8 +19,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import asim.tgs_member_app.chat.ChatActivity;
@@ -31,14 +30,16 @@ import cz.msebera.android.httpclient.Header;
 public class Current_job_screen extends AppCompatActivity {
 
     private String pickup,detination,mem_share,customer_name,customer_image,cust_mobile,cust_id,order_id
-            ,meet_date_,job_hrs_,total_distance_;
+            ,meet_date_,order_date_,job_hrs_,service_name,total_distance_,booking_type;
 
-    private TextView pickup_text,detination_text,mem_share_text,customer_name_text,meet_date,total_distance;
-    private ImageView customer_image_url;
+    private TextView item_desc,item_type,delivery_person,pickup_text,detination_text,mem_share_text,customer_name_text,
+            order_datetime,meet_date,total_distance,bookingType,service_name_text,no_of_hours_text;
+    private ImageView customer_image_url,doc_image;
     private LinearLayout chat_btn,call_btn;
-    private Button complete_job_btn;
+    private Button complete_job_btn,track_order_btn;
     private String member_id;
     private SharedPreferences sharedPreferences;
+    private boolean isBumble = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class Current_job_screen extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         pickup = getIntent().getStringExtra("pickup");
+        isBumble = getIntent().getBooleanExtra("isBumble",false);
         detination = getIntent().getStringExtra("detination");
         mem_share = getIntent().getStringExtra("mem_share");
         customer_name = getIntent().getStringExtra("customer_name");
@@ -59,13 +61,66 @@ public class Current_job_screen extends AppCompatActivity {
         cust_mobile = getIntent().getStringExtra("cust_mobile");
         cust_id = getIntent().getStringExtra("cust_id");
         order_id = getIntent().getStringExtra("order_id");
-      //  meet_date_ = getIntent().getStringExtra("meet_date");
+        booking_type = getIntent().getStringExtra("booking_type");
+        meet_date_ = getIntent().getStringExtra("meet_datetime");
+        service_name = getIntent().getStringExtra("service_name");
+        job_hrs_ = getIntent().getStringExtra("no_of_hours");
+        order_date_ = getIntent().getStringExtra("order_datetime");
         total_distance_ = getIntent().getStringExtra("total_distance");
+
+        String doc_image_path = getIntent().getStringExtra("doc_image");
+        String doc_desc = getIntent().getStringExtra("item_desc");
+        String d_person = getIntent().getStringExtra("delivery_person");
+        String d_type = getIntent().getStringExtra("doc_type");
+
+        doc_image = (ImageView) findViewById(R.id.doc_image_view);
+        delivery_person = (TextView) findViewById(R.id.delivery_person);
+        item_desc = (TextView) findViewById(R.id.doc_description);
+
+
+        if (d_type!=null){
+            if (!d_type.equalsIgnoreCase("null")){
+                item_desc.setText(doc_desc);
+                delivery_person.setText(d_person);
+                Picasso.with(this).load(doc_image_path).into(doc_image);
+                findViewById(R.id.document_item_layout).setVisibility(View.VISIBLE);
+            }
+        }
+
+        findViewById(R.id.document_item_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (findViewById(R.id.doc_info_section_lay).getVisibility()==View.VISIBLE){
+                    findViewById(R.id.doc_info_section_lay).setVisibility(View.GONE);
+                }else {
+                    findViewById(R.id.doc_info_section_lay).setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         sharedPreferences = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
         member_id = sharedPreferences.getString(Constants.PREFS_CUSTOMER_ID,"117");
 
+
+
         complete_job_btn = (Button) findViewById(R.id.complete_job_btn);
+        track_order_btn = (Button) findViewById(R.id.track_order_btn);
+        if (isBumble)
+            track_order_btn.setVisibility(View.VISIBLE);
+        else
+            track_order_btn.setVisibility(View.GONE);
+
+        track_order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Current_job_screen.this,BumbleRideActivity.class)
+
+                        .putExtra("mem_share",mem_share)
+                        .putExtra("customer_name",customer_name)
+                        .putExtra("customer_image",customer_image)
+                        .putExtra("cust_mobile", cust_mobile));
+            }
+        });
         complete_job_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +134,12 @@ public class Current_job_screen extends AppCompatActivity {
         detination_text = (TextView) findViewById(R.id.destination_location);
         mem_share_text = (TextView) findViewById(R.id.member_share);
         customer_name_text = (TextView) findViewById(R.id.customer_name);
+        order_datetime = (TextView) findViewById(R.id.order_datetime);
+        meet_date = (TextView) findViewById(R.id.meet_datetime);
         total_distance = (TextView) findViewById(R.id.total_distance);
+        bookingType = (TextView) findViewById(R.id.booking_type);
+        service_name_text = (TextView) findViewById(R.id.service_name);
+        no_of_hours_text = (TextView) findViewById(R.id.job_hrs);
         customer_image_url = (ImageView) findViewById(R.id.customer_img);
 
         chat_btn = (LinearLayout) findViewById(R.id.chat_btn_layout);
@@ -110,11 +170,18 @@ public class Current_job_screen extends AppCompatActivity {
         pickup_text.setText(pickup);
         detination_text.setText(detination);
         customer_name_text.setText(customer_name);
+        bookingType.setText(booking_type);
         total_distance.setText(total_distance_+"KM");
+        order_datetime.setText(order_date_);
+        meet_date.setText(meet_date_);
+        service_name_text.setText(service_name);
+        no_of_hours_text.setText(job_hrs_+" hours");
 
         mem_share_text.setText(mem_share);
 
-        Glide.with(Current_job_screen.this).load(Constants.Customer_Image_BASE_PATH+customer_image).into(customer_image_url);
+        Picasso.with(Current_job_screen.this)
+                .load(Constants.Customer_Image_BASE_PATH+customer_image)
+                .into(customer_image_url);
 
     }
 

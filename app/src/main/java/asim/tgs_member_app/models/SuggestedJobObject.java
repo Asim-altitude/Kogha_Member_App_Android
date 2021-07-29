@@ -11,8 +11,8 @@ import asim.tgs_member_app.restclient.BaseModel;
 
 public class SuggestedJobObject extends BaseModel {
 
-    private String order_id
-            ,meet_loc,destination,datetime_ordered,
+    private String main_id,order_id,otw_state
+            ,meet_loc,main_service_name,destination,datetime_ordered,item_desc,delivery_person,doc_image,item_type,
             datetime_meet,order_total,
             total_distance,status,instructions,no_of_hours,member_share,
             order_item_id;
@@ -25,9 +25,11 @@ public class SuggestedJobObject extends BaseModel {
     private String customer_name;
     private String customer_image;
     private String job_status;
+    private int selected_index;
     private String status_id;
-    private String uniform;
+    private String uniform,service_type_name;
     private String selected_service_id = "0",service_type_selected_id="0",service_name="";
+    private StopContactObj pick_contact_obj,destination_contact_obj;
 
 
     public String getService_name() {
@@ -91,7 +93,9 @@ public class SuggestedJobObject extends BaseModel {
     public SuggestedJobObject()
     {
         job_posted_time = "calculating...";
+        selected_index = -1 ;
         service_list = new ArrayList<>();
+        service_type_name = "";
     }
 
 
@@ -272,5 +276,93 @@ public class SuggestedJobObject extends BaseModel {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public int getSelected_index() {
+        return selected_index;
+    }
+
+    public void setSelected_index(int selected_index) {
+        this.selected_index = selected_index;
+    }
+
+    public String getService_type_name() {
+        return service_type_name;
+    }
+
+    public void setService_type_name(String service_type_name) {
+        this.service_type_name = service_type_name;
+    }
+
+    public String getOtw_state() {
+        return otw_state;
+    }
+
+    public void setOtw_state(String otw_state) {
+        this.otw_state = otw_state;
+    }
+
+    public String getMain_id() {
+        return main_id;
+    }
+
+    public void setMain_id(String main_id) {
+        this.main_id = main_id;
+    }
+
+    public String getItem_desc() {
+        return item_desc;
+    }
+
+    public void setItem_desc(String item_desc) {
+        this.item_desc = item_desc;
+    }
+
+    public String getDelivery_person() {
+        return delivery_person;
+    }
+
+    public void setDelivery_person(String delivery_person) {
+        this.delivery_person = delivery_person;
+    }
+
+    public String getDoc_image() {
+        return doc_image;
+    }
+
+    public void setDoc_image(String doc_image) {
+        this.doc_image = doc_image;
+    }
+
+    public String getItem_type() {
+        return item_type;
+    }
+
+    public void setItem_type(String item_type) {
+        this.item_type = item_type;
+    }
+
+    public StopContactObj getPick_contact_obj() {
+        return pick_contact_obj;
+    }
+
+    public void setPick_contact_obj(StopContactObj pick_contact_obj) {
+        this.pick_contact_obj = pick_contact_obj;
+    }
+
+    public StopContactObj getDestination_contact_obj() {
+        return destination_contact_obj;
+    }
+
+    public void setDestination_contact_obj(StopContactObj destination_contact_obj) {
+        this.destination_contact_obj = destination_contact_obj;
+    }
+
+    public String getMain_service_name() {
+        return main_service_name;
+    }
+
+    public void setMain_service_name(String main_service_name) {
+        this.main_service_name = main_service_name;
     }
 }

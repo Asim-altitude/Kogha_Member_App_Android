@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@drawable/order_item_bg"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:padding="10dp"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         >
@@ -41,10 +46,38 @@
         android:padding="10dp"
         android:text="Bodyguard"
         android:textSize="16dp"
+        android:textStyle="bold"
         android:textColor="@color/black_color"
         android:id="@+id/service_name"
         />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        >
 
-</LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sub_services_list"
+            ></ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="(zaddad,sdssfzaddad,sdssfzaddad,sdssfzaddad,sdssfzaddad,sdssf)(zaddad,sdssfzaddad,sdssfzaddad,sdssfzaddad,sdssfzaddad,sdssf)"
+            android:layout_margin="5dp"
+            android:id="@+id/sub_item"
+            android:minLines="4"
+            android:maxLines="5"
+            android:visibility="gone"
+            android:textColor="@color/black_color"
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

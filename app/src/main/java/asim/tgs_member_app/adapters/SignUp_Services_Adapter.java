@@ -1,15 +1,18 @@
 package asim.tgs_member_app.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import java.util.List;
 
 import asim.tgs_member_app.R;
+import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.Order_Service_Info;
 import asim.tgs_member_app.utils.Job_Selection_Notifier;
 import asim.tgs_member_app.utils.ServiceSelectionCallBack;
@@ -17,13 +20,12 @@ import asim.tgs_member_app.utils.ServiceSelectionCallBack;
 /**
  * Created by Asim Shahzad on 12/5/2017.
  */
-public class SignUp_Services_Adapter extends RecyclerView.Adapter<SignUp_Services_Adapter.MyViewHolder>
+public class SignUp_Services_Adapter extends BaseAdapter
 {
 
     private List<Order_Service_Info> services;
+    String[] service_id;
     private Context context;
-    private LayoutInflater layoutInflater;
-    private View layoutView;
 
     private int selected_index =-1;
 
@@ -47,9 +49,13 @@ public class SignUp_Services_Adapter extends RecyclerView.Adapter<SignUp_Service
         this.selected_index = selected_index;
     }
 
+    SharedPreferences sharedPreferences;
     public SignUp_Services_Adapter(List<Order_Service_Info> orderList, Context context) {
         this.services = orderList;
         this.context = context;
+        sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+       // service_id = sharedPreferences.getString("service_id","").split(Pattern.quote("-"));
+
     }
 
     Job_Selection_Notifier job_selection_notifier;
@@ -58,22 +64,31 @@ public class SignUp_Services_Adapter extends RecyclerView.Adapter<SignUp_Service
         this.job_selection_notifier = job_selection_notifier;
     }
 
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-
-        layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_service_data_item, parent, false);
-        MyViewHolder _ViewHolder = new MyViewHolder(layoutView);
-
-        return _ViewHolder;
+    public int getCount() {
+        return services.size();
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position)
-    {
-        holder.service_name.setText(services.get(position).getService_name());
+    public Object getItem(int position) {
+        return null;
+    }
 
-        if (selected_index!=position) {
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        if (convertView==null)
+            convertView = LayoutInflater.from(context).inflate(R.layout.job_service_data_item,null);
+
+        CheckBox service_name = (CheckBox) convertView.findViewById(R.id.service_name);
+        service_name.setText(services.get(position).getService_name());
+
+       /* if (selected_index!=position) {
             holder.service_name.setBackgroundResource(R.drawable.service_unselected);
             holder.service_name.setTextColor(context.getResources().getColor(R.color.theme_primary));
         }
@@ -81,56 +96,47 @@ public class SignUp_Services_Adapter extends RecyclerView.Adapter<SignUp_Service
         {
             holder.service_name.setBackgroundResource(R.drawable.service_selected);
             holder.service_name.setTextColor(context.getResources().getColor(R.color.white_color));
-        }
+        }*/
 
-        holder.service_name.setOnClickListener(new View.OnClickListener() {
+
+       /*try{
+
+               for (int j=0;j<service_id.length;j++){
+                   if (services.get(position).getService_id().equalsIgnoreCase(service_id[j].toString())){
+                     service_name.setChecked(true);
+                   } else {
+                       service_name.setChecked(false);
+                   }
+               }
+
+       }
+       catch (Exception e){
+           e.printStackTrace();
+       }
+*/
+
+        service_name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-               // job_selection_notifier.onJobSelection(position);
-                serviceSelectionCallBack.onServiceSelected(services.get(position),s_code,position);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+                    services.get(position).setSelected(1);
+
+                }
+                else {
+                    services.get(position).setSelected(-1);
+                }
+
+                if (isChecked && serviceSelectionCallBack!=null){
+                    serviceSelectionCallBack.onServiceSelected(services.get(position),s_code,position);
+
+                }
             }
         });
 
+        return convertView;
     }
 
-    @Override
-    public int getItemCount() {
-        return services.size();
 
-    }
-
-    //holder
-    public class MyViewHolder extends RecyclerView.ViewHolder
-    {
-        public TextView service_name;;
-
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            service_name = (TextView) itemView.findViewById(R.id.service_name);
-
-        }
-
-    }
-
-    private String getDate(String date)
-    {
-        String[] arr = date.split(" ");
-        String[] mDate = arr[0].split("-");
-
-        //return mDate[2]+" DEC "+mDate[0];
-        return arr[0];
-    }
-
-    private String getTime(String dateTime)
-    {
-        if (dateTime!=null) {
-            String[] arr = dateTime.split(" ");
-            // String[] mDate = arr[0].split("-");
-
-            return arr[1];
-        }
-        return "00:00:00";
-    }
 
 }

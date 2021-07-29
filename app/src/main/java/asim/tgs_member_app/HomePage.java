@@ -2,28 +2,20 @@ package asim.tgs_member_app;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.PlaceBuffer;
@@ -32,7 +24,6 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import java.math.BigDecimal;
 
 import asim.tgs_member_app.fragments.Immediate_Jobs_Frame;
-import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.restclient.RestServiceClient;
 
 /**
@@ -44,7 +35,7 @@ public class HomePage extends AppCompatActivity  {
     private String fullName;
     private View nav_header;
     NavigationView navigationView;
-    DrawerLayout drawer;
+    androidx.drawerlayout.widget.DrawerLayout drawer;
 
 
     RestServiceClient restServiceClient;
@@ -135,10 +126,10 @@ public class HomePage extends AppCompatActivity  {
             int height_val = pxToDp(height);
             Log.e("height_val", String.valueOf(height_val));
 
-            appbar = (AppBarLayout) findViewById(R.id.appBarMain);
+           /* appbar = (AppBarLayout) findViewById(R.id.appBarMain);
             float heightDp = (float) (getResources().getDisplayMetrics().heightPixels / 1.52);
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
-            lp.height = (int) heightDp;
+            lp.height = (int) heightDp;*/
  /*
             E/height: 1920
             E/width: 1080
@@ -149,14 +140,14 @@ public class HomePage extends AppCompatActivity  {
 
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer =  findViewById(R.id.drawer_layout);
+
+        androidx.appcompat.app.ActionBarDrawerToggle actionBarDrawerToggle = new androidx.appcompat.app.ActionBarDrawerToggle(HomePage.this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
       //  setupNavigationView();
 
@@ -166,7 +157,7 @@ public class HomePage extends AppCompatActivity  {
 
     }
 
-    FragmentManager manager = getSupportFragmentManager();
+    androidx.fragment.app.FragmentManager manager = getSupportFragmentManager();
    /* private void setupNavigationView() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.navigation_drawer_items);

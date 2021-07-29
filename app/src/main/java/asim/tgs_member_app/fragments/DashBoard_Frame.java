@@ -1,25 +1,25 @@
 package asim.tgs_member_app.fragments;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,26 +39,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import asim.tgs_member_app.BumbleRideActivity;
 import asim.tgs_member_app.Current_job_screen;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberLocationObject;
 import asim.tgs_member_app.service.BackgroundLocationService;
-import asim.tgs_member_app.utils.NotifyUpdates;
+import asim.tgs_member_app.utils.GPSTracker;
 import asim.tgs_member_app.utils.RideDirectionPointsDB;
-import asim.tgs_member_app.utils.ServiceStatus;
 import asim.tgs_member_app.utils.UtilsManager;
 import cz.msebera.android.httpclient.Header;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * Created by Asim Shahzad on 2/19/2018.
  */
 public class DashBoard_Frame extends Fragment
 {
-    private ViewPager viewPager;
+    private static final String TAG = "DashBoard_Frame";
+
+    private androidx.viewpager.widget.ViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout upcoming,completed,tabs_lay,current_layout;
 
@@ -67,14 +71,14 @@ public class DashBoard_Frame extends Fragment
     private String member_id,member_name,lat,lon;
 
 
-    private String pickup,detination,mem_share,customer_name,customer_image,cust_mobile,
-            cust_id,order_id,total_distance,meet_date,service_id;
+    private String pickup,detination,mem_share,booking_type,customer_name,customer_image,cust_mobile,order_datetime="",meet_datetime="",
+            item_desc,delivery_person,doc_image,item_type,cust_id,order_id,total_distance,meet_date,service_id,no_of_hrs,service_name;
     private FirebaseDatabase firebaseDatabase;
-    TabLayout tabs;
+    com.google.android.material.tabs.TabLayout tabs;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rooTView = inflater.inflate(R.layout.dashboard_layout, container, false);
     ///setToolBar();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -83,7 +87,7 @@ public class DashBoard_Frame extends Fragment
         lat = settings.getString(Constants.PREFS_USER_LAT,"0");
         lon = settings.getString(Constants.PREFS_USER_LNG,"0");
         key ="tgs_appkey_amin";
-        viewPager = (ViewPager) rooTView.findViewById(R.id.sos_viewpager);
+        viewPager =  rooTView.findViewById(R.id.sos_viewpager);
         upcoming = (LinearLayout) rooTView.findViewById(R.id.selected_tab1);
         completed = (LinearLayout) rooTView.findViewById(R.id.selected_tab2);
         tabs_lay = (LinearLayout) rooTView.findViewById(R.id.tabs_lay);
@@ -98,26 +102,64 @@ public class DashBoard_Frame extends Fragment
 
                 if (haveJob && isBumble)
                 {
-                    startActivity(new Intent(getContext(),BumbleRideActivity.class)
+                   /* startActivity(new Intent(getContext(),BumbleRideActivity.class)
+
                             .putExtra("mem_share",mem_share)
                             .putExtra("customer_name",customer_name)
                             .putExtra("customer_image",customer_image)
                             .putExtra("cust_mobile", cust_mobile));
+
+*/
+                    Intent intent = new Intent(getContext(), Current_job_screen.class);
+                    intent.putExtra("isBumble",true);
+                    intent.putExtra("pickup", pickup);
+                    intent.putExtra("detination", detination);
+                    intent.putExtra("mem_share", mem_share);
+                    intent.putExtra("order_datetime", order_datetime);
+                    intent.putExtra("meet_datetime", meet_datetime);
+                    intent.putExtra("booking_type", booking_type);
+                    intent.putExtra("service_name", service_name);
+                    intent.putExtra("no_of_hours", no_of_hrs);
+                    intent.putExtra("customer_name", customer_name);
+                    intent.putExtra("customer_image", customer_image);
+                    intent.putExtra("cust_mobile", cust_mobile);
+                    intent.putExtra("cust_id", cust_id);
+                    intent.putExtra("order_id", order_id);
+
+                    intent.putExtra("item_desc", item_desc);
+                    intent.putExtra("delivery_person", delivery_person);
+                    intent.putExtra("doc_image", doc_image);
+                    intent.putExtra("doc_type", item_type);
+
+                    intent.putExtra("total_distance", total_distance);
+                    startActivity(intent);
                     return;
                 }
 
                 if (haveJob) {
                     Intent intent = new Intent(getContext(), Current_job_screen.class);
-
+                    intent.putExtra("isBumble",false);
                     intent.putExtra("pickup", pickup);
                     intent.putExtra("detination", detination);
                     intent.putExtra("mem_share", mem_share);
+                    intent.putExtra("order_datetime", order_datetime);
+                    intent.putExtra("meet_datetime", meet_datetime);
+                    intent.putExtra("booking_type", booking_type);
+                    intent.putExtra("service_name", service_name);
+                    intent.putExtra("no_of_hours", no_of_hrs);
                     intent.putExtra("customer_name", customer_name);
                     intent.putExtra("customer_image", customer_image);
                     intent.putExtra("cust_mobile", cust_mobile);
                     intent.putExtra("cust_id", cust_id);
                     intent.putExtra("order_id", order_id);
                     intent.putExtra("total_distance", total_distance);
+
+                    intent.putExtra("item_desc", item_desc);
+                    intent.putExtra("delivery_person", delivery_person);
+                    intent.putExtra("doc_image", doc_image);
+                    intent.putExtra("doc_type", item_type);
+
+
                     startActivity(intent);
                 }
             }
@@ -168,14 +210,15 @@ public class DashBoard_Frame extends Fragment
         return rooTView;
     }
 
-    public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+    public class ViewPagerAdapter extends androidx.fragment.app.FragmentStatePagerAdapter {
         private final List<Fragment> _FragmentList = new ArrayList<>();
         private final List<String> _FragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager fm) {
+        public ViewPagerAdapter(androidx.fragment.app.FragmentManager fm) {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return _FragmentList.get(position);
@@ -199,7 +242,7 @@ public class DashBoard_Frame extends Fragment
 
     }
 
-    private void setupViewPager(ViewPager viewPager,Bundle bundle) {
+    private void setupViewPager(androidx.viewpager.widget.ViewPager viewPager, Bundle bundle) {
 
         int index=0;
 
@@ -301,6 +344,10 @@ public class DashBoard_Frame extends Fragment
 
            // getContext().startService(new Intent(getContext(),BackgroundLocationService.class));
             checkCurrentJob();
+            /*if (!UtilsManager.isMyServiceRunning(getContext(),BackgroundLocationService.class))
+                 UtilsManager.startLocationService(getContext(),0);*/
+
+            getCurrentLocation();
 
            // setUpTimer();
         }
@@ -374,11 +421,23 @@ public class DashBoard_Frame extends Fragment
                     service_id = data.getString("service_id");
                     detination = data.getString("destination");
                     mem_share = data.getString("member_share");
+                    booking_type = data.getString("booking_type");
                     customer_name = data.getString("customer_name");
                     customer_image = data.getString("customer_profile_img");
                     cust_mobile = data.getString("customer_mobile");
                     cust_id = data.getString("customer_id");
                     order_id = data.getString("order_id");
+
+                    item_desc =  data.getString("lalamove_description");
+                    doc_image =  data.getString("lalamove_image");
+                    delivery_person =  data.getString("lalamove_receiver_name");
+                    item_type =  data.getString("lalamove_type");
+
+
+                    no_of_hrs = data.getString("no_of_hours");
+                    meet_datetime = data.getString("meet_datetime");
+                    service_name = data.getString("service_name");
+                    order_datetime = data.getString("datetime_ordered");
                     total_distance = data.getString("total_distance");
                     // meet_date = data.getString("meetup_time");
 
@@ -412,9 +471,9 @@ public class DashBoard_Frame extends Fragment
                         final MemberLocationObject member = new MemberLocationObject(mem_id, mem_name, "driver", lat + "", lon + "");
                         member.setCurrent_job(order_id);
 
-                     /*   String key = mem_id + "_member";
+                        String key = mem_id + "_member";
                         if (!mem_id.equalsIgnoreCase(""))
-                            firebaseDatabase.getReference().child("members").child(key).setValue(member);*/
+                            firebaseDatabase.getReference().child("members").child(key).setValue(member);
 
                     }
                     else {
@@ -453,6 +512,8 @@ public class DashBoard_Frame extends Fragment
                         new RideDirectionPointsDB(getContext()).clearSavedPoints();
                     }
 
+
+
                   //  setUpTimer();
                 }
                 catch (Exception e)
@@ -480,6 +541,35 @@ public class DashBoard_Frame extends Fragment
             }
         });
 
+    }
+
+    private void stopLocationService(){
+        try {
+            if (UtilsManager.isMyServiceRunning(getActivity(), BackgroundLocationService.class)) {
+                getActivity().stopService(new Intent(getActivity(), BackgroundLocationService.class));
+
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void startLocationService() {
+        try {
+            if (!UtilsManager.isMyServiceRunning(getActivity(), BackgroundLocationService.class)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getActivity().startForegroundService(new Intent(getActivity(), BackgroundLocationService.class));
+                } else {
+                    getActivity().startService(new Intent(getActivity(), BackgroundLocationService.class));
+                }
+            }
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     boolean isBumble = false;
@@ -615,5 +705,95 @@ public class DashBoard_Frame extends Fragment
         {
             e.printStackTrace();
         }
+    }
+
+
+    private  boolean location_found = false;
+    private void getCurrentLocation()
+    {
+
+        try {
+
+            GPSTracker gpsTracker = null;
+            Location location;
+            gpsTracker = new GPSTracker(getContext());
+            if (gpsTracker.canGetLocation()) {
+                location = gpsTracker.getLocation();
+                if (location != null) {
+                    location_found = true;
+                    settings.edit().putString(Constants.PREFS_USER_LAT, location.getLatitude() + "").apply();
+                    settings.edit().putString(Constants.PREFS_USER_LNG, location.getLongitude() + "").apply();
+
+
+                    Log.e(TAG, "getCurrentLocation: "+location.getLatitude()+" lon "+location.getLongitude());
+
+                }
+            } else {
+                if (settings == null)
+                    settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+
+                String mem_id = settings.getString(Constants.PREFS_USER_ID, "117");
+                String mem_name = settings.getString(Constants.PREFS_USER_NAME, "Asim Shahzad");
+
+                getLastLocation(mem_id, mem_name);
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getLastLocation(final String mem_id,final String mem_name) {
+        // Get last known recent location using new Google Play Services SDK (v11+)
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getActivity());
+
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location loc) {
+                        // GPS location can be null if GPS is switched off
+                        try {
+                            if (loc != null) {
+                                settings.edit().putString(Constants.PREFS_USER_LAT, loc.getLatitude() + "").apply();
+                                settings.edit().putString(Constants.PREFS_USER_LNG, loc.getLongitude() + "").apply();
+                                Log.e(TAG, "getCurrentLocation: "+loc.getLatitude()+" lon "+loc.getLongitude());
+                                final MemberLocationObject member = new MemberLocationObject(mem_id,mem_name, "driver",loc.getLatitude()+ "", loc.getLongitude() + "");
+                                member.setCurrent_job("0");
+                                String key = mem_id + "_member";
+                                if (!mem_id.equalsIgnoreCase(""))
+                                    FirebaseDatabase.getInstance().getReference().child("members").child(key).setValue(member);
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    }
+                });
     }
 }

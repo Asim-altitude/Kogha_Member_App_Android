@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:orientation="vertical">
+
+
+    <include android:id="@+id/toolbar" layout="@layout/toolbar"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/white_rect"
+        android:layout_margin="5dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:src="@drawable/wallet"
+                    android:elevation="5dp"
+                    android:tint="@color/theme_primary"
+                    android:layout_centerHorizontal="true"
+                    />
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You owe (RM00)"
+                    android:textSize="20dp"
+                    android:textColor="@color/theme_primary"
+                    android:gravity="center_horizontal"
+                    android:id="@+id/you_owe_text"
+                    android:layout_marginTop="125dp"
+                    />
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="RM00"
+                    android:textStyle="bold"
+                    android:textColor="@color/black_color"
+                    android:id="@+id/user_credit"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="155dp"
+                    />
+
+
+
+            </RelativeLayout>
+
+
+
+
+            <asim.tgs_member_app.custom.CustomButton
+                app:font_text="m_r.otf"
+                android:id="@+id/pay_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/next_btn_drawable"
+                android:text="Top Up More"
+                android:textAllCaps="false"
+                android:layout_alignParentBottom="true"
+                android:textSize="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="25dp"
+                android:visibility="gone"
+                android:layout_marginRight="25dp"
+                android:textColor="@color/white_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:background="@drawable/theme_rect_round_drawable"
+                android:padding="5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                android:id="@+id/refund_btn"
+                android:elevation="5dp"
+                >
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/refund"
+                    android:visibility="gone"
+                    android:tint="@color/step_color"
+                    />
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_r.otf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Request for withdrawal"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white_color"
+                    android:layout_marginLeft="10dp"
+
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/credit_history_layout"
+            android:visibility="visible"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                >
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="Credit History"
+                    android:textColor="@color/black_color"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:font_text="m_semibold.otf" />
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_semibold.otf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rides"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:visibility="gone"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black_color"
+                    />
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_semibold.otf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pink Credit"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"
+                    android:textColor="@color/black_color"
+                    />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black_color"
+                android:layout_marginRight="28dp"
+                android:layout_marginLeft="28dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Credit History"
+                android:textColor="@color/white_color"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:gravity="center_horizontal"
+                android:background="@color/black_color"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/refresh_history"
+                    >
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/credit_list"
+                        android:layout_margin="10dp"
+                        ></ListView>
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                >
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loading_bar"
+                    android:visibility="visible"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,432 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+                <asim.tgs_member_app.custom.CustomTextView
+                    app:font_text="m_semibold.otf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="Kogha Member"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="@dimen/header_registeration_size"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black_color"
+                    />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:id="@+id/back_btn"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/black_color"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/step_color"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/light_gray"
+                ></View>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:text="1/6"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_gray_color"
+            />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <asim.tgs_member_app.custom.CustomTextView
+                app:font_text="m_semibold.otf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="Provide Basic Information"
+                android:textSize="@dimen/header_registeration_size"
+                android:gravity="center"
+                android:textColor="@color/black_color"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:background="@drawable/white_rect"
+                >
+                <LinearLayout
+                    android:id="@+id/profile_layout_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        >
+
+                        <LinearLayout
+                            android:id="@+id/userProfilePic_lay"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            >
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/userProfilePic"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ico_profile_user"
+                                />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginEnd="2dp"
+                                android:layout_marginTop="2dp"
+                                android:src="@drawable/ic_meetup_location" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kualalampur, Malaysia"
+                                android:textColor="@color/white_color"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    >
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_gray_color"
+                        android:textStyle="bold"
+                        android:text="Full Name (as per your ID)"
+                        />
+                    <asim.tgs_member_app.custom.CustomEditText
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/black_color"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:layout_marginTop="5dp"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:hint=" e.g Mohd Arshad Bin Mohd Akbar"
+                        android:background="@drawable/grey_rect_empty"
+                        android:imeOptions="actionNext"
+                        android:id="@+id/full_name_txt"
+                        />
+                    <asim.tgs_member_app.custom.CustomTextView
+                        android:id="@+id/fname_message"
+                        app:font_text="m_light.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="@color/theme_primary"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:text="Please provide your name in accordance to your Identification Card/IC"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    >
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_gray_color"
+                        android:textStyle="bold"
+                        android:text="Preferred Name"
+                        />
+                    <asim.tgs_member_app.custom.CustomEditText
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/black_color"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:layout_marginTop="5dp"
+                        android:maxLines="1"
+                        android:hint=" e.g Mohd "
+                        android:inputType="text"
+                        android:background="@drawable/grey_rect_empty"
+                        android:imeOptions="actionNext"
+                        android:id="@+id/name_txt"
+                        />
+                    <asim.tgs_member_app.custom.CustomTextView
+                        android:id="@+id/name_message"
+                        app:font_text="m_light.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="@color/theme_primary"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:text="Your nick name should not be less than 3 characteristics"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    >
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_gray_color"
+                        android:textStyle="bold"
+                        android:text="Contact Number"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/grey_rect_empty"
+                        android:layout_marginTop="5dp"
+                        >
+                        <asim.tgs_member_app.custom.CustomTextView
+                            app:font_text="m_r.otf"
+                            android:layout_width="60dp"
+                            android:layout_height="50dp"
+                            android:textSize="16dp"
+                            android:textColor="@color/black_color"
+                            android:textStyle="bold"
+                            android:text="+60"
+                            android:maxLines="1"
+                            android:inputType="text"
+                            android:gravity="center"
+                            android:background="@drawable/contact_prefix_rect"
+                            />
+
+                        <asim.tgs_member_app.custom.CustomEditText
+                            app:font_text="m_r.otf"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/black_color"
+                            android:textStyle="bold"
+                            android:text=""
+                            android:maxLength="11"
+                            android:maxLines="1"
+                            android:hint="1936899##"
+                            android:inputType="number"
+                            android:id="@+id/number_txt"
+                            android:background="@null"
+                            android:paddingLeft="5dp"
+                            />
+
+                    </LinearLayout>
+                    <asim.tgs_member_app.custom.CustomTextView
+                        android:id="@+id/contact_message"
+                        app:font_text="m_light.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="@color/theme_primary"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:text="Contact Number should not be less than 9"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp"
+                    >
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/dark_gray_color"
+                        android:textStyle="bold"
+                        android:text="Email Address"
+                        />
+
+                    <asim.tgs_member_app.custom.CustomEditText
+                        app:font_text="m_r.otf"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/black_color"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:text=""
+                        android:layout_marginTop="5dp"
+                        android:maxLines="1"
+                        android:hint="abc@example.com"
+                        android:inputType="text"
+                        android:background="@drawable/grey_rect_empty"
+                        android:imeOptions="actionNext"
+                        android:id="@+id/email_txt"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/next_btn_drawable"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/next_btn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:elevation="5dp"
+                    >
+
+                    <asim.tgs_member_app.custom.CustomTextView
+                        app:font_text="m_semibold.otf"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:text="NEXT"
+                        android:textColor="@color/white_color"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

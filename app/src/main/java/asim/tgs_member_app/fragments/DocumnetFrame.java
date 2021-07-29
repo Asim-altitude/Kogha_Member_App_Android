@@ -4,9 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +26,6 @@ import java.util.List;
 
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.Upload_Strength_Picture_Registeration;
-import asim.tgs_member_app.UploadedDocumentsScreen;
 import asim.tgs_member_app.adapters.DocumentAdapter;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.MemberDocument;
@@ -138,6 +137,7 @@ public class DocumnetFrame extends Fragment
         mem_id = settings.getString(Constants.PREFS_USER_ID,"");
         upload_documnets_btn = (Button) rootView.findViewById(R.id.upload_documnets_btn);
         listView = (ListView) rootView.findViewById(R.id.doc_listview);
+        upload_documnets_btn.setVisibility(View.GONE);
         upload_documnets_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -74,7 +74,7 @@ public class MyPrefrences
     {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key,value);
-        editor.commit();
+        editor.apply();
     }
 
     private String getValueFromKey(String key)

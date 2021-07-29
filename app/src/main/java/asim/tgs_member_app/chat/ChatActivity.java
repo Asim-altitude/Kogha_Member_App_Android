@@ -5,11 +5,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,16 +32,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
+import androidx.appcompat.app.AppCompatActivity;
 import asim.tgs_member_app.R;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.Member;
-import asim.tgs_member_app.service.ChatMessageNotifier;
 import asim.tgs_member_app.service.FcmMessagingService;
 import cz.msebera.android.httpclient.Header;
 
 public class ChatActivity extends AppCompatActivity {
+
+    private static final String TAG = "ChatActivity";
 
     private Member member;
     private FirebaseDatabase firebaseDatabase;
@@ -96,9 +95,11 @@ public class ChatActivity extends AppCompatActivity {
         if (chat_id==null)
             chat_id = FireBaseChatHead.getUniqueChatId(member.getMem_id(),cust_id,order_id);
 
+        Log.e(TAG, "onCreate: "+chat_id );
+
         chat_list = new ArrayList<>();
         chatListAdapter = new ChatListAdapter(chat_list,getApplicationContext());
-        chat_recycler.setLayoutManager(new LinearLayoutManager(ChatActivity.this,LinearLayout.VERTICAL,false));
+        chat_recycler.setLayoutManager(new LinearLayoutManager(ChatActivity.this,RecyclerView.VERTICAL,false));
         chat_recycler.setAdapter(chatListAdapter);
 
         send_btn.setOnClickListener(new View.OnClickListener() {
@@ -190,11 +191,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ((TextView)toolbar.findViewById(R.id.pageTitle)).setText("Chat");
+        androidx.appcompat.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
+        //((TextView)toolbar.findViewById(R.id.pageTitle)).setText("Chat");
         setSupportActionBar(toolbar);
         // Show menu icon
-        final ActionBar ab = getSupportActionBar();
+        final androidx.appcompat.app.ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
         setTitle("");
@@ -223,6 +224,9 @@ public class ChatActivity extends AppCompatActivity {
 
                         message.getMessage().setShown(true);
                         updateMessageStatus(chat_id,dataSnapshot.getKey(),message);
+
+
+                        setTitle(customer.getC_name());
 
                     }
                     catch (Exception e)

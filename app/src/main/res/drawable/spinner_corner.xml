@@ -5,23 +5,18 @@
             <item>
                 <shape>
                     <gradient
-                        android:startColor="@color/white_color"
-                        android:endColor="@color/white_color"
+                        android:startColor="@color/light_gray_color"
+                        android:endColor="@color/light_gray_color"
                         android:angle="270" />
                     <stroke
                         android:width="0dp"
-                        android:color="@color/white_color" />
+                        android:color="@color/light_gray_color" />
                     <corners
                         android:radius="4dp" />
                     />
                 </shape>
-            </item>
-            <item
-                android:top="-2dp"
-                android:right="-1.8dp">
-                <bitmap android:src="@drawable/ic_dropdown_filled"
-                        android:gravity="top|right" />
-            </item>
+
+              </item>
         </layer-list>
     </item>
 </selector>

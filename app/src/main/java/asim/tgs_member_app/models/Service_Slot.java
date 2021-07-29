@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Service_Slot implements Serializable
 {
 
-    private String slot_id,slot_name;
+    private String slot_id,service_id,slot_name;
     private String selected_id;
 
 
@@ -59,5 +59,13 @@ public class Service_Slot implements Serializable
 
     public void setSlot_name(String slot_name) {
         this.slot_name = slot_name;
+    }
+
+    public String getService_id() {
+        return service_id;
+    }
+
+    public void setService_id(String service_id) {
+        this.service_id = service_id;
     }
 }

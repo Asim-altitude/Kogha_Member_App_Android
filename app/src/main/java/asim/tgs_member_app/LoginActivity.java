@@ -1,26 +1,29 @@
 package asim.tgs_member_app;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,19 +41,19 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Pattern;
 
-import asim.tgs_member_app.adapters.SelectServicesAdapter;
+import androidx.appcompat.app.AppCompatActivity;
 import asim.tgs_member_app.models.Constants;
 import asim.tgs_member_app.models.ErrorCodes;
 import asim.tgs_member_app.models.FragmentSettings;
 import asim.tgs_member_app.models.MOLoginResponse;
 import asim.tgs_member_app.models.MemberLocationObject;
+import asim.tgs_member_app.registration.SignUp_Two;
 import asim.tgs_member_app.restclient.BaseModel;
 import asim.tgs_member_app.restclient.ErrorModel;
 import asim.tgs_member_app.restclient.RestServiceClient;
@@ -103,14 +106,16 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
       settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
       boolean login = settings.getBoolean(Constants.PREFS_LOGIN_STATE,false);
 
-      LoadLocalConfigurations();
-
-      databaseReference = FirebaseDatabase.getInstance();
-
       if(login) {
          startActivity(new Intent(this, DrawerActivity.class));
          finish();
       }
+
+      LoadLocalConfigurations();
+
+      databaseReference = FirebaseDatabase.getInstance();
+
+
 
       // Set up the login form.
       remember = (CheckBox) findViewById(R.id.checkBoxRemember);
@@ -145,6 +150,9 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
 
    }
+
+
+
 
    private void LoadLocalConfigurations()
    {
@@ -274,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
             break;
 
          case R.id.btnSignUp:
-            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            startActivity(new Intent(LoginActivity.this, SignUp_Two.class));
             break;
 
          case R.id.checkBoxRemember:
@@ -454,13 +462,16 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
    private void parseResponseLoginApi(String response) {
 
+      String message = "";
       try
       {
          JSONObject object = new JSONObject(response);
+         message = object.getString("message");
          JSONArray data = object.getJSONArray("data");
 
          JSONObject user_object = data.getJSONObject(0);
 
+         String group = user_object.getString("group");
          String id = user_object.getString("member_id");
          String name = user_object.getString("member_name");
          String display_name = user_object.getString("member_display_name");
@@ -483,6 +494,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
          SharedPreferences.Editor editor = settings.edit();
 
+         editor.putString(Constants.PREFS_USER_GROUP,group);
          editor.putString(Constants.PREFS_USER_NAME,name);
          editor.putString(Constants.PREFS_USER_EMAIL,email);
          editor.putString(Constants.PREFS_USER_MOBILE,mobile);
@@ -491,6 +503,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          editor.putString(Constants.PREFS_USER_ADDRESS,address);
          editor.putString(Constants.PREFS_USER_IMAGE,image);
          editor.putString(Constants.PREFS_USER_ID,id);
+         editor.putString(Constants.PREFS_CUSTOMER_ID,id);
 
          editor.putString(Constants.APPROVED,can_login);
 
@@ -520,14 +533,16 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
 
          if (can_login.equalsIgnoreCase("Yes"))
          {
-            startActivity(new Intent(LoginActivity.this, DrawerActivity.class).putExtra(Constants.APPROVED,"yes")
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class)
+                    .putExtra(Constants.APPROVED,"yes")
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
          }
          else
          {
-            startActivity(new Intent(LoginActivity.this, DrawerActivity.class).putExtra(Constants.APPROVED,"no")
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(LoginActivity.this, DrawerActivity.class)
+                    .putExtra(Constants.APPROVED,"no")
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
          }
 
@@ -550,7 +565,7 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
       catch (Exception e)
       {
          e.printStackTrace();
-         UtilsManager.showAlertMessage(LoginActivity.this,"","Invalid User or Password");
+         UtilsManager.showAlertMessage(LoginActivity.this,"",message);
       }
    }
 
@@ -727,5 +742,65 @@ public class LoginActivity extends AppCompatActivity implements Observer, View.O
          Log.e("Error getting Key",e.getMessage());
       }
    }
+
+   @Override
+   public void onBackPressed() {
+
+   }
+
+
+   @Override
+   protected void attachBaseContext(Context base) {
+      super.attachBaseContext(updateBaseContextLocale(base));
+   }
+
+
+   private Context updateBaseContextLocale(Context context) {
+      // SharedPreferences sharedPreferences = context.getSharedPreferences(,MODE_PRIVATE);
+       SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+       String language = settings.getString(Constants.PREF_LOCAL,"en");//sharedPreferences.getString(Constants.LANGUAGE,Locale.getDefault().getLanguage());//.getSavedLanguage(); // Helper method to get saved language from SharedPreferences
+      Locale locale = new Locale(language);
+      Locale.setDefault(locale);
+
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+         return updateResourcesLocale(context, locale);
+      }
+
+      return updateResourcesLocaleLegacy(context, locale);
+   }
+
+   @TargetApi(Build.VERSION_CODES.N_MR1)
+   private Context updateResourcesLocale(Context context, Locale locale) {
+      Configuration configuration = new Configuration(context.getResources().getConfiguration());
+      configuration.setLocale(locale);
+      return context.createConfigurationContext(configuration);
+   }
+
+   @SuppressWarnings("deprecation")
+   private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+      Resources resources = context.getResources();
+      Configuration configuration = resources.getConfiguration();
+      configuration.locale = locale;
+      resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+      return context;
+   }
+
+   @Override
+   public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+         // update overrideConfiguration with your locale
+         // setLocale(overrideConfiguration); // you will need to implement this
+
+         createConfigurationContext(overrideConfiguration);
+      }
+      super.applyOverrideConfiguration(overrideConfiguration);
+   }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateBaseContextLocale(this);
+    }
 }
 
